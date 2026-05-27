@@ -425,15 +425,15 @@ button {
     box-shadow 0.2s;
 }
 .sb-cta-primary {
-  background: var(--sb-cta);
+  background: var(--sb-green);
   color: white;
-  box-shadow: 0 8px 20px rgba(200, 38, 90, 0.3);
+  box-shadow: 0 8px 20px rgba(46, 204, 113, 0.3);
   margin-top: 8px;
 }
 .sb-cta-primary:hover {
-  background: var(--sb-cta-hover);
+  background: #27ae60;
   transform: translateY(-2px);
-  box-shadow: 0 12px 26px rgba(200, 38, 90, 0.4);
+  box-shadow: 0 12px 26px rgba(46, 204, 113, 0.4);
 }
 .sb-cta-wa {
   background: var(--sb-green);
