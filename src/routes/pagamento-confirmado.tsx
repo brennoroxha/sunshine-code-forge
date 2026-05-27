@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSearch } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { CheckCircle, Package, Truck, ArrowLeft, Home, MessageCircle } from "lucide-react";
 import logo from "@/assets/logo.png";
 
@@ -18,8 +19,42 @@ export const Route = createFileRoute("/pagamento-confirmado")({
 function PagamentoConfirmadoPage() {
   const search = useSearch({ from: "/pagamento-confirmado" }) as Record<string, string>;
   const hash = search.hash || "620359715";
+  const amount = Number(search.amount) || 79.9;
   const waText = encodeURIComponent(`Olá! Acabei de fazer meu pedido #${hash} e gostaria de acompanhar o status.`);
   const waHref = `https://wa.me/5511999999999?text=${waText}`;
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const key = `sb_purchase_fired_${hash}`;
+    if (sessionStorage.getItem(key)) return;
+    sessionStorage.setItem(key, "1");
+
+    const payload = {
+      orderId: hash,
+      transactionId: hash,
+      value: amount,
+      currency: "BRL",
+      status: "paid",
+      products: [{ id: "kit-02-slim-belly", name: "KIT 02 Cinta Modeladora Cintura Alta", quantity: 1, price: amount }],
+    };
+
+    try {
+      const w = window as any;
+      // Utmify pixel
+      if (typeof w.utmify?.track === "function") w.utmify.track("Purchase", payload);
+      if (typeof w.utmifyTrack === "function") w.utmifyTrack("Purchase", payload);
+      if (typeof w.pixel?.track === "function") w.pixel.track("Purchase", payload);
+      // Meta Pixel fallback (caso esteja injetado pela Utmify)
+      if (typeof w.fbq === "function") w.fbq("track", "Purchase", { value: amount, currency: "BRL" });
+      // dataLayer (GTM)
+      w.dataLayer = w.dataLayer || [];
+      w.dataLayer.push({ event: "purchase", ecommerce: { transaction_id: hash, value: amount, currency: "BRL" } });
+      // Custom event
+      window.dispatchEvent(new CustomEvent("purchase", { detail: payload }));
+    } catch (e) {
+      console.error("[purchase] tracking error", e);
+    }
+  }, [hash, amount]);
 
   return (
     <div className="sb-root" style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
