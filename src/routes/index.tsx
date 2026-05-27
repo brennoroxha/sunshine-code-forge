@@ -421,10 +421,7 @@ function Index() {
             <div className="sb-selector">
 
               <label className="sb-label">
-                <strong>{selectedKit.label}:</strong>{" "}
-                {remainingColors > 0
-                  ? `${colors.length === 0 ? "escolha" : "escolha mais"} ${remainingColors} ${pieceWord(remainingColors, "cor", "cores")}${maxItems > 1 ? " (pode repetir)" : ""}`
-                  : `Cores: ${buildHint("cor", 0, colors, COLORS.map((c) => c.name))}`}
+                Cor — {colors.length > 0 ? colors.map((i) => COLORS[i].name).join(", ") : "escolha"}
               </label>
               <div className="sb-swatches">
                 {COLORS.map((c, i) => {
