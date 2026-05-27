@@ -494,11 +494,49 @@ function Index() {
                   );
                 })}
               </div>
+              {sizes.length > 0 && (
+                <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 4 }}>
+                  {Array.from(new Set(sizes)).map((idx) => (
+                    <div
+                      key={idx}
+                      style={{
+                        fontSize: 12,
+                        color: "#b45309",
+                        background: "#fff7ed",
+                        border: "1px solid #fed7aa",
+                        padding: "6px 10px",
+                        borderRadius: 8,
+                        fontWeight: 600,
+                      }}
+                    >
+                      ⚠️ Apenas {stockBySize[idx]} unidades restantes no tamanho {SIZES[idx]}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
-            <div className="sb-price">
-              <span className="sb-price-new">R$ 79,90</span>
+            <div className="sb-price" style={{ flexWrap: "wrap", alignItems: "center", gap: 10 }}>
+              <span className="sb-price-old">De R$ 149,90</span>
+              <span className="sb-price-new">{selectedKit.priceLabel}</span>
+              <span
+                style={{
+                  background: "var(--sb-cta)",
+                  color: "#fff",
+                  fontSize: 12,
+                  fontWeight: 800,
+                  padding: "4px 10px",
+                  borderRadius: 999,
+                  letterSpacing: 0.4,
+                }}
+              >
+                47% OFF
+              </span>
             </div>
+            <div className="sb-installments">
+              ou 3x de {(selectedKit.price / 3 / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} sem juros
+            </div>
+
 
             <Link to="/checkout" ref={ctaRef} className="sb-cta sb-cta-primary" onClick={ripple}>
               🛒 COMPRAR AGORA
