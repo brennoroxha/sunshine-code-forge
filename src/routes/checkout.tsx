@@ -169,11 +169,46 @@ function CheckoutPage() {
 
   useEffect(() => {
     if (step !== "loading") return;
-    const t = setTimeout(() => {
-      setStep("pix");
-      setExpira(15 * 60);
-    }, 2200);
-    return () => clearTimeout(t);
+    let canceled = false;
+    setPixError(null);
+    (async () => {
+      try {
+        const res = await createPix({
+          data: {
+            amount: totalComFrete,
+            customer: {
+              name: form.nomeCompleto.trim(),
+              email: form.email.trim(),
+              phone_number: onlyDigits(form.telefone),
+              document: onlyDigits(form.cpf),
+            },
+            cart: [
+              { name: "Pedido ConfiaShop", quantity: 1, unit_price: totalComFrete },
+            ],
+          },
+        });
+        if (canceled) return;
+        if (!res.ok) {
+          setPixError(res.error);
+          setStep(3);
+          return;
+        }
+        setPixData({
+          hash: res.hash,
+          pix_copy_paste: res.pix_copy_paste,
+          pix_qr_code: res.pix_qr_code,
+        });
+        setExpira(15 * 60);
+        setStep("pix");
+      } catch (e: any) {
+        if (canceled) return;
+        setPixError("Falha ao gerar Pix. Tente novamente.");
+        setStep(3);
+      }
+    })();
+    return () => {
+      canceled = true;
+    };
   }, [step]);
 
   const back = () => {
