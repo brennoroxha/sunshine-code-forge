@@ -270,7 +270,22 @@ function CheckoutPage() {
 
           {step === 2 && (
             <>
-              <h2 className="ck-h2">Entrega</h2>
+              <div className="ck-info-summary" style={{ margin: "0 0 16px", boxShadow: "none", padding: 0 }}>
+                <div className="ck-info-summary-head">
+                  <span className="ck-info-summary-title"><User size={18} /> Dados pessoais</span>
+                  <button type="button" className="ck-info-summary-link" onClick={() => setStep(1)}>Não é você? Sair</button>
+                </div>
+                <p>{form.email}</p>
+                <p><strong>Nome:</strong> {form.nomeCompleto}</p>
+                <p><strong>Telefone:</strong> {form.telefone}</p>
+                <button type="button" className="ck-info-edit-btn" onClick={() => setStep(1)}>
+                  ✎ Alterar meus dados
+                </button>
+              </div>
+              <div style={{ height: 1, background: "#e5e7eb", margin: "0 0 16px" }} />
+              <h2 className="ck-h2" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                <Truck size={20} color="#0b2447" /> Entrega
+              </h2>
               <label className="ck-label">CEP</label>
               <input
                 placeholder="00000-000"
