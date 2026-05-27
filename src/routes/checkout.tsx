@@ -10,7 +10,7 @@ export const Route = createFileRoute("/checkout")({
   head: () => ({ meta: [{ title: "Checkout — ConfiaShop" }] }),
 });
 
-const TOTAL = 23970;
+const TOTAL = 7990;
 const PIX_KEY = "64119790000101";
 
 function formatBRL(cents: number) {
