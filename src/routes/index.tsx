@@ -358,74 +358,20 @@ function Index() {
 
             <div className="sb-selector">
               <label className="sb-label">
-                Tamanhos (escolha 2, pode repetir):{" "}
-                <strong>
-                  {sizes.length === 0
-                    ? "—"
-                    : sizes.length === 2 && sizes[0] === sizes[1]
-                    ? `2x ${SIZES[sizes[0]]}`
-                    : sizes.map((i) => SIZES[i]).join(" + ")}
-                </strong>
+                Tamanhos (escolha 2):{" "}
+                <strong>{sizes.map((i) => SIZES[i]).join(" + ")}</strong>
               </label>
-              <div className="sb-swatches">
-                {SIZES.map((s, i) => {
-                  const count = sizes.filter((x) => x === i).length;
-                  return (
-                    <button
-                      key={s}
-                      onClick={() => {
-                        setSizes((prev) => (prev.length >= 2 ? [i] : [...prev, i]));
-                      }}
-                      className={`sb-swatch sb-size-swatch ${count > 0 ? "is-active" : ""}`}
-                      aria-label={s}
-                      title={s}
-                      style={{ position: "relative" }}
-                    >
-                      <span style={{ fontWeight: 700, fontSize: 14 }}>{s}</span>
-                      {count > 0 && (
-                        <span
-                          style={{
-                            position: "absolute",
-                            top: -6,
-                            right: -6,
-                            background: "hsl(var(--primary))",
-                            color: "hsl(var(--primary-foreground))",
-                            borderRadius: "999px",
-                            minWidth: 20,
-                            height: 20,
-                            fontSize: 12,
-                            fontWeight: 700,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            padding: "0 6px",
-                            boxShadow: "0 1px 4px rgba(0,0,0,.25)",
-                          }}
-                        >
-                          ×{count}
-                        </span>
-                      )}
-                    </button>
-                  );
-                })}
+              <div className="sb-sizes">
+                {SIZES.map((s, i) => (
+                  <button
+                    key={s}
+                    onClick={() => setSizes((prev) => toggleSelection(prev, i, 2))}
+                    className={`sb-size ${sizes.includes(i) ? "is-active" : ""}`}
+                  >
+                    {s}
+                  </button>
+                ))}
               </div>
-              {sizes.length > 0 && (
-                <button
-                  type="button"
-                  onClick={() => setSizes([])}
-                  style={{
-                    marginTop: 8,
-                    background: "transparent",
-                    border: "none",
-                    color: "hsl(var(--muted-foreground))",
-                    fontSize: 12,
-                    textDecoration: "underline",
-                    cursor: "pointer",
-                  }}
-                >
-                  Limpar seleção
-                </button>
-              )}
             </div>
 
             <div className="sb-price">

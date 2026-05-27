@@ -370,11 +370,6 @@ button {
   box-shadow: 0 0 0 2px rgba(200, 38, 90, 0.2);
 }
 
-.sb-size-swatch {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
 .sb-sizes {
   display: flex;
