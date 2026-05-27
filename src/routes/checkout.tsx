@@ -421,21 +421,20 @@ function CheckoutPage() {
           )}
 
           {/* Navegação */}
-          {step !== "pix" ? (
+          {step !== "pix" && step !== 3 && (
             <div className="ck-nav">
-              {step === 3 && (
-                <button type="button" className="ck-pay-btn ck-btn-secondary" onClick={back}>
-                  <ChevronLeft size={16} /> Voltar
-                </button>
-              )}
               <button type="button" className="ck-pay-btn" onClick={next} disabled={!canAdvance} style={!canAdvance ? { opacity: 0.5, cursor: "not-allowed" } : undefined}>
-                {step === 3 ? "Pagar agora" : step === 1 ? <>Avançar para a entrega <ChevronRight size={16} /></> : <>Avançar para o pagamento <ChevronRight size={16} /></>}
+                {step === 1 ? <>Avançar para a entrega <ChevronRight size={16} /></> : <>Avançar para o pagamento <ChevronRight size={16} /></>}
               </button>
             </div>
-          ) : (
-            <button type="button" className="ck-pay-btn ck-btn-secondary" onClick={back}>
-              <ChevronLeft size={16} /> Voltar
-            </button>
+          )}
+
+          {step === 3 && (
+            <div className="ck-sticky-footer">
+              <button type="button" className="ck-pay-btn ck-sticky-btn" onClick={next} disabled={!canAdvance} style={!canAdvance ? { opacity: 0.5, cursor: "not-allowed" } : undefined}>
+                Finalizar Compra
+              </button>
+            </div>
           )}
 
         </div>
