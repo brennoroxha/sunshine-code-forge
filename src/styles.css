@@ -218,12 +218,20 @@ button {
   transform: scale(1.04);
 }
 .sb-thumbs {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  display: flex;
   gap: 8px;
   margin-top: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  padding-bottom: 4px;
 }
+.sb-thumbs::-webkit-scrollbar { height: 4px; }
+.sb-thumbs::-webkit-scrollbar-thumb { background: var(--sb-primary); border-radius: 4px; }
 .sb-thumb {
+  flex: 0 0 22%;
+  max-width: 90px;
   aspect-ratio: 1;
   border-radius: 8px;
   overflow: hidden;
@@ -231,6 +239,8 @@ button {
   padding: 0;
   background: var(--sb-white);
   transition: border-color 0.2s;
+  scroll-snap-align: start;
+  cursor: pointer;
 }
 .sb-thumb img {
   width: 100%;
@@ -239,6 +249,14 @@ button {
 }
 .sb-thumb.is-active {
   border-color: var(--sb-primary);
+}
+@media (min-width: 768px) {
+  .sb-thumbs {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    overflow: visible;
+  }
+  .sb-thumb { flex: initial; max-width: none; }
 }
 
 .sb-info {
