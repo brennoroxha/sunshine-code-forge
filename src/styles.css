@@ -960,3 +960,7 @@ button {
   color: var(--sb-text);
   margin-bottom: 8px;
 }
+
+.sb-logo img { height: 36px; width: auto; display: block; }
+.sb-logo-img { height: 40px; width: auto; }
+.sb-logo-light { filter: brightness(0) invert(1); }

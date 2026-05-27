@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import desc1 from "@/assets/desc-1.png";
 import desc2 from "@/assets/desc-2.png";
 import desc3 from "@/assets/desc-3.png";
+import logo from "@/assets/logo.png";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -174,8 +175,8 @@ function Index() {
       {/* 2. HEADER */}
       <header className="sb-header">
         <div className="sb-container sb-header-inner">
-          <a href="#" className="sb-logo">
-            Slim Belly
+          <a href="#" className="sb-logo" aria-label="ConfiaShop">
+            <img src={logo} alt="ConfiaShop" />
           </a>
           <div className="sb-header-icons">
             <a
@@ -464,7 +465,7 @@ function Index() {
       <footer className="sb-footer">
         <div className="sb-container sb-footer-grid">
           <div>
-            <div className="sb-logo sb-logo-light">Slim Belly</div>
+            <img src={logo} alt="ConfiaShop" className="sb-logo-img sb-logo-light" />
             <p className="sb-footer-text">
               Magazines Bytes
               <br />
