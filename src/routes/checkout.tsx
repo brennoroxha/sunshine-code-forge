@@ -101,6 +101,9 @@ function CheckoutPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [copied, setCopied] = useState(false);
   const [expira, setExpira] = useState(15 * 60);
+  const [pixData, setPixData] = useState<{ hash: string; pix_copy_paste: string; pix_qr_code: string } | null>(null);
+  const [pixError, setPixError] = useState<string | null>(null);
+  const createPix = useServerFn(createPixTransaction);
 
   useEffect(() => {
     if (step !== "pix") return;
