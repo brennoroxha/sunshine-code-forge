@@ -387,7 +387,10 @@ function CheckoutPage() {
           <div className="ck-summary-row ck-summary-total">
             <span>Total</span>
             <strong>{formatBRL(TOTAL)}</strong>
+          </div>
         </div>
+
+
 
         {/* Trust card */}
         <div className="ck-trust-card">
