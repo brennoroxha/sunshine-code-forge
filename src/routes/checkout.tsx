@@ -180,9 +180,9 @@ function CheckoutPage() {
 
   const stepNum = step === "pix" ? 3 : step;
   const steps = [
-    { n: 1, label: "Dados Pessoais" },
-    { n: 2, label: "Entrega" },
-    { n: 3, label: "Pagamento" },
+    { n: 1, label: "Dados Pessoais", Icon: User },
+    { n: 2, label: "Entrega", Icon: Truck },
+    { n: 3, label: "Pagamento", Icon: QrCode },
   ];
 
   const fieldErr = (k: string) => errors[k] && <div className="ck-err">{errors[k]}</div>;
