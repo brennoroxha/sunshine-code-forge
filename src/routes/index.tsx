@@ -363,7 +363,7 @@ function Index() {
             </a>
 
             <div className="sb-social-count">
-              <span className="sb-pulse" /> 21 pessoas estão vendo agora
+              <span className="sb-pulse" /> {viewers} pessoas estão vendo agora
             </div>
 
             <div className="sb-timeline" suppressHydrationWarning>
