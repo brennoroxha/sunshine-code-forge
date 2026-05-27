@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { ShieldCheck, Lock, Copy, Check, ChevronRight, ChevronLeft, ShoppingBag, Truck, Tag, User, QrCode, CheckCircle2, Star, Calculator, ArrowDown } from "lucide-react";
 import logo from "@/assets/logo.png";
+import { createPixTransaction } from "@/lib/klivopay.functions";
 
 export const Route = createFileRoute("/checkout")({
   component: CheckoutPage,
