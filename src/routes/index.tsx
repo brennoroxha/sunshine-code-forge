@@ -285,7 +285,7 @@ function Index() {
 
             <div className="sb-selector">
               <label className="sb-label">
-                Cores (escolha 2, pode repetir):{" "}
+                Cores (<strong>escolha 2, pode repetir</strong>):{" "}
                 <strong>
                   {colors.length === 0
                     ? "—"
