@@ -226,7 +226,7 @@ function Index() {
 
           {/* Info */}
           <div className="sb-info">
-            <span className="sb-badge sb-badge-best">🏆 MAIS VENDIDO</span>
+            
             <h1 className="sb-title">KIT 02 Cinta Modeladora Cintura Alta — Slim Belly</h1>
             <div className="sb-rating">
               <span className="sb-stars">⭐⭐⭐⭐⭐</span>
