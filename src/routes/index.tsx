@@ -353,12 +353,6 @@ function Index() {
               </div>
             </div>
 
-            <div className="sb-trust">
-              <span>🔒 Compra Segura</span>
-              <span>🔄 Troca em 7 dias</span>
-              <span>🚚 Frete Grátis</span>
-              <span>✅ 30 dias de garantia</span>
-            </div>
 
             <div className="sb-social-count">
               <span className="sb-pulse" /> 👁️ 21 pessoas estão vendo agora
