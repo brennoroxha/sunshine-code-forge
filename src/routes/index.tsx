@@ -104,10 +104,25 @@ const FAQS = [
 
 function Index() {
   const [mainImg, setMainImg] = useState(0);
-  const [color, setColor] = useState(0);
-  const [size, setSize] = useState(1);
+  const [colors, setColors] = useState<number[]>([0]);
+  const [sizes, setSizes] = useState<number[]>([1]);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [testimonial, setTestimonial] = useState(0);
+
+  const toggleSelection = (
+    current: number[],
+    index: number,
+    max: number,
+    onAdd?: (i: number) => void,
+  ): number[] => {
+    if (current.includes(index)) {
+      if (current.length === 1) return current; // keep at least 1
+      return current.filter((i) => i !== index);
+    }
+    onAdd?.(index);
+    if (current.length >= max) return [...current.slice(1), index];
+    return [...current, index];
+  };
 
   // Fade in on scroll
   useEffect(() => {
