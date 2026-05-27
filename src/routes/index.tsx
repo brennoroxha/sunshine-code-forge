@@ -366,7 +366,7 @@ function Index() {
 
             <div className="sb-selector">
               <label className="sb-label">
-                Escolha seu kit: <strong>{selectedKit.label} — {selectedKit.title}</strong>
+                Escolha seu kit: <strong>{selectedKit.label}</strong>
               </label>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 8 }}>
                 {KITS.map((k) => {
