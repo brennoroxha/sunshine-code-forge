@@ -124,6 +124,13 @@ function RootShell({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
+        {/* Google tag (gtag.js) — injetado direto no <head> para Tag Assistant detectar */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17951971754" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;gtag('js',new Date());gtag('config','AW-17951971754');`,
+          }}
+        />
         <HeadContent />
       </head>
       <body>
