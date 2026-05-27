@@ -613,7 +613,7 @@ function Index() {
           <p>Estoque limitado — Últimas unidades</p>
           <Link to="/checkout" className="sb-cta-light" onClick={ripple as any}>
             QUERO MINHA CINTA AGORA →
-          </a>
+          </Link>
         </div>
       </section>
 
