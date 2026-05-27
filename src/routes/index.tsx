@@ -652,31 +652,6 @@ function Index() {
             <img src={desc3} alt="Tabela de tamanhos Slim Belly" loading="lazy" />
           </div>
 
-          <h3 className="sb-desc-h3">Características</h3>
-          <ul className="sb-desc-list">
-            <li>80% Náilon + 20% Elastano</li>
-            <li>Conforto perfeito: contorna perfeitamente o seu corpo para a liberdade irrestrita.</li>
-            <li>Adesivo Aquecedor: Proporciona calor e cuidado para o seu bem-estar.</li>
-            <li>Controle de barriga de cintura alta: molda sua cintura sem esforço para suporte extra.</li>
-            <li>Efeito lifting de bumbum: realça instantaneamente suas curvas para uma aparência mais atraente.</li>
-            <li>Resistência: Mantém a forma ao longo do tempo, resistindo à deformação.</li>
-            <li>Tecido Respirável: frescor e respirabilidade durante todo o dia.</li>
-            <li>
-              Tamanho: M: Cintura 55-65cm, quadril 70-80cm, peso 45-55kg / G: Cintura 60-70cm,
-              quadril 75-85cm, peso 55-65kg / XL: Cintura 65-75cm, quadril 80-90cm, peso 65-75kg /
-              XXL: Cintura 70-80cm, quadril 85-95cm, peso 75-85kg
-            </li>
-            <li>Cores: Preta, Bege e Vermelha</li>
-          </ul>
-
-          <h3 className="sb-desc-h3">Embalagem Contém</h3>
-          <ul className="sb-desc-list">
-            <li>01x Cinta Modeladora Cintura Alta - Slim Belly</li>
-            <li>
-              KIT 5 - 05 Cintas Modeladoras Cintura Alta - Slim Belly (2x Pretas, 2x Bege e 01x
-              Vermelha)
-            </li>
-          </ul>
         </div>
       </section>
 
