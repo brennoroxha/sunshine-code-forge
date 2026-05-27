@@ -243,7 +243,9 @@ function CheckoutPage() {
 
           {step === 1 && (
             <>
-              <h2 className="ck-h2">Dados Pessoais</h2>
+              <h2 className="ck-h2" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                <User size={20} color="#0b2447" /> Dados Pessoais
+              </h2>
               <p className="ck-muted" style={{ fontSize: 13, marginTop: -4 }}>
                 Solicitamos apenas as informações essenciais para a realização da compra.
               </p>
