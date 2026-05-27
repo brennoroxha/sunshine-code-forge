@@ -537,7 +537,7 @@ function Index() {
             </div>
 
 
-            <a href="/checkout" ref={ctaRef as any} className="sb-cta sb-cta-primary" onClick={ripple}>
+            <a href={`/checkout?kit=${selectedKit.id}`} ref={ctaRef as any} className="sb-cta sb-cta-primary" onClick={ripple}>
               🛒 COMPRAR AGORA
             </a>
 
