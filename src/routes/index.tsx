@@ -661,7 +661,7 @@ function Index() {
           </div>
         </div>
         <div className="sb-footer-bottom">
-          Magazines Bytes — Todos os direitos reservados
+          Confia Shop LTDA — CNPJ: 64.119.790/0001-01 — Todos os direitos reservados
         </div>
       </footer>
     </div>
