@@ -355,10 +355,8 @@ function CheckoutPage() {
             </button>
           )}
 
-          <div className="ck-trust">
-            <ShieldCheck size={14} /> Pagamento processado em ambiente seguro
-          </div>
         </div>
+
 
         {/* Resumo do pedido — sempre embaixo */}
         <div className="ck-summary-card">
