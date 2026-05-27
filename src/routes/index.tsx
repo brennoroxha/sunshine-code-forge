@@ -678,7 +678,6 @@ function Index() {
           <h3 className="sb-desc-h3">Embalagem Contém</h3>
           <ul className="sb-desc-list">
             <li>01x Cinta Modeladora Cintura Alta - Slim Belly</li>
-            <li>KIT 3 - 03 Cintas Modeladoras Cintura Alta - Slim Belly (Preta, Bege e Vermelha)</li>
             <li>
               KIT 5 - 05 Cintas Modeladoras Cintura Alta - Slim Belly (2x Pretas, 2x Bege e 01x
               Vermelha)
