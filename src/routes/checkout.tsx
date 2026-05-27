@@ -85,15 +85,14 @@ function CheckoutPage() {
   const [step, setStep] = useState<Step>(1);
   const [form, setForm] = useState({
     email: "",
-    nome: "",
-    sobrenome: "",
+    nomeCompleto: "",
     cpf: "",
+    telefone: "",
     cep: "",
     endereco: "",
     numero: "",
     cidade: "",
     estado: "SP",
-    telefone: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [copied, setCopied] = useState(false);
@@ -135,16 +134,15 @@ function CheckoutPage() {
     const e: Record<string, string> = {};
     if (s === 1) {
       if (!isValidEmail(form.email)) e.email = "E-mail inválido";
+      if (form.nomeCompleto.trim().split(/\s+/).length < 2) e.nomeCompleto = "Informe nome e sobrenome";
+      if (!isValidCPF(form.cpf)) e.cpf = "CPF inválido";
+      if (!isValidPhone(form.telefone)) e.telefone = "Telefone inválido";
     }
     if (s === 2) {
-      if (!form.nome.trim()) e.nome = "Informe o nome";
-      if (!form.sobrenome.trim()) e.sobrenome = "Informe o sobrenome";
-      if (!isValidCPF(form.cpf)) e.cpf = "CPF inválido";
       if (!isValidCEP(form.cep)) e.cep = "CEP inválido (8 dígitos)";
       if (!form.endereco.trim()) e.endereco = "Informe o endereço";
       if (!form.numero.trim()) e.numero = "Nº";
       if (!form.cidade.trim()) e.cidade = "Informe a cidade";
-      if (!isValidPhone(form.telefone)) e.telefone = "Telefone inválido";
     }
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -182,7 +180,7 @@ function CheckoutPage() {
 
   const stepNum = step === "pix" ? 3 : step;
   const steps = [
-    { n: 1, label: "Contato" },
+    { n: 1, label: "Dados Pessoais" },
     { n: 2, label: "Entrega" },
     { n: 3, label: "Pagamento" },
   ];
@@ -227,7 +225,10 @@ function CheckoutPage() {
 
           {step === 1 && (
             <>
-              <h2 className="ck-h2">Contato</h2>
+              <h2 className="ck-h2">Dados Pessoais</h2>
+              <p className="ck-muted" style={{ fontSize: 13, marginTop: -4 }}>
+                Solicitamos apenas as informações essenciais para a realização da compra.
+              </p>
               <input
                 type="email"
                 placeholder="E-mail"
@@ -236,33 +237,35 @@ function CheckoutPage() {
                 className={inputCls("email")}
               />
               {fieldErr("email")}
-              <p className="ck-muted" style={{ fontSize: 13 }}>
-                Enviaremos a confirmação da compra para este e-mail.
-              </p>
-            </>
-          )}
-
-          {step === 2 && (
-            <>
-              <h2 className="ck-h2">Entrega</h2>
-              <div className="ck-row">
-                <div style={{ flex: 1 }}>
-                  <input placeholder="Nome" value={form.nome} onChange={upd("nome")} className={inputCls("nome")} />
-                  {fieldErr("nome")}
-                </div>
-                <div style={{ flex: 1 }}>
-                  <input placeholder="Sobrenome" value={form.sobrenome} onChange={upd("sobrenome")} className={inputCls("sobrenome")} />
-                  {fieldErr("sobrenome")}
-                </div>
-              </div>
               <input
-                placeholder="CPF"
+                placeholder="Nome completo"
+                value={form.nomeCompleto}
+                onChange={upd("nomeCompleto")}
+                className={inputCls("nomeCompleto")}
+              />
+              {fieldErr("nomeCompleto")}
+              <input
+                placeholder="CPF (999.999.999-99)"
                 value={form.cpf}
                 onChange={upd("cpf")}
                 className={inputCls("cpf")}
                 inputMode="numeric"
               />
               {fieldErr("cpf")}
+              <input
+                placeholder="Telefone (11) 99999-9999"
+                value={form.telefone}
+                onChange={upd("telefone")}
+                className={inputCls("telefone")}
+                inputMode="tel"
+              />
+              {fieldErr("telefone")}
+            </>
+          )}
+
+          {step === 2 && (
+            <>
+              <h2 className="ck-h2">Entrega</h2>
               <input
                 placeholder="CEP"
                 value={form.cep}
@@ -292,14 +295,6 @@ function CheckoutPage() {
                   ))}
                 </select>
               </div>
-              <input
-                placeholder="Telefone"
-                value={form.telefone}
-                onChange={upd("telefone")}
-                className={inputCls("telefone")}
-                inputMode="tel"
-              />
-              {fieldErr("telefone")}
             </>
           )}
 
