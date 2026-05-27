@@ -974,9 +974,10 @@ button {
   gap: 8px;
   margin: 20px 0;
   padding: 14px 12px;
-  background: #f3f4f6;
+  background: #ffffff;
   border: 1px solid #e5e7eb;
   border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 .sb-timeline::before {
   content: "";
