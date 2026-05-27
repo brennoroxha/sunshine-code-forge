@@ -153,15 +153,23 @@ function CheckoutPage() {
   };
 
   const next = () => {
-    if (!validateStep(step as Step)) return;
+    if (step !== "pix" && step !== "loading" && !validateStep(step as Step)) return;
     if (step === 1) setStep(2);
     else if (step === 2) setStep(3);
     else if (step === 3) {
-      setStep("pix");
-      setExpira(15 * 60);
+      setStep("loading");
     }
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  useEffect(() => {
+    if (step !== "loading") return;
+    const t = setTimeout(() => {
+      setStep("pix");
+      setExpira(15 * 60);
+    }, 2200);
+    return () => clearTimeout(t);
+  }, [step]);
 
   const back = () => {
     if (step === 2) setStep(1);
