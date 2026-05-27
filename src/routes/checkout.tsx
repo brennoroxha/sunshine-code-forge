@@ -225,7 +225,10 @@ function CheckoutPage() {
 
           {step === 1 && (
             <>
-              <h2 className="ck-h2">Contato</h2>
+              <h2 className="ck-h2">Dados Pessoais</h2>
+              <p className="ck-muted" style={{ fontSize: 13, marginTop: -4 }}>
+                Solicitamos apenas as informações essenciais para a realização da compra.
+              </p>
               <input
                 type="email"
                 placeholder="E-mail"
@@ -234,33 +237,35 @@ function CheckoutPage() {
                 className={inputCls("email")}
               />
               {fieldErr("email")}
-              <p className="ck-muted" style={{ fontSize: 13 }}>
-                Enviaremos a confirmação da compra para este e-mail.
-              </p>
-            </>
-          )}
-
-          {step === 2 && (
-            <>
-              <h2 className="ck-h2">Entrega</h2>
-              <div className="ck-row">
-                <div style={{ flex: 1 }}>
-                  <input placeholder="Nome" value={form.nome} onChange={upd("nome")} className={inputCls("nome")} />
-                  {fieldErr("nome")}
-                </div>
-                <div style={{ flex: 1 }}>
-                  <input placeholder="Sobrenome" value={form.sobrenome} onChange={upd("sobrenome")} className={inputCls("sobrenome")} />
-                  {fieldErr("sobrenome")}
-                </div>
-              </div>
               <input
-                placeholder="CPF"
+                placeholder="Nome completo"
+                value={form.nomeCompleto}
+                onChange={upd("nomeCompleto")}
+                className={inputCls("nomeCompleto")}
+              />
+              {fieldErr("nomeCompleto")}
+              <input
+                placeholder="CPF (999.999.999-99)"
                 value={form.cpf}
                 onChange={upd("cpf")}
                 className={inputCls("cpf")}
                 inputMode="numeric"
               />
               {fieldErr("cpf")}
+              <input
+                placeholder="Telefone (11) 99999-9999"
+                value={form.telefone}
+                onChange={upd("telefone")}
+                className={inputCls("telefone")}
+                inputMode="tel"
+              />
+              {fieldErr("telefone")}
+            </>
+          )}
+
+          {step === 2 && (
+            <>
+              <h2 className="ck-h2">Entrega</h2>
               <input
                 placeholder="CEP"
                 value={form.cep}
@@ -290,14 +295,6 @@ function CheckoutPage() {
                   ))}
                 </select>
               </div>
-              <input
-                placeholder="Telefone"
-                value={form.telefone}
-                onChange={upd("telefone")}
-                className={inputCls("telefone")}
-                inputMode="tel"
-              />
-              {fieldErr("telefone")}
             </>
           )}
 
