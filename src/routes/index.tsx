@@ -386,6 +386,31 @@ function Index() {
               </div>
             </div>
 
+            <div className="sb-info-box">
+              <div className="sb-info-row">
+                <ShieldCheck size={20} className="sb-info-ico" />
+                <div className="sb-info-text">
+                  <strong>Compra garantida:</strong> Você tem até 30 dias de Garantia
+                </div>
+              </div>
+              <div className="sb-info-row">
+                <RefreshCw size={20} className="sb-info-ico" />
+                <div className="sb-info-text">
+                  <strong>Troca Grátis:</strong> Você tem até 7 dias para testar o produto
+                </div>
+              </div>
+            </div>
+
+            <div className="sb-info-box">
+              <div className="sb-info-row">
+                <Truck size={22} className="sb-info-ico" style={{ color: "#FFD400" }} />
+                <div className="sb-info-text">
+                  <div><strong>Frete Grátis:</strong> para Ourinhos, SP e Região</div>
+                  <div>Receba entre: {deliveryDates?.placed ?? "—"} e {deliveryDates?.delivered ?? "—"}</div>
+                </div>
+              </div>
+            </div>
+
             </div>
           </div>
         </div>
