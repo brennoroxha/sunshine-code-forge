@@ -143,7 +143,26 @@ function Index() {
   const [stockBySize] = useState<number[]>(() =>
     SIZES.map(() => 3 + Math.floor(Math.random() * 5)),
   );
-  // Persist kit choice for checkout
+  const maxItems = selectedKit.qty;
+  const remainingColors = Math.max(0, maxItems - colors.length);
+  const remainingSizes = Math.max(0, maxItems - sizes.length);
+  const pieceWord = (n: number, s: string, p: string) => (n === 1 ? s : p);
+  const buildHint = (kind: "cor" | "tamanho", remaining: number, current: number[], labels: string[]) => {
+    if (remaining > 0) {
+      const word = kind === "cor" ? pieceWord(remaining, "cor", "cores") : pieceWord(remaining, "tamanho", "tamanhos");
+      const prefix = current.length === 0 ? "escolha" : "escolha mais";
+      return `${prefix} ${remaining} ${word}`;
+    }
+    // all selected — show summary
+    if (current.length === 0) return "";
+    const counts = new Map<number, number>();
+    current.forEach((i) => counts.set(i, (counts.get(i) ?? 0) + 1));
+    return Array.from(counts.entries())
+      .map(([i, c]) => (c > 1 ? `${c}x ${labels[i]}` : labels[i]))
+      .join(" + ");
+  };
+
+  // Persist kit choice for checkout + reset selections when kit changes
   useEffect(() => {
     try {
       localStorage.setItem(
@@ -151,7 +170,11 @@ function Index() {
         JSON.stringify({ id: selectedKit.id, label: selectedKit.label, title: selectedKit.title, price: selectedKit.price, priceLabel: selectedKit.priceLabel }),
       );
     } catch {}
+    setColors([]);
+    setSizes([]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedKit.id]);
+
   const [deliveryDates, setDeliveryDates] = useState<{ placed: string; processed: string; delivered: string } | null>(null);
   const [shippingRange, setShippingRange] = useState<{ from: string; to: string } | null>(null);
   const [city, setCity] = useState<{ name: string; region: string }>({ name: "Ourinhos", region: "SP" });
