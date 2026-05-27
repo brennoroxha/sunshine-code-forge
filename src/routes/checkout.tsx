@@ -103,18 +103,29 @@ function CheckoutPage() {
   const [expira, setExpira] = useState(15 * 60);
   const [pixData, setPixData] = useState<{ hash: string; pix_copy_paste: string; pix_qr_code: string } | null>(null);
   const [pixError, setPixError] = useState<string | null>(null);
-  const [kit, setKit] = useState<{ id: number; label: string; title: string; price: number; priceLabel: string }>(
-    { id: 2, label: "KIT 2", title: "2 Cintas", price: 7990, priceLabel: "R$ 79,90" },
-  );
+  const KIT_OPTIONS: Record<number, { id: number; label: string; title: string; price: number; priceLabel: string }> = {
+    1: { id: 1, label: "1 Cinta", title: "1 Cinta", price: 5990, priceLabel: "R$ 59,90" },
+    2: { id: 2, label: "KIT 2", title: "2 Cintas", price: 7990, priceLabel: "R$ 79,90" },
+  };
+  const [kit, setKit] = useState<{ id: number; label: string; title: string; price: number; priceLabel: string }>(KIT_OPTIONS[2]);
   useEffect(() => {
-    let loadedKit = { id: 2, label: "KIT 2", title: "2 Cintas", price: 7990, priceLabel: "R$ 79,90" };
+    let loadedKit = KIT_OPTIONS[2];
     try {
-      const raw = localStorage.getItem("sb_kit");
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (parsed && typeof parsed.price === "number") {
-          loadedKit = parsed;
-          setKit(parsed);
+      // 1) Try URL ?kit=
+      const urlKitId = Number(new URLSearchParams(window.location.search).get("kit"));
+      if (urlKitId && KIT_OPTIONS[urlKitId]) {
+        loadedKit = KIT_OPTIONS[urlKitId];
+        setKit(loadedKit);
+        try { localStorage.setItem("sb_kit", JSON.stringify(loadedKit)); } catch {}
+      } else {
+        // 2) Fallback to localStorage
+        const raw = localStorage.getItem("sb_kit");
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && typeof parsed.price === "number" && KIT_OPTIONS[parsed.id]) {
+            loadedKit = KIT_OPTIONS[parsed.id];
+            setKit(loadedKit);
+          }
         }
       }
     } catch {}
