@@ -63,26 +63,51 @@ const SIZE_TABLE = [
   ["G2", "80-90cm", "95-105cm", "90-100kg"],
 ];
 
+const KITS = [
+  { id: 1, label: "KIT 1", title: "1 Cinta", price: 5990, priceLabel: "R$ 59,90", badge: null as string | null },
+  { id: 2, label: "KIT 2", title: "2 Cintas", price: 7990, priceLabel: "R$ 79,90", badge: "MAIS VENDIDO" },
+  { id: 3, label: "KIT 3", title: "3 Cintas", price: 9990, priceLabel: "R$ 99,90", badge: "MELHOR CUSTO" },
+];
+
 const TESTIMONIALS = [
   {
-    initials: "M.S.",
+    initials: "MS",
     name: "Marina Souza",
     city: "São Paulo, SP",
-    text: "Adorei! A cinta é super confortável e modela muito bem. Uso o dia todo no trabalho sem incomodar.",
+    text: "Perdi 2cm de cintura na primeira semana usando todos os dias. Super confortável, uso até no trabalho.",
   },
   {
-    initials: "A.R.",
+    initials: "AR",
     name: "Amanda Ribeiro",
     city: "Rio de Janeiro, RJ",
-    text: "Resultado imediato! A cintura fica marcada e o bumbum mais empinado. Comprei outra para presentear minha irmã.",
+    text: "Resultado imediato! Marquei a cintura e o bumbum ficou mais empinado. Comprei outra pra minha irmã.",
   },
   {
-    initials: "C.P.",
+    initials: "CP",
     name: "Carla Pereira",
     city: "Belo Horizonte, MG",
-    text: "Tecido respirável de verdade, não esquenta. Vale cada centavo, recomendo demais!",
+    text: "Em 15 dias minha barriga ficou notavelmente mais lisa. Tecido respirável, não esquenta nada.",
+  },
+  {
+    initials: "JM",
+    name: "Juliana Martins",
+    city: "Curitiba, PR",
+    text: "Voltei a usar vestido justo depois de 2 anos. Disfarça totalmente a gordurinha, ninguém percebe.",
+  },
+  {
+    initials: "PL",
+    name: "Patrícia Lima",
+    city: "Salvador, BA",
+    text: "Perdi 3cm de cintura em 20 dias usando junto com caminhada. Vale demais cada centavo.",
+  },
+  {
+    initials: "RA",
+    name: "Renata Almeida",
+    city: "Porto Alegre, RS",
+    text: "Sumiu aquela gordurinha lateral que eu odiava. Já tô na segunda compra, presenteei minha mãe.",
   },
 ];
+
 
 const FAQS = [
   {
