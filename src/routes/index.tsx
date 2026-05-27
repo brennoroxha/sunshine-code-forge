@@ -115,7 +115,7 @@ const FAQS = [
   },
   {
     q: "Em quantas parcelas posso parcelar?",
-    a: "Você pode parcelar em até 12x sem juros no cartão de crédito. Também aceitamos Pix com 5% de desconto adicional.",
+    a: "Aceitamos Pix com 5% de desconto adicional. Pagamento via Pix é processado instantaneamente e seu pedido é confirmado na hora.",
   },
   {
     q: "Qual o prazo de entrega?",
