@@ -443,7 +443,7 @@ function Index() {
                       key={c.name}
                       onClick={() => {
                         setMainImg(c.imgIndex);
-                        setColors((prev) => (prev.length >= 2 ? [i] : [...prev, i]));
+                        setColors((prev) => (prev.length >= maxItems ? [i] : [...prev, i]));
                       }}
                       className={`sb-swatch ${count > 0 ? "is-active" : ""}`}
                       aria-label={c.name}
