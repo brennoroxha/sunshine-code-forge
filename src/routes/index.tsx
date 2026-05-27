@@ -358,19 +358,27 @@ function Index() {
 
             <div className="sb-selector">
               <label className="sb-label">
-                Tamanhos (escolha 2):{" "}
+                Tamanhos (escolha 2, pode repetir):{" "}
                 <strong>{sizes.map((i) => SIZES[i]).join(" + ")}</strong>
               </label>
               <div className="sb-sizes">
-                {SIZES.map((s, i) => (
-                  <button
-                    key={s}
-                    onClick={() => setSizes((prev) => toggleSelection(prev, i, 2))}
-                    className={`sb-size ${sizes.includes(i) ? "is-active" : ""}`}
-                  >
-                    {s}
-                  </button>
-                ))}
+                {SIZES.map((s, i) => {
+                  const count = sizes.filter((x) => x === i).length;
+                  return (
+                    <button
+                      key={s}
+                      onClick={() =>
+                        setSizes((prev) =>
+                          prev.length >= 2 ? [i] : [...prev, i]
+                        )
+                      }
+                      className={`sb-size ${count > 0 ? "is-active" : ""}`}
+                    >
+                      {s}
+                      {count > 1 ? ` ×${count}` : ""}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
