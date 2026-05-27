@@ -90,10 +90,12 @@ function CheckoutPage() {
     telefone: "",
     cep: "",
     endereco: "",
+    bairro: "",
     numero: "",
     cidade: "",
     estado: "SP",
   });
+  const [frete, setFrete] = useState<"transportadora" | "full">("transportadora");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [copied, setCopied] = useState(false);
   const [expira, setExpira] = useState(15 * 60);
