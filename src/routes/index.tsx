@@ -440,7 +440,7 @@ function Index() {
 
 
       {/* 4. DESCRIÇÃO */}
-      <section className="sb-section">
+      <section className="sb-section" style={{ paddingTop: 0 }}>
         <div className="sb-container sb-container-sm">
           <h2 className="sb-h2" style={{ marginBottom: 24 }}>
             Descrição
