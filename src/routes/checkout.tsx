@@ -376,21 +376,25 @@ function CheckoutPage() {
 
           {step === 3 && (
             <>
-              <h2 className="ck-h2">Pagamento</h2>
-              <p className="ck-muted">Todas as transações são seguras e criptografadas.</p>
-              <div className="ck-pay-option ck-pay-active">
-                <div className="ck-radio" />
-                <div style={{ flex: 1 }}>
-                  <strong>Pix</strong>
-                  <div className="ck-muted" style={{ fontSize: 13 }}>
-                    Aprovação imediata. Clique em pagar para gerar o QR Code.
+              <h2 className="ck-h2" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                <Calculator size={20} color="#0b2447" /> Pagamento
+              </h2>
+              <div style={{ border: "2px solid #2563eb", borderRadius: 12, overflow: "hidden", marginTop: 8 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 14px", background: "#eff6ff", borderBottom: "1px solid #dbeafe" }}>
+                  <div style={{ width: 18, height: 18, borderRadius: "50%", border: "2px solid #2563eb", position: "relative", flexShrink: 0 }}>
+                    <div style={{ position: "absolute", inset: 3, borderRadius: "50%", background: "#2563eb" }} />
                   </div>
+                  <strong style={{ color: "#111" }}>Pix</strong>
                 </div>
-                <span className="ck-pix-badge">PIX</span>
-              </div>
-              <div className="ck-total">
-                <span>Total</span>
-                <strong>{formatBRL(TOTAL)}</strong>
+                <div style={{ padding: "22px 14px", textAlign: "center", background: "#fff" }}>
+                  <img
+                    src="https://logospng.org/download/pix/logo-pix-512.png"
+                    alt="Pix"
+                    style={{ height: 56, margin: "0 auto 14px", display: "block" }}
+                  />
+                  <p style={{ fontWeight: 700, color: "#111", margin: "0 0 10px" }}>Para pagar, finalize sua compra abaixo</p>
+                  <ArrowDown size={20} color="#111" />
+                </div>
               </div>
             </>
           )}
