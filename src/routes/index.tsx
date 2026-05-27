@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { ClipboardList, Package, PackageCheck, ShieldCheck, RefreshCw, Truck } from "lucide-react";
+import { ClipboardList, Package, PackageCheck, ShieldCheck, RefreshCw } from "lucide-react";
 import desc1 from "@/assets/desc-1.png";
 import desc2 from "@/assets/desc-2.png";
 import desc3 from "@/assets/desc-3.png";
