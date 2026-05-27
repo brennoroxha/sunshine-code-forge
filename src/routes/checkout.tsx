@@ -363,6 +363,19 @@ function CheckoutPage() {
           <div className="ck-summary-title">
             <ShoppingBag size={18} /> Resumo do pedido
           </div>
+          <div className="ck-cart-item">
+            <img
+              src="https://lojasmasgazines.com/cdn/shop/files/calcinha-modeladora-slim-belly-bem-estar-041-loja-da-dryka-138176_800x.jpg"
+              alt="Cinta Modeladora Slim Belly"
+              className="ck-cart-img"
+            />
+            <div className="ck-cart-info">
+              <div className="ck-cart-name">KIT 02 Cinta Modeladora Cintura Alta — Slim Belly</div>
+              <div className="ck-cart-meta">Qtd: 1</div>
+            </div>
+            <div className="ck-cart-price">{formatBRL(TOTAL)}</div>
+          </div>
+
           <div className="ck-summary-row">
             <span><Tag size={14} /> Subtotal</span>
             <strong>{formatBRL(TOTAL)}</strong>
