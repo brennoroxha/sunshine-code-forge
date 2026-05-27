@@ -66,7 +66,6 @@ const SIZE_TABLE = [
 const KITS = [
   { id: 1, qty: 1, label: "1 Cinta", title: "1 Cinta", price: 5990, priceLabel: "R$ 59,90", badge: null as string | null },
   { id: 2, qty: 2, label: "Kit 2 Cintas", title: "2 Cintas", price: 7990, priceLabel: "R$ 79,90", badge: "MAIS VENDIDO" },
-  { id: 3, qty: 3, label: "Kit 3 Cintas", title: "3 Cintas", price: 9990, priceLabel: "R$ 99,90", badge: "MELHOR CUSTO" },
 ];
 
 const TESTIMONIALS = [
