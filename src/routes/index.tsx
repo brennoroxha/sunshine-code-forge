@@ -244,9 +244,6 @@ function Index() {
               <span className="sb-muted">· 2.847 avaliações</span>
             </div>
 
-            <div className="sb-price">
-              <span className="sb-price-new">R$ 79,90</span>
-            </div>
 
             <div className="sb-selector">
               <label className="sb-label">
@@ -337,6 +334,10 @@ function Index() {
                   </button>
                 ))}
               </div>
+            </div>
+
+            <div className="sb-price">
+              <span className="sb-price-new">R$ 79,90</span>
             </div>
 
             <a href="#comprar" className="sb-cta sb-cta-primary" onClick={ripple}>
