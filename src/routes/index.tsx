@@ -358,7 +358,7 @@ function Index() {
 
             <div className="sb-selector">
               <label className="sb-label">
-                Tamanhos (escolha 2, pode repetir):{" "}
+                Tamanhos (<strong>escolha 2, pode repetir</strong>):{" "}
                 <strong>{sizes.map((i) => SIZES[i]).join(" + ")}</strong>
               </label>
               <div className="sb-sizes">
