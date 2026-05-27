@@ -1088,3 +1088,24 @@ button {
 .ck-copy code { flex: 1; background: #f3f4f6; padding: 10px; border-radius: 6px; font-size: 11px; word-break: break-all; max-height: 80px; overflow: auto; }
 .ck-copy-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: #111; color: #fff; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; }
 @media (max-width: 480px) { .ck-row { flex-direction: column; } .ck-card { padding: 18px; } }
+
+/* Checkout stepper + validation */
+.ck-stepper { display: flex; align-items: center; gap: 4px; margin-bottom: 20px; }
+.ck-step-wrap { display: flex; align-items: center; flex: 1; }
+.ck-step-wrap:last-child { flex: 0; }
+.ck-step { display: flex; align-items: center; gap: 8px; color: #9ca3af; font-size: 13px; font-weight: 600; transition: color .2s; }
+.ck-step-num { width: 26px; height: 26px; border-radius: 50%; background: #e5e7eb; color: #6b7280; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+.ck-step.is-on { color: #111; }
+.ck-step.is-on .ck-step-num { background: #16a34a; color: #fff; }
+.ck-step.is-active .ck-step-num { background: #111; color: #fff; }
+.ck-step-line { flex: 1; height: 2px; background: #e5e7eb; margin: 0 8px; transition: background .2s; }
+.ck-step-line.is-on { background: #16a34a; }
+.ck-step span { display: none; }
+@media (min-width: 520px) { .ck-step span { display: inline; } }
+
+.ck-input-err { border-color: #dc2626 !important; }
+.ck-err { color: #dc2626; font-size: 12px; margin: -6px 0 10px; font-weight: 500; }
+
+.ck-nav { display: flex; gap: 10px; margin-top: 8px; }
+.ck-nav .ck-pay-btn { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.ck-btn-secondary { background: #6b7280 !important; }
