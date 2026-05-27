@@ -426,14 +426,6 @@ function Index() {
                 {remainingColors > 0
                   ? `${colors.length === 0 ? "escolha" : "escolha mais"} ${remainingColors} ${pieceWord(remainingColors, "cor", "cores")}${maxItems > 1 ? " (pode repetir)" : ""}`
                   : `Cores: ${buildHint("cor", 0, colors, COLORS.map((c) => c.name))}`}
-                {" "}
-                <strong>
-                  {colors.length === 0
-                    ? "—"
-                    : colors.length === 2 && colors[0] === colors[1]
-                    ? `2x ${COLORS[colors[0]].name}`
-                    : colors.map((i) => COLORS[i].name).join(" + ")}
-                </strong>
               </label>
               <div className="sb-swatches">
                 {COLORS.map((c, i) => {
