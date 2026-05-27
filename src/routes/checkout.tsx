@@ -556,7 +556,7 @@ function CheckoutPage() {
             <strong>{formatBRL(TOTAL)}</strong>
           </div>
           <div className="ck-summary-row">
-            <span><Truck size={14} /> Frete {frete === "full" ? "(Entrega Full)" : "(Transportadora)"}</span>
+            <span><Truck size={14} />{` Frete ${frete === "full" ? "(Entrega Full)" : "(Transportadora)"}`}</span>
             {freteCost === 0
               ? <strong style={{ color: "#16a34a" }}>Grátis</strong>
               : <strong>{formatBRL(freteCost)}</strong>}
