@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ShieldCheck, Lock, Copy, Check } from "lucide-react";
+import { ShieldCheck, Lock, Copy, Check, ChevronRight, ChevronLeft } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 export const Route = createFileRoute("/checkout")({
@@ -8,8 +8,8 @@ export const Route = createFileRoute("/checkout")({
   head: () => ({ meta: [{ title: "Checkout — ConfiaShop" }] }),
 });
 
-const TOTAL = 23970; // R$ 239,70 em centavos
-const PIX_KEY = "64119790000101"; // CNPJ ConfiaShop
+const TOTAL = 23970;
+const PIX_KEY = "64119790000101";
 
 function formatBRL(cents: number) {
   return (cents / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -26,7 +26,10 @@ function maskCEP(v: string) {
 
 function maskPhone(v: string) {
   const d = onlyDigits(v).slice(0, 11);
-  if (d.length <= 10) return d.replace(/(\d{0,2})(\d{0,4})(\d{0,4}).*/, (_, a, b, c) => [a && `(${a})`, b && ` ${b}`, c && `-${c}`].filter(Boolean).join(""));
+  if (d.length <= 10)
+    return d.replace(/(\d{0,2})(\d{0,4})(\d{0,4}).*/, (_, a, b, c) =>
+      [a && `(${a})`, b && ` ${b}`, c && `-${c}`].filter(Boolean).join("")
+    );
   return d.replace(/(\d{2})(\d{5})(\d{0,4}).*/, "($1) $2-$3");
 }
 
@@ -38,14 +41,48 @@ function maskCPF(v: string) {
     .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
 }
 
-// Gera "payload" estilo Pix Copia e Cola (fake, apenas demo visual)
+// Validadores
+function isValidCPF(v: string) {
+  const c = onlyDigits(v);
+  if (c.length !== 11 || /^(\d)\1{10}$/.test(c)) return false;
+  let s = 0;
+  for (let i = 0; i < 9; i++) s += parseInt(c[i]) * (10 - i);
+  let d1 = 11 - (s % 11);
+  if (d1 >= 10) d1 = 0;
+  if (d1 !== parseInt(c[9])) return false;
+  s = 0;
+  for (let i = 0; i < 10; i++) s += parseInt(c[i]) * (11 - i);
+  let d2 = 11 - (s % 11);
+  if (d2 >= 10) d2 = 0;
+  return d2 === parseInt(c[10]);
+}
+
+function isValidPhone(v: string) {
+  const d = onlyDigits(v);
+  if (d.length < 10 || d.length > 11) return false;
+  const ddd = parseInt(d.slice(0, 2));
+  if (ddd < 11 || ddd > 99) return false;
+  if (d.length === 11 && d[2] !== "9") return false;
+  return true;
+}
+
+function isValidCEP(v: string) {
+  return onlyDigits(v).length === 8;
+}
+
+function isValidEmail(v: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+}
+
 function makePixPayload(amountCents: number) {
   const amount = (amountCents / 100).toFixed(2);
   return `00020126360014BR.GOV.BCB.PIX0114${PIX_KEY}5204000053039865406${amount}5802BR5910ConfiaShop6009SAO PAULO62070503***6304ABCD`;
 }
 
+type Step = 1 | 2 | 3 | "pix";
+
 function CheckoutPage() {
-  const [step, setStep] = useState<"form" | "pix">("form");
+  const [step, setStep] = useState<Step>(1);
   const [form, setForm] = useState({
     email: "",
     nome: "",
@@ -58,6 +95,7 @@ function CheckoutPage() {
     estado: "SP",
     telefone: "",
   });
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [copied, setCopied] = useState(false);
   const [expira, setExpira] = useState(15 * 60);
 
@@ -73,9 +111,9 @@ function CheckoutPage() {
     if (k === "telefone") v = maskPhone(v);
     if (k === "cpf") v = maskCPF(v);
     setForm((p) => ({ ...p, [k]: v }));
+    setErrors((p) => ({ ...p, [k]: "" }));
   };
 
-  // Auto-buscar endereço via ViaCEP
   useEffect(() => {
     const d = onlyDigits(form.cep);
     if (d.length !== 8) return;
@@ -93,16 +131,44 @@ function CheckoutPage() {
       .catch(() => {});
   }, [form.cep]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setStep("pix");
-    setExpira(15 * 60);
+  const validateStep = (s: Step): boolean => {
+    const e: Record<string, string> = {};
+    if (s === 1) {
+      if (!isValidEmail(form.email)) e.email = "E-mail inválido";
+    }
+    if (s === 2) {
+      if (!form.nome.trim()) e.nome = "Informe o nome";
+      if (!form.sobrenome.trim()) e.sobrenome = "Informe o sobrenome";
+      if (!isValidCPF(form.cpf)) e.cpf = "CPF inválido";
+      if (!isValidCEP(form.cep)) e.cep = "CEP inválido (8 dígitos)";
+      if (!form.endereco.trim()) e.endereco = "Informe o endereço";
+      if (!form.numero.trim()) e.numero = "Nº";
+      if (!form.cidade.trim()) e.cidade = "Informe a cidade";
+      if (!isValidPhone(form.telefone)) e.telefone = "Telefone inválido";
+    }
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  };
+
+  const next = () => {
+    if (!validateStep(step as Step)) return;
+    if (step === 1) setStep(2);
+    else if (step === 2) setStep(3);
+    else if (step === 3) {
+      setStep("pix");
+      setExpira(15 * 60);
+    }
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const back = () => {
+    if (step === 2) setStep(1);
+    else if (step === 3) setStep(2);
+    else if (step === "pix") setStep(3);
   };
 
   const pixPayload = makePixPayload(TOTAL);
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(pixPayload)}`;
-
   const mm = String(Math.floor(expira / 60)).padStart(2, "0");
   const ss = String(expira % 60).padStart(2, "0");
 
@@ -114,9 +180,18 @@ function CheckoutPage() {
     } catch {}
   };
 
+  const stepNum = step === "pix" ? 3 : step;
+  const steps = [
+    { n: 1, label: "Contato" },
+    { n: 2, label: "Entrega" },
+    { n: 3, label: "Pagamento" },
+  ];
+
+  const fieldErr = (k: string) => errors[k] && <div className="ck-err">{errors[k]}</div>;
+  const inputCls = (k: string) => `ck-input${errors[k] ? " ck-input-err" : ""}`;
+
   return (
     <div className="ck-root">
-      {/* TOPO */}
       <header className="ck-header">
         <div className="ck-header-inner">
           <Link to="/" className="ck-logo">
@@ -131,98 +206,125 @@ function CheckoutPage() {
       </header>
 
       <main className="ck-main">
-        {step === "form" ? (
-          <form className="ck-card" onSubmit={handleSubmit}>
-            <div className="ck-summary">
-              <span>Resumo do pedido</span>
-              <strong>{formatBRL(TOTAL)}</strong>
-            </div>
+        <div className="ck-card">
+          {/* Stepper */}
+          <div className="ck-stepper">
+            {steps.map((s, i) => (
+              <div key={s.n} className="ck-step-wrap">
+                <div className={`ck-step ${stepNum >= s.n ? "is-on" : ""} ${stepNum === s.n && step !== "pix" ? "is-active" : ""}`}>
+                  <div className="ck-step-num">{stepNum > s.n || step === "pix" ? <Check size={14} /> : s.n}</div>
+                  <span>{s.label}</span>
+                </div>
+                {i < steps.length - 1 && <div className={`ck-step-line ${stepNum > s.n ? "is-on" : ""}`} />}
+              </div>
+            ))}
+          </div>
 
-            <h2 className="ck-h2">Contato</h2>
-            <input
-              type="email"
-              required
-              placeholder="E-mail"
-              value={form.email}
-              onChange={upd("email")}
-              className="ck-input"
-            />
+          <div className="ck-summary">
+            <span>Resumo do pedido</span>
+            <strong>{formatBRL(TOTAL)}</strong>
+          </div>
 
-            <h2 className="ck-h2">Entrega</h2>
-            <div className="ck-row">
-              <input required placeholder="Nome" value={form.nome} onChange={upd("nome")} className="ck-input" />
-              <input required placeholder="Sobrenome" value={form.sobrenome} onChange={upd("sobrenome")} className="ck-input" />
-            </div>
-            <input
-              required
-              placeholder="CPF"
-              value={form.cpf}
-              onChange={upd("cpf")}
-              className="ck-input"
-              inputMode="numeric"
-            />
-            <input
-              required
-              placeholder="CEP"
-              value={form.cep}
-              onChange={upd("cep")}
-              className="ck-input"
-              inputMode="numeric"
-            />
-            <div className="ck-row">
-              <input required placeholder="Endereço" value={form.endereco} onChange={upd("endereco")} className="ck-input" />
-              <input placeholder="Número" value={form.numero} onChange={upd("numero")} className="ck-input" style={{ maxWidth: 120 }} />
-            </div>
-            <div className="ck-row">
-              <input required placeholder="Cidade" value={form.cidade} onChange={upd("cidade")} className="ck-input" />
-              <select value={form.estado} onChange={upd("estado")} className="ck-input">
-                {["AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO"].map((uf) => (
-                  <option key={uf} value={uf}>{uf}</option>
-                ))}
-              </select>
-            </div>
-            <input
-              required
-              placeholder="Telefone"
-              value={form.telefone}
-              onChange={upd("telefone")}
-              className="ck-input"
-              inputMode="tel"
-            />
+          {step === 1 && (
+            <>
+              <h2 className="ck-h2">Contato</h2>
+              <input
+                type="email"
+                placeholder="E-mail"
+                value={form.email}
+                onChange={upd("email")}
+                className={inputCls("email")}
+              />
+              {fieldErr("email")}
+              <p className="ck-muted" style={{ fontSize: 13 }}>
+                Enviaremos a confirmação da compra para este e-mail.
+              </p>
+            </>
+          )}
 
-            <h2 className="ck-h2">Pagamento</h2>
-            <p className="ck-muted">Todas as transações são seguras e criptografadas.</p>
-            <div className="ck-pay-option ck-pay-active">
-              <div className="ck-radio" />
-              <div style={{ flex: 1 }}>
-                <strong>Pix</strong>
-                <div className="ck-muted" style={{ fontSize: 13 }}>
-                  Aprovação imediata. Clique em pagar para gerar o QR Code.
+          {step === 2 && (
+            <>
+              <h2 className="ck-h2">Entrega</h2>
+              <div className="ck-row">
+                <div style={{ flex: 1 }}>
+                  <input placeholder="Nome" value={form.nome} onChange={upd("nome")} className={inputCls("nome")} />
+                  {fieldErr("nome")}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <input placeholder="Sobrenome" value={form.sobrenome} onChange={upd("sobrenome")} className={inputCls("sobrenome")} />
+                  {fieldErr("sobrenome")}
                 </div>
               </div>
-              <span className="ck-pix-badge">PIX</span>
-            </div>
+              <input
+                placeholder="CPF"
+                value={form.cpf}
+                onChange={upd("cpf")}
+                className={inputCls("cpf")}
+                inputMode="numeric"
+              />
+              {fieldErr("cpf")}
+              <input
+                placeholder="CEP"
+                value={form.cep}
+                onChange={upd("cep")}
+                className={inputCls("cep")}
+                inputMode="numeric"
+              />
+              {fieldErr("cep")}
+              <div className="ck-row">
+                <div style={{ flex: 1 }}>
+                  <input placeholder="Endereço" value={form.endereco} onChange={upd("endereco")} className={inputCls("endereco")} />
+                  {fieldErr("endereco")}
+                </div>
+                <div style={{ maxWidth: 120 }}>
+                  <input placeholder="Número" value={form.numero} onChange={upd("numero")} className={inputCls("numero")} />
+                  {fieldErr("numero")}
+                </div>
+              </div>
+              <div className="ck-row">
+                <div style={{ flex: 1 }}>
+                  <input placeholder="Cidade" value={form.cidade} onChange={upd("cidade")} className={inputCls("cidade")} />
+                  {fieldErr("cidade")}
+                </div>
+                <select value={form.estado} onChange={upd("estado")} className="ck-input">
+                  {["AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO"].map((uf) => (
+                    <option key={uf} value={uf}>{uf}</option>
+                  ))}
+                </select>
+              </div>
+              <input
+                placeholder="Telefone"
+                value={form.telefone}
+                onChange={upd("telefone")}
+                className={inputCls("telefone")}
+                inputMode="tel"
+              />
+              {fieldErr("telefone")}
+            </>
+          )}
 
-            <div className="ck-total">
-              <span>Total</span>
-              <strong>{formatBRL(TOTAL)}</strong>
-            </div>
+          {step === 3 && (
+            <>
+              <h2 className="ck-h2">Pagamento</h2>
+              <p className="ck-muted">Todas as transações são seguras e criptografadas.</p>
+              <div className="ck-pay-option ck-pay-active">
+                <div className="ck-radio" />
+                <div style={{ flex: 1 }}>
+                  <strong>Pix</strong>
+                  <div className="ck-muted" style={{ fontSize: 13 }}>
+                    Aprovação imediata. Clique em pagar para gerar o QR Code.
+                  </div>
+                </div>
+                <span className="ck-pix-badge">PIX</span>
+              </div>
+              <div className="ck-total">
+                <span>Total</span>
+                <strong>{formatBRL(TOTAL)}</strong>
+              </div>
+            </>
+          )}
 
-            <button type="submit" className="ck-pay-btn">
-              Pagar agora
-            </button>
-
-            <div className="ck-trust">
-              <ShieldCheck size={14} /> Pagamento processado em ambiente seguro
-            </div>
-          </form>
-        ) : (
-          <div className="ck-card">
-            <div className="ck-summary">
-              <span>Pagamento via Pix</span>
-              <strong>{formatBRL(TOTAL)}</strong>
-            </div>
-
+          {step === "pix" && (
             <div className="ck-pix-box">
               <div className="ck-pix-timer">
                 Expira em <strong>{mm}:{ss}</strong>
@@ -231,7 +333,6 @@ function CheckoutPage() {
               <p className="ck-muted" style={{ textAlign: "center" }}>
                 Abra o app do seu banco, escolha pagar com Pix e escaneie o QR Code.
               </p>
-
               <label className="ck-h2" style={{ fontSize: 14, marginTop: 8 }}>Pix Copia e Cola</label>
               <div className="ck-copy">
                 <code>{pixPayload}</code>
@@ -240,15 +341,30 @@ function CheckoutPage() {
                 </button>
               </div>
             </div>
+          )}
 
-            <button type="button" className="ck-pay-btn" onClick={() => setStep("form")} style={{ background: "#444" }}>
-              Voltar
-            </button>
-            <div className="ck-trust">
-              <ShieldCheck size={14} /> Após o pagamento, a confirmação é automática.
+          {/* Navegação */}
+          {step !== "pix" ? (
+            <div className="ck-nav">
+              {step !== 1 && (
+                <button type="button" className="ck-pay-btn ck-btn-secondary" onClick={back}>
+                  <ChevronLeft size={16} /> Voltar
+                </button>
+              )}
+              <button type="button" className="ck-pay-btn" onClick={next}>
+                {step === 3 ? "Pagar agora" : <>Continuar <ChevronRight size={16} /></>}
+              </button>
             </div>
+          ) : (
+            <button type="button" className="ck-pay-btn ck-btn-secondary" onClick={back}>
+              <ChevronLeft size={16} /> Voltar
+            </button>
+          )}
+
+          <div className="ck-trust">
+            <ShieldCheck size={14} /> Pagamento processado em ambiente seguro
           </div>
-        )}
+        </div>
       </main>
 
       <footer className="ck-footer">
