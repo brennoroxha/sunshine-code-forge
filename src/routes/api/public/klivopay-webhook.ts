@@ -99,8 +99,9 @@ async function sendUtmifyOrder({ payload, hash, amount, paymentMethod, status }:
     const customer = payload?.customer || payload?.data?.customer || payload?.transaction?.customer || {};
     const utms = payload?.tracking || payload?.utm || payload?.data?.utm || {};
     const now = new Date().toISOString().replace("T", " ").substring(0, 19);
-    const amountCents = Math.round(Number(amount || 0) * (Number(amount) > 1000 ? 1 : 100));
-    const finalAmount = Number(amount) > 1000 ? Number(amount) : Math.round(Number(amount || 79.9) * 100);
+    // Klivopay normalmente envia em centavos; se já vier <= 1000, assume reais
+    const numAmount = Number(amount || 0);
+    const finalAmount = numAmount > 1000 ? Math.round(numAmount) : Math.round((numAmount || 79.9) * 100);
 
     const body = {
       orderId: String(hash || `order_${Date.now()}`),
