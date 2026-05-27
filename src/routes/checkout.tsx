@@ -147,6 +147,10 @@ function CheckoutPage() {
         if (typeof w.pixel?.track === "function") { w.pixel.track("InitiateCheckout", payload); }
         w.dataLayer = w.dataLayer || [];
         w.dataLayer.push({ event: "begin_checkout", ecommerce: { value, currency: "BRL", items: payload.contents } });
+        if (typeof w.gtag === "function") {
+          w.gtag("event", "begin_checkout", { currency: "BRL", value, items: [{ item_id: `kit-0${loadedKit.id}-slim-belly`, item_name: "Cinta Slim Belly", quantity: loadedKit.id, price: value }] });
+          fired = true;
+        }
       } catch (e) {
         console.error("[InitiateCheckout] tracking error", e);
       }
