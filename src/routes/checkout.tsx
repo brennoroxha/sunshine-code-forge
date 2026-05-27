@@ -7,8 +7,16 @@ import { createPixTransaction } from "@/lib/klivopay.functions";
 
 export const Route = createFileRoute("/checkout")({
   component: CheckoutPage,
+  validateSearch: (search: Record<string, unknown>) => ({
+    kit: search.kit === "1" || search.kit === 1 ? 1 : 2,
+  }),
   head: () => ({ meta: [{ title: "Checkout — ConfiaShop" }] }),
 });
+
+const KIT_OPTIONS: Record<number, { id: number; label: string; title: string; price: number; priceLabel: string }> = {
+  1: { id: 1, label: "1 Cinta", title: "1 Cinta", price: 5990, priceLabel: "R$ 59,90" },
+  2: { id: 2, label: "KIT 2", title: "2 Cintas", price: 7990, priceLabel: "R$ 79,90" },
+};
 
 const TOTAL = 7990;
 const PIX_KEY = "64119790000101";
