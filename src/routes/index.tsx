@@ -331,7 +331,10 @@ function Index() {
                 boxShadow: "0 4px 20px rgba(0,0,0,.06)",
               }}
             >
-              <h1 className="sb-title">KIT 02 Cinta Modeladora Cintura Alta — Slim Belly</h1>
+              <h1 className="sb-title">Leve 2 Cintas Modeladoras Slim Belly pelo preço de 1</h1>
+              <p style={{ fontSize: 14, color: "#6b6b6b", marginTop: 6, marginBottom: 4 }}>
+                Escolha 2 cores e 2 tamanhos — frete grátis incluído
+              </p>
               <div className="sb-rating">
                 <span className="sb-stars">⭐⭐⭐⭐⭐</span>
                 <strong>4.9</strong>
