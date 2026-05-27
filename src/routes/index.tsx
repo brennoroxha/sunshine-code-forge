@@ -64,9 +64,9 @@ const SIZE_TABLE = [
 ];
 
 const KITS = [
-  { id: 1, label: "KIT 1", title: "1 Cinta", price: 5990, priceLabel: "R$ 59,90", badge: null as string | null },
-  { id: 2, label: "KIT 2", title: "2 Cintas", price: 7990, priceLabel: "R$ 79,90", badge: "MAIS VENDIDO" },
-  { id: 3, label: "KIT 3", title: "3 Cintas", price: 9990, priceLabel: "R$ 99,90", badge: "MELHOR CUSTO" },
+  { id: 1, qty: 1, label: "1 Cinta", title: "1 Cinta", price: 5990, priceLabel: "R$ 59,90", badge: null as string | null },
+  { id: 2, qty: 2, label: "Kit 2 Cintas", title: "2 Cintas", price: 7990, priceLabel: "R$ 79,90", badge: "MAIS VENDIDO" },
+  { id: 3, qty: 3, label: "Kit 3 Cintas", title: "3 Cintas", price: 9990, priceLabel: "R$ 99,90", badge: "MELHOR CUSTO" },
 ];
 
 const TESTIMONIALS = [
@@ -143,7 +143,26 @@ function Index() {
   const [stockBySize] = useState<number[]>(() =>
     SIZES.map(() => 3 + Math.floor(Math.random() * 5)),
   );
-  // Persist kit choice for checkout
+  const maxItems = selectedKit.qty;
+  const remainingColors = Math.max(0, maxItems - colors.length);
+  const remainingSizes = Math.max(0, maxItems - sizes.length);
+  const pieceWord = (n: number, s: string, p: string) => (n === 1 ? s : p);
+  const buildHint = (kind: "cor" | "tamanho", remaining: number, current: number[], labels: string[]) => {
+    if (remaining > 0) {
+      const word = kind === "cor" ? pieceWord(remaining, "cor", "cores") : pieceWord(remaining, "tamanho", "tamanhos");
+      const prefix = current.length === 0 ? "escolha" : "escolha mais";
+      return `${prefix} ${remaining} ${word}`;
+    }
+    // all selected — show summary
+    if (current.length === 0) return "";
+    const counts = new Map<number, number>();
+    current.forEach((i) => counts.set(i, (counts.get(i) ?? 0) + 1));
+    return Array.from(counts.entries())
+      .map(([i, c]) => (c > 1 ? `${c}x ${labels[i]}` : labels[i]))
+      .join(" + ");
+  };
+
+  // Persist kit choice for checkout + reset selections when kit changes
   useEffect(() => {
     try {
       localStorage.setItem(
@@ -151,7 +170,11 @@ function Index() {
         JSON.stringify({ id: selectedKit.id, label: selectedKit.label, title: selectedKit.title, price: selectedKit.price, priceLabel: selectedKit.priceLabel }),
       );
     } catch {}
+    setColors([]);
+    setSizes([]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedKit.id]);
+
   const [deliveryDates, setDeliveryDates] = useState<{ placed: string; processed: string; delivered: string } | null>(null);
   const [shippingRange, setShippingRange] = useState<{ from: string; to: string } | null>(null);
   const [city, setCity] = useState<{ name: string; region: string }>({ name: "Ourinhos", region: "SP" });
@@ -399,14 +422,10 @@ function Index() {
             <div className="sb-selector">
 
               <label className="sb-label">
-                Cores (<strong>escolha 2, pode repetir</strong>):{" "}
-                <strong>
-                  {colors.length === 0
-                    ? "—"
-                    : colors.length === 2 && colors[0] === colors[1]
-                    ? `2x ${COLORS[colors[0]].name}`
-                    : colors.map((i) => COLORS[i].name).join(" + ")}
-                </strong>
+                <strong>{selectedKit.label}:</strong>{" "}
+                {remainingColors > 0
+                  ? `${colors.length === 0 ? "escolha" : "escolha mais"} ${remainingColors} ${pieceWord(remainingColors, "cor", "cores")}${maxItems > 1 ? " (pode repetir)" : ""}`
+                  : `Cores: ${buildHint("cor", 0, colors, COLORS.map((c) => c.name))}`}
               </label>
               <div className="sb-swatches">
                 {COLORS.map((c, i) => {
@@ -416,7 +435,7 @@ function Index() {
                       key={c.name}
                       onClick={() => {
                         setMainImg(c.imgIndex);
-                        setColors((prev) => (prev.length >= 2 ? [i] : [...prev, i]));
+                        setColors((prev) => (prev.length >= maxItems ? [i] : [...prev, i]));
                       }}
                       className={`sb-swatch ${count > 0 ? "is-active" : ""}`}
                       aria-label={c.name}
@@ -472,8 +491,10 @@ function Index() {
 
             <div className="sb-selector">
               <label className="sb-label">
-                Tamanhos (<strong>escolha 2, pode repetir</strong>):{" "}
-                <strong>{sizes.map((i) => SIZES[i]).join(" + ")}</strong>
+                <strong>{selectedKit.label}:</strong>{" "}
+                {remainingSizes > 0
+                  ? `${sizes.length === 0 ? "escolha" : "escolha mais"} ${remainingSizes} ${pieceWord(remainingSizes, "tamanho", "tamanhos")}${maxItems > 1 ? " (pode repetir)" : ""}`
+                  : `Tamanhos: ${buildHint("tamanho", 0, sizes, SIZES)}`}
               </label>
               <div className="sb-sizes">
                 {SIZES.map((s, i) => {
@@ -483,7 +504,7 @@ function Index() {
                       key={s}
                       onClick={() =>
                         setSizes((prev) =>
-                          prev.length >= 2 ? [i] : [...prev, i]
+                          prev.length >= maxItems ? [i] : [...prev, i]
                         )
                       }
                       className={`sb-size ${count > 0 ? "is-active" : ""}`}
