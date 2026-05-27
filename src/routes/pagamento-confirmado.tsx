@@ -55,6 +55,22 @@ function PagamentoConfirmadoPage() {
         // GTM dataLayer
         w.dataLayer = w.dataLayer || [];
         w.dataLayer.push({ event: "purchase", ecommerce: { transaction_id: hash, value: amount, currency: "BRL" } });
+        // Google Ads (gtag) — conversão + purchase
+        if (typeof w.gtag === "function") {
+          w.gtag("event", "conversion", {
+            send_to: "AW-17951971754/316ACNHlmvgbEKqzlfBC",
+            value: amount,
+            currency: "BRL",
+            transaction_id: hash,
+          });
+          w.gtag("event", "purchase", {
+            transaction_id: hash,
+            value: amount,
+            currency: "BRL",
+            items: [{ item_id: "kit-02-slim-belly", item_name: "KIT 02 Cinta Modeladora Cintura Alta", quantity: 1, price: amount }],
+          });
+          fired = true;
+        }
         // Custom event
         window.dispatchEvent(new CustomEvent("purchase", { detail: payload }));
       } catch (e) {
