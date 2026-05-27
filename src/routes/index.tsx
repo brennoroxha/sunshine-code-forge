@@ -117,6 +117,8 @@ function Index() {
   const [shippingRange, setShippingRange] = useState<{ from: string; to: string } | null>(null);
   const [city, setCity] = useState<{ name: string; region: string }>({ name: "Ourinhos", region: "SP" });
   const [viewers, setViewers] = useState(21);
+  const [isCtaVisible, setIsCtaVisible] = useState(true);
+  const ctaRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
     const ctrl = new AbortController();
@@ -202,6 +204,22 @@ function Index() {
       { threshold: 0.15 },
     );
     els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
+  // Watch CTA visibility for sticky footer
+  useEffect(() => {
+    const node = ctaRef.current;
+    if (!node) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsCtaVisible(entry.isIntersecting);
+        });
+      },
+      { threshold: 0 },
+    );
+    io.observe(node);
     return () => io.disconnect();
   }, []);
 
@@ -386,7 +404,7 @@ function Index() {
               <span className="sb-price-new">R$ 79,90</span>
             </div>
 
-            <Link to="/checkout" className="sb-cta sb-cta-primary" onClick={ripple}>
+            <Link to="/checkout" ref={ctaRef} className="sb-cta sb-cta-primary" onClick={ripple}>
               🛒 COMPRAR AGORA
             </Link>
 
@@ -679,6 +697,12 @@ function Index() {
           Confia Shop LTDA — CNPJ: 64.119.790/0001-01 — Todos os direitos reservados
         </div>
       </footer>
+      {/* Sticky mobile CTA */}
+      <div className={`sb-sticky-cta ${!isCtaVisible ? "is-visible" : ""}`}>
+        <Link to="/checkout" className="sb-cta sb-cta-primary" onClick={ripple}>
+          🛒 COMPRAR AGORA — R$ 79,90
+        </Link>
+      </div>
     </div>
   );
 }
