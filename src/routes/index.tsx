@@ -342,8 +342,62 @@ function Index() {
               </div>
               <div style={{ width: "100%", height: 1, background: "#e5e5e5", margin: "12px 0" }} />
 
+            <div className="sb-selector">
+              <label className="sb-label">
+                Escolha seu kit: <strong>{selectedKit.label} — {selectedKit.title}</strong>
+              </label>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
+                {KITS.map((k) => {
+                  const active = k.id === kitId;
+                  return (
+                    <button
+                      key={k.id}
+                      type="button"
+                      onClick={() => setKitId(k.id)}
+                      style={{
+                        position: "relative",
+                        padding: "12px 6px 10px",
+                        border: `2px solid ${active ? "var(--sb-cta)" : "#e5e5e5"}`,
+                        background: active ? "#fff5f8" : "#fff",
+                        borderRadius: 12,
+                        cursor: "pointer",
+                        textAlign: "center",
+                        transition: "all .15s ease",
+                      }}
+                    >
+                      {k.badge && (
+                        <span
+                          style={{
+                            position: "absolute",
+                            top: -10,
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                            background: k.badge === "MAIS VENDIDO" ? "var(--sb-cta)" : "#1a1a1a",
+                            color: "#fff",
+                            fontSize: 9,
+                            fontWeight: 800,
+                            padding: "3px 8px",
+                            borderRadius: 999,
+                            whiteSpace: "nowrap",
+                            letterSpacing: 0.3,
+                          }}
+                        >
+                          {k.badge}
+                        </span>
+                      )}
+                      <div style={{ fontSize: 12, fontWeight: 700, color: "#1a1a1a" }}>{k.label}</div>
+                      <div style={{ fontSize: 11, color: "#6b6b6b", marginTop: 2 }}>{k.title}</div>
+                      <div style={{ fontSize: 15, fontWeight: 800, marginTop: 6, color: active ? "var(--sb-cta)" : "#1a1a1a" }}>
+                        {k.priceLabel}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
 
             <div className="sb-selector">
+
               <label className="sb-label">
                 Cores (<strong>escolha 2, pode repetir</strong>):{" "}
                 <strong>
