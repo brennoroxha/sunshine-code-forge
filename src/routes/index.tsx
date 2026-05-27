@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { ClipboardList, Package, PackageCheck, ShieldCheck, RefreshCw } from "lucide-react";
 import desc1 from "@/assets/desc-1.png";
@@ -378,9 +378,9 @@ function Index() {
               <span className="sb-price-new">R$ 79,90</span>
             </div>
 
-            <a href="#comprar" className="sb-cta sb-cta-primary" onClick={ripple}>
+            <Link to="/checkout" className="sb-cta sb-cta-primary" onClick={ripple}>
               🛒 COMPRAR AGORA
-            </a>
+            </Link>
 
             <div className="sb-social-count">
               <span className="sb-pulse" /> {viewers} pessoas estão vendo agora
@@ -611,7 +611,7 @@ function Index() {
         <div className="sb-container" data-reveal>
           <h2>Garanta já a sua com desconto de lançamento</h2>
           <p>Estoque limitado — Últimas unidades</p>
-          <a href="#comprar" className="sb-cta-light" onClick={ripple}>
+          <Link to="/checkout" className="sb-cta-light" onClick={ripple as any}>
             QUERO MINHA CINTA AGORA →
           </a>
         </div>
