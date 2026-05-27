@@ -66,7 +66,6 @@ const SIZE_TABLE = [
 const KITS = [
   { id: 1, qty: 1, label: "1 Cinta", title: "1 Cinta", price: 5990, priceLabel: "R$ 59,90", badge: null as string | null },
   { id: 2, qty: 2, label: "Kit 2 Cintas", title: "2 Cintas", price: 7990, priceLabel: "R$ 79,90", badge: "MAIS VENDIDO" },
-  { id: 3, qty: 3, label: "Kit 3 Cintas", title: "3 Cintas", price: 9990, priceLabel: "R$ 99,90", badge: "MELHOR CUSTO" },
 ];
 
 const TESTIMONIALS = [
@@ -369,7 +368,7 @@ function Index() {
               <label className="sb-label">
                 Escolha seu kit: <strong>{selectedKit.label} — {selectedKit.title}</strong>
               </label>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 8 }}>
                 {KITS.map((k) => {
                   const active = k.id === kitId;
                   return (
@@ -679,7 +678,6 @@ function Index() {
           <h3 className="sb-desc-h3">Embalagem Contém</h3>
           <ul className="sb-desc-list">
             <li>01x Cinta Modeladora Cintura Alta - Slim Belly</li>
-            <li>KIT 3 - 03 Cintas Modeladoras Cintura Alta - Slim Belly (Preta, Bege e Vermelha)</li>
             <li>
               KIT 5 - 05 Cintas Modeladoras Cintura Alta - Slim Belly (2x Pretas, 2x Bege e 01x
               Vermelha)
