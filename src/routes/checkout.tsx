@@ -103,7 +103,20 @@ function CheckoutPage() {
   const [expira, setExpira] = useState(15 * 60);
   const [pixData, setPixData] = useState<{ hash: string; pix_copy_paste: string; pix_qr_code: string } | null>(null);
   const [pixError, setPixError] = useState<string | null>(null);
+  const [kit, setKit] = useState<{ id: number; label: string; title: string; price: number; priceLabel: string }>(
+    { id: 2, label: "KIT 2", title: "2 Cintas", price: 7990, priceLabel: "R$ 79,90" },
+  );
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("sb_kit");
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed.price === "number") setKit(parsed);
+      }
+    } catch {}
+  }, []);
   const createPix = useServerFn(createPixTransaction);
+
 
   useEffect(() => {
     if (step !== "pix") return;
