@@ -858,8 +858,8 @@ button {
 
 /* =========== 11. FOOTER =========== */
 .sb-footer {
-  background: var(--sb-dark);
-  color: #c8c8d4;
+  background: #ffffff;
+  color: var(--sb-text);
   padding: 50px 0 20px;
 }
 .sb-footer-grid {
@@ -881,7 +881,7 @@ button {
   line-height: 1.6;
 }
 .sb-footer h4 {
-  color: white;
+  color: var(--sb-text);
   font-size: 15px;
   margin-bottom: 14px;
   font-family: "Inter", system-ui, sans-serif;
@@ -905,7 +905,7 @@ button {
   gap: 6px;
 }
 .sb-pay span {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.06);
   padding: 5px 10px;
   border-radius: 4px;
   font-size: 11px;
@@ -916,9 +916,9 @@ button {
   text-align: center;
   margin-top: 40px;
   padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
   font-size: 12px;
-  color: #8a8aa0;
+  color: var(--sb-muted);
 }
 
 /* Description section */
