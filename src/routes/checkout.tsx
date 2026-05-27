@@ -144,6 +144,7 @@ function CheckoutPage() {
     if (s === 2) {
       if (!isValidCEP(form.cep)) e.cep = "CEP inválido (8 dígitos)";
       if (!form.endereco.trim()) e.endereco = "Informe o endereço";
+      if (!form.bairro.trim()) e.bairro = "Informe o bairro";
       if (!form.numero.trim()) e.numero = "Nº";
       if (!form.cidade.trim()) e.cidade = "Informe a cidade";
     }
