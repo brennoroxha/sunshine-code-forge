@@ -179,6 +179,7 @@ function CheckoutPage() {
     if (s === 2) {
       return isValidCEP(form.cep)
         && !!form.endereco.trim()
+        && !!form.bairro.trim()
         && !!form.numero.trim()
         && !!form.cidade.trim();
     }
