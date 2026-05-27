@@ -1140,3 +1140,7 @@ button {
 .ck-trust-stars span { margin-left: 6px; }
 .ck-trust-quote { font-style: italic; color: #4b5563; font-size: 13px; line-height: 1.5; margin: 10px 0 6px; }
 .ck-trust-author { font-size: 13px; font-weight: 600; color: #111; }
+
+.ck-secure { display: flex; align-items: center; gap: 8px; color: #0b2447; }
+.ck-secure-text { display: flex; flex-direction: column; line-height: 1.1; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
+.ck-secure-text strong { font-size: 12px; }
