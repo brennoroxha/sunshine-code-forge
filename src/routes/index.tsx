@@ -115,7 +115,7 @@ const FAQS = [
   },
   {
     q: "Em quantas parcelas posso parcelar?",
-    a: "Você pode parcelar em até 12x sem juros no cartão de crédito. Também aceitamos Pix com 5% de desconto adicional.",
+    a: "Aceitamos Pix com 5% de desconto adicional. Pagamento via Pix é processado instantaneamente e seu pedido é confirmado na hora.",
   },
   {
     q: "Qual o prazo de entrega?",
@@ -353,9 +353,9 @@ function Index() {
                 boxShadow: "0 4px 20px rgba(0,0,0,.06)",
               }}
             >
-              <h1 className="sb-title">Leve 2 Cintas Modeladoras Slim Belly pelo preço de 1</h1>
+              <h1 className="sb-title">Cinta Modeladora Slim Belly — Cintura Alta</h1>
               <p style={{ fontSize: 14, color: "#6b6b6b", marginTop: 6, marginBottom: 4 }}>
-                Escolha 2 cores e 2 tamanhos — frete grátis incluído
+                Escolha seu kit abaixo
               </p>
               <div className="sb-rating">
                 <span className="sb-stars">⭐⭐⭐⭐⭐</span>
@@ -421,10 +421,7 @@ function Index() {
             <div className="sb-selector">
 
               <label className="sb-label">
-                <strong>{selectedKit.label}:</strong>{" "}
-                {remainingColors > 0
-                  ? `${colors.length === 0 ? "escolha" : "escolha mais"} ${remainingColors} ${pieceWord(remainingColors, "cor", "cores")}${maxItems > 1 ? " (pode repetir)" : ""}`
-                  : `Cores: ${buildHint("cor", 0, colors, COLORS.map((c) => c.name))}`}
+                Cor — {colors.length > 0 ? colors.map((i) => COLORS[i].name).join(", ") : "escolha"}
               </label>
               <div className="sb-swatches">
                 {COLORS.map((c, i) => {
@@ -490,10 +487,7 @@ function Index() {
 
             <div className="sb-selector">
               <label className="sb-label">
-                <strong>{selectedKit.label}:</strong>{" "}
-                {remainingSizes > 0
-                  ? `${sizes.length === 0 ? "escolha" : "escolha mais"} ${remainingSizes} ${pieceWord(remainingSizes, "tamanho", "tamanhos")}${maxItems > 1 ? " (pode repetir)" : ""}`
-                  : `Tamanhos: ${buildHint("tamanho", 0, sizes, SIZES)}`}
+                Tamanho — {sizes.length > 0 ? sizes.map((i) => SIZES[i]).join(", ") : "escolha"}
               </label>
               <div className="sb-sizes">
                 {SIZES.map((s, i) => {
@@ -658,121 +652,9 @@ function Index() {
             <img src={desc3} alt="Tabela de tamanhos Slim Belly" loading="lazy" />
           </div>
 
-          <h3 className="sb-desc-h3">Características</h3>
-          <ul className="sb-desc-list">
-            <li>80% Náilon + 20% Elastano</li>
-            <li>Conforto perfeito: contorna perfeitamente o seu corpo para a liberdade irrestrita.</li>
-            <li>Adesivo Aquecedor: Proporciona calor e cuidado para o seu bem-estar.</li>
-            <li>Controle de barriga de cintura alta: molda sua cintura sem esforço para suporte extra.</li>
-            <li>Efeito lifting de bumbum: realça instantaneamente suas curvas para uma aparência mais atraente.</li>
-            <li>Resistência: Mantém a forma ao longo do tempo, resistindo à deformação.</li>
-            <li>Tecido Respirável: frescor e respirabilidade durante todo o dia.</li>
-            <li>
-              Tamanho: M: Cintura 55-65cm, quadril 70-80cm, peso 45-55kg / G: Cintura 60-70cm,
-              quadril 75-85cm, peso 55-65kg / XL: Cintura 65-75cm, quadril 80-90cm, peso 65-75kg /
-              XXL: Cintura 70-80cm, quadril 85-95cm, peso 75-85kg
-            </li>
-            <li>Cores: Preta, Bege e Vermelha</li>
-          </ul>
-
-          <h3 className="sb-desc-h3">Embalagem Contém</h3>
-          <ul className="sb-desc-list">
-            <li>01x Cinta Modeladora Cintura Alta - Slim Belly</li>
-            <li>
-              KIT 5 - 05 Cintas Modeladoras Cintura Alta - Slim Belly (2x Pretas, 2x Bege e 01x
-              Vermelha)
-            </li>
-          </ul>
         </div>
       </section>
 
-      {/* SEÇÃO ANTES/DEPOIS */}
-      <section className="sb-section" style={{ background: "#fff8f5" }}>
-        <div className="sb-container">
-          <h2 className="sb-h2" data-reveal style={{ textAlign: "center", marginBottom: 24 }}>
-            Resultado real das nossas clientes
-          </h2>
-          <div
-            data-reveal
-            style={{
-              display: "flex",
-              gap: 16,
-              overflowX: "auto",
-              scrollSnapType: "x mandatory",
-              paddingBottom: 8,
-              WebkitOverflowScrolling: "touch",
-            }}
-          >
-            {[
-              { before: IMAGES[2], after: IMAGES[0] },
-              { before: IMAGES[3], after: IMAGES[5] },
-              { before: IMAGES[4], after: IMAGES[6] },
-            ].map((pair, i) => (
-              <div
-                key={i}
-                style={{
-                  flex: "0 0 auto",
-                  width: "min(320px, 85vw)",
-                  background: "#fff",
-                  borderRadius: 16,
-                  overflow: "hidden",
-                  boxShadow: "0 4px 16px rgba(0,0,0,.08)",
-                  scrollSnapAlign: "start",
-                }}
-              >
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0 }}>
-                  <div style={{ position: "relative" }}>
-                    <img src={pair.before} alt="Antes" loading="lazy" style={{ width: "100%", height: 240, objectFit: "cover", filter: "grayscale(.3) brightness(.92)" }} />
-                    <span style={{ position: "absolute", top: 8, left: 8, background: "rgba(0,0,0,.7)", color: "#fff", fontSize: 11, fontWeight: 800, padding: "4px 8px", borderRadius: 4, letterSpacing: 0.5 }}>
-                      ANTES
-                    </span>
-                  </div>
-                  <div style={{ position: "relative" }}>
-                    <img src={pair.after} alt="Depois" loading="lazy" style={{ width: "100%", height: 240, objectFit: "cover" }} />
-                    <span style={{ position: "absolute", top: 8, left: 8, background: "var(--sb-cta)", color: "#fff", fontSize: 11, fontWeight: 800, padding: "4px 8px", borderRadius: 4, letterSpacing: 0.5 }}>
-                      DEPOIS
-                    </span>
-                  </div>
-                </div>
-                <div style={{ padding: "12px 14px", fontSize: 13, color: "#1a1a1a", fontWeight: 600, textAlign: "center" }}>
-                  Resultado em poucas semanas de uso
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 7. TABELA DE TAMANHOS */}
-
-      <section className="sb-section sb-section-soft">
-        <div className="sb-container">
-          <h2 className="sb-h2" data-reveal>
-            Tabela de Tamanhos
-          </h2>
-          <div className="sb-table-wrap" data-reveal>
-            <table className="sb-table">
-              <thead>
-                <tr>
-                  <th>Tamanho</th>
-                  <th>Cintura</th>
-                  <th>Quadril</th>
-                  <th>Peso</th>
-                </tr>
-              </thead>
-              <tbody>
-                {SIZE_TABLE.map((row) => (
-                  <tr key={row[0]}>
-                    {row.map((c, i) => (
-                      <td key={i}>{c}</td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
 
       {/* 8. DEPOIMENTOS */}
       <section className="sb-section">
