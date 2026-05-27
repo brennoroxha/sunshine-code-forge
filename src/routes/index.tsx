@@ -114,7 +114,22 @@ function Index() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [testimonial, setTestimonial] = useState(0);
   const [deliveryDates, setDeliveryDates] = useState<{ placed: string; processed: string; delivered: string } | null>(null);
+  const [shippingRange, setShippingRange] = useState<{ from: string; to: string } | null>(null);
+  const [city, setCity] = useState<{ name: string; region: string }>({ name: "Ourinhos", region: "SP" });
   const [viewers, setViewers] = useState(21);
+
+  useEffect(() => {
+    const ctrl = new AbortController();
+    fetch("https://ipapi.co/json/", { signal: ctrl.signal })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (d && d.city) {
+          setCity({ name: d.city, region: d.region_code || d.region || "" });
+        }
+      })
+      .catch(() => {});
+    return () => ctrl.abort();
+  }, []);
 
   useEffect(() => {
     let current = 21;
