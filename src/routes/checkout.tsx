@@ -357,7 +357,27 @@ function CheckoutPage() {
             <ShieldCheck size={14} /> Pagamento processado em ambiente seguro
           </div>
         </div>
+
+        {/* Resumo do pedido — sempre embaixo */}
+        <div className="ck-summary-card">
+          <div className="ck-summary-title">
+            <ShoppingBag size={18} /> Resumo do pedido
+          </div>
+          <div className="ck-summary-row">
+            <span><Tag size={14} /> Subtotal</span>
+            <strong>{formatBRL(TOTAL)}</strong>
+          </div>
+          <div className="ck-summary-row">
+            <span><Truck size={14} /> Frete</span>
+            <strong style={{ color: "#16a34a" }}>Grátis</strong>
+          </div>
+          <div className="ck-summary-row ck-summary-total">
+            <span>Total</span>
+            <strong>{formatBRL(TOTAL)}</strong>
+          </div>
+        </div>
       </main>
+
 
       <footer className="ck-footer">
         Confia Shop LTDA · CNPJ 64.119.790/0001-01
