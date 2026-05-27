@@ -111,37 +111,19 @@ function CheckoutPage() {
   const [expira, setExpira] = useState(15 * 60);
   const [pixData, setPixData] = useState<{ hash: string; pix_copy_paste: string; pix_qr_code: string } | null>(null);
   const [pixError, setPixError] = useState<string | null>(null);
-  const KIT_OPTIONS: Record<number, { id: number; label: string; title: string; price: number; priceLabel: string }> = {
-    1: { id: 1, label: "1 Cinta", title: "1 Cinta", price: 5990, priceLabel: "R$ 59,90" },
-    2: { id: 2, label: "KIT 2", title: "2 Cintas", price: 7990, priceLabel: "R$ 79,90" },
-  };
-  const [kit, setKit] = useState<{ id: number; label: string; title: string; price: number; priceLabel: string }>(KIT_OPTIONS[2]);
+  // Kit é derivado diretamente da URL (?kit=1 ou ?kit=2) — sem flash de kit 2
+  const search = Route.useSearch();
+  const kit = KIT_OPTIONS[search.kit] ?? KIT_OPTIONS[2];
   useEffect(() => {
-    let loadedKit = KIT_OPTIONS[2];
-    try {
-      // 1) Try URL ?kit=
-      const urlKitId = Number(new URLSearchParams(window.location.search).get("kit"));
-      if (urlKitId && KIT_OPTIONS[urlKitId]) {
-        loadedKit = KIT_OPTIONS[urlKitId];
-        setKit(loadedKit);
-        try { localStorage.setItem("sb_kit", JSON.stringify(loadedKit)); } catch {}
-      } else {
-        // 2) Fallback to localStorage
-        const raw = localStorage.getItem("sb_kit");
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          if (parsed && typeof parsed.price === "number" && KIT_OPTIONS[parsed.id]) {
-            loadedKit = KIT_OPTIONS[parsed.id];
-            setKit(loadedKit);
-          }
-        }
-      }
-    } catch {}
+    try { localStorage.setItem("sb_kit", JSON.stringify(kit)); } catch {}
+  }, [kit.id]);
 
+  useEffect(() => {
     // Dispara InitiateCheckout (Meta Pixel + Utmify + dataLayer)
     if (typeof window === "undefined") return;
     const key = "sb_ic_fired";
     if (sessionStorage.getItem(key)) return;
+    const loadedKit = kit;
     const value = (loadedKit.price || 7990) / 100;
     const payload = {
       value,
