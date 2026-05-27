@@ -220,12 +220,15 @@ function Index() {
                 {COLORS.map((c, i) => (
                   <button
                     key={c.name}
-                    onClick={() => setColor(i)}
+                    onClick={() => {
+                      setColor(i);
+                      setMainImg(c.imgIndex);
+                    }}
                     className={`sb-swatch ${color === i ? "is-active" : ""}`}
                     aria-label={c.name}
                     title={c.name}
                   >
-                    <img src={c.img} alt={c.name} loading="lazy" />
+                    <img src={IMAGES[c.imgIndex]} alt={c.name} loading="lazy" />
                   </button>
                 ))}
               </div>
