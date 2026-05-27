@@ -487,10 +487,7 @@ function Index() {
 
             <div className="sb-selector">
               <label className="sb-label">
-                <strong>{selectedKit.label}:</strong>{" "}
-                {remainingSizes > 0
-                  ? `${sizes.length === 0 ? "escolha" : "escolha mais"} ${remainingSizes} ${pieceWord(remainingSizes, "tamanho", "tamanhos")}${maxItems > 1 ? " (pode repetir)" : ""}`
-                  : `Tamanhos: ${buildHint("tamanho", 0, sizes, SIZES)}`}
+                Tamanho — {sizes.length > 0 ? sizes.map((i) => SIZES[i]).join(", ") : "escolha"}
               </label>
               <div className="sb-sizes">
                 {SIZES.map((s, i) => {
