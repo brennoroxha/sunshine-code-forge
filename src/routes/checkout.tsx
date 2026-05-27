@@ -204,24 +204,21 @@ function CheckoutPage() {
       </header>
 
       <main className="ck-main">
-        <div className="ck-card">
-          {/* Stepper */}
-          <div className="ck-stepper">
-            {steps.map((s, i) => (
-              <div key={s.n} className="ck-step-wrap">
-                <div className={`ck-step ${stepNum >= s.n ? "is-on" : ""} ${stepNum === s.n && step !== "pix" ? "is-active" : ""}`}>
-                  <div className="ck-step-num">{stepNum > s.n || step === "pix" ? <Check size={14} /> : s.n}</div>
-                  <span>{s.label}</span>
-                </div>
-                {i < steps.length - 1 && <div className={`ck-step-line ${stepNum > s.n ? "is-on" : ""}`} />}
+        {/* Stepper fora do card */}
+        <div className="ck-stepper">
+          {steps.map((s, i) => (
+            <div key={s.n} className="ck-step-wrap">
+              <div className={`ck-step ${stepNum >= s.n ? "is-on" : ""} ${stepNum === s.n && step !== "pix" ? "is-active" : ""}`}>
+                <div className="ck-step-num">{stepNum > s.n || step === "pix" ? <Check size={14} /> : s.n}</div>
+                <span>{s.label}</span>
               </div>
-            ))}
-          </div>
+              {i < steps.length - 1 && <div className={`ck-step-line ${stepNum > s.n ? "is-on" : ""}`} />}
+            </div>
+          ))}
+        </div>
 
-          <div className="ck-summary">
-            <span>Resumo do pedido</span>
-            <strong>{formatBRL(TOTAL)}</strong>
-          </div>
+        <div className="ck-card">
+
 
           {step === 1 && (
             <>
