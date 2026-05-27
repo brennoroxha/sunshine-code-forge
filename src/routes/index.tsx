@@ -368,7 +368,9 @@ function Index() {
             </div>
           </div>
         </div>
+        </div>
       </section>
+
 
 
       {/* 4. DESCRIÇÃO */}
