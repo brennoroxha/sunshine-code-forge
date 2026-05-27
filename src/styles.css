@@ -967,6 +967,7 @@ button {
 
 /* Delivery timeline */
 .sb-timeline {
+  position: relative;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -977,13 +978,26 @@ button {
   border: 1px solid #e5e7eb;
   border-radius: 10px;
 }
+.sb-timeline::before {
+  content: "";
+  position: absolute;
+  left: 32px;
+  right: 32px;
+  top: 32px;
+  height: 2px;
+  background: #e11d2e;
+  border-radius: 1px;
+  z-index: 0;
+}
 .sb-tl-step {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  flex: 0 0 auto;
-  min-width: 80px;
+  flex: 1 1 0;
+  min-width: 0;
 }
 .sb-tl-icon {
   width: 36px;
@@ -1009,9 +1023,5 @@ button {
   color: #6b7280;
 }
 .sb-tl-line {
-  flex: 1;
-  height: 2px;
-  background: #d1d5db;
-  margin-top: 17px;
-  border-radius: 1px;
+  display: none;
 }
