@@ -656,37 +656,6 @@ function Index() {
       </section>
 
 
-      {/* 7. TABELA DE TAMANHOS */}
-
-      <section className="sb-section sb-section-soft">
-        <div className="sb-container">
-          <h2 className="sb-h2" data-reveal>
-            Tabela de Tamanhos
-          </h2>
-          <div className="sb-table-wrap" data-reveal>
-            <table className="sb-table">
-              <thead>
-                <tr>
-                  <th>Tamanho</th>
-                  <th>Cintura</th>
-                  <th>Quadril</th>
-                  <th>Peso</th>
-                </tr>
-              </thead>
-              <tbody>
-                {SIZE_TABLE.map((row) => (
-                  <tr key={row[0]}>
-                    {row.map((c, i) => (
-                      <td key={i}>{c}</td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
       {/* 8. DEPOIMENTOS */}
       <section className="sb-section">
         <div className="sb-container">
