@@ -171,7 +171,13 @@ async function sendUtmifyOrder({ payload, hash, amount, paymentMethod, status }:
         phone: customer?.phone || customer?.phone_number || null,
         document: customer?.document || customer?.cpf || null,
         country: "BR",
-        ip: customer?.ip || null,
+        ip:
+          customer?.ip ||
+          payload?.metadata?.client_ip ||
+          payload?.data?.metadata?.client_ip ||
+          payload?.transaction?.metadata?.client_ip ||
+          payload?.ip ||
+          "0.0.0.0",
       },
       products: [
         {
