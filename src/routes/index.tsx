@@ -199,18 +199,6 @@ function Index() {
           <a href="#" className="sb-logo" aria-label="ConfiaShop">
             <img src={logo} alt="ConfiaShop" />
           </a>
-          <div className="sb-header-icons">
-            <a
-              href="https://wa.me/5500000000000"
-              aria-label="WhatsApp"
-              className="sb-icon-btn sb-icon-wa"
-            >
-              💬
-            </a>
-            <a href="#comprar" aria-label="Carrinho" className="sb-icon-btn">
-              🛒
-            </a>
-          </div>
         </div>
       </header>
 

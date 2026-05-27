@@ -151,38 +151,16 @@ button {
 .sb-header-inner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding-top: 16px;
   padding-bottom: 16px;
 }
 .sb-logo {
-  font-family: "Inter", system-ui, sans-serif;
-  font-weight: 900;
-  font-size: 28px;
-  color: var(--sb-primary);
-  letter-spacing: -0.5px;
+  display: block;
 }
-.sb-header-icons {
-  display: flex;
-  gap: 10px;
-}
-.sb-icon-btn {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: var(--sb-bg);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  transition: transform 0.2s;
-}
-.sb-icon-btn:hover {
-  transform: scale(1.08);
-}
-.sb-icon-wa {
-  background: var(--sb-green);
-  color: white;
+.sb-logo img {
+  height: 52px;
+  width: auto;
 }
 
 /* =========== 3. HERO =========== */
