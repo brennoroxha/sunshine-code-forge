@@ -961,6 +961,31 @@ button {
 .sb-logo-img { height: 40px; width: auto; }
 .sb-logo-light { filter: brightness(0) invert(1); }
 
+.sb-info-box {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.sb-info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 14px;
+  color: #1f2937;
+  line-height: 1.45;
+}
+.sb-info-ico {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #111827;
+}
+.sb-info-text strong { font-weight: 600; }
+
 /* Delivery timeline */
 .sb-timeline {
   position: relative;
