@@ -103,7 +103,20 @@ function CheckoutPage() {
   const [expira, setExpira] = useState(15 * 60);
   const [pixData, setPixData] = useState<{ hash: string; pix_copy_paste: string; pix_qr_code: string } | null>(null);
   const [pixError, setPixError] = useState<string | null>(null);
+  const [kit, setKit] = useState<{ id: number; label: string; title: string; price: number; priceLabel: string }>(
+    { id: 2, label: "KIT 2", title: "2 Cintas", price: 7990, priceLabel: "R$ 79,90" },
+  );
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("sb_kit");
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed.price === "number") setKit(parsed);
+      }
+    } catch {}
+  }, []);
   const createPix = useServerFn(createPixTransaction);
+
 
   useEffect(() => {
     if (step !== "pix") return;
@@ -236,7 +249,7 @@ function CheckoutPage() {
   const canAdvance = step !== "pix" && isStepValid(step as Step);
 
   const freteCost = frete === "full" ? 997 : 0;
-  const totalComFrete = TOTAL + freteCost;
+  const totalComFrete = kit.price + freteCost;
   const pixPayload = pixData?.pix_copy_paste || makePixPayload(totalComFrete);
   const qrUrl = pixData?.pix_qr_code
     ? `https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(pixData.pix_qr_code)}`
@@ -550,15 +563,15 @@ function CheckoutPage() {
               className="ck-cart-img"
             />
             <div className="ck-cart-info">
-              <div className="ck-cart-name">KIT 02 Cinta Modeladora Cintura Alta — Slim Belly</div>
+              <div className="ck-cart-name">{kit.label} — Cinta Modeladora Slim Belly ({kit.title})</div>
               <div className="ck-cart-meta">Qtd: 1</div>
             </div>
-            <div className="ck-cart-price">{formatBRL(TOTAL)}</div>
+            <div className="ck-cart-price">{formatBRL(kit.price)}</div>
           </div>
 
           <div className="ck-summary-row">
             <span><Tag size={14} /> Subtotal</span>
-            <strong>{formatBRL(TOTAL)}</strong>
+            <strong>{formatBRL(kit.price)}</strong>
           </div>
           <div className="ck-summary-row">
             <span><Truck size={14} />{` Frete ${frete === "full" ? "(Entrega Full)" : "(Transportadora)"}`}</span>

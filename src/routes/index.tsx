@@ -63,26 +63,51 @@ const SIZE_TABLE = [
   ["G2", "80-90cm", "95-105cm", "90-100kg"],
 ];
 
+const KITS = [
+  { id: 1, label: "KIT 1", title: "1 Cinta", price: 5990, priceLabel: "R$ 59,90", badge: null as string | null },
+  { id: 2, label: "KIT 2", title: "2 Cintas", price: 7990, priceLabel: "R$ 79,90", badge: "MAIS VENDIDO" },
+  { id: 3, label: "KIT 3", title: "3 Cintas", price: 9990, priceLabel: "R$ 99,90", badge: "MELHOR CUSTO" },
+];
+
 const TESTIMONIALS = [
   {
-    initials: "M.S.",
+    initials: "MS",
     name: "Marina Souza",
     city: "São Paulo, SP",
-    text: "Adorei! A cinta é super confortável e modela muito bem. Uso o dia todo no trabalho sem incomodar.",
+    text: "Perdi 2cm de cintura na primeira semana usando todos os dias. Super confortável, uso até no trabalho.",
   },
   {
-    initials: "A.R.",
+    initials: "AR",
     name: "Amanda Ribeiro",
     city: "Rio de Janeiro, RJ",
-    text: "Resultado imediato! A cintura fica marcada e o bumbum mais empinado. Comprei outra para presentear minha irmã.",
+    text: "Resultado imediato! Marquei a cintura e o bumbum ficou mais empinado. Comprei outra pra minha irmã.",
   },
   {
-    initials: "C.P.",
+    initials: "CP",
     name: "Carla Pereira",
     city: "Belo Horizonte, MG",
-    text: "Tecido respirável de verdade, não esquenta. Vale cada centavo, recomendo demais!",
+    text: "Em 15 dias minha barriga ficou notavelmente mais lisa. Tecido respirável, não esquenta nada.",
+  },
+  {
+    initials: "JM",
+    name: "Juliana Martins",
+    city: "Curitiba, PR",
+    text: "Voltei a usar vestido justo depois de 2 anos. Disfarça totalmente a gordurinha, ninguém percebe.",
+  },
+  {
+    initials: "PL",
+    name: "Patrícia Lima",
+    city: "Salvador, BA",
+    text: "Perdi 3cm de cintura em 20 dias usando junto com caminhada. Vale demais cada centavo.",
+  },
+  {
+    initials: "RA",
+    name: "Renata Almeida",
+    city: "Porto Alegre, RS",
+    text: "Sumiu aquela gordurinha lateral que eu odiava. Já tô na segunda compra, presenteei minha mãe.",
   },
 ];
+
 
 const FAQS = [
   {
@@ -113,6 +138,20 @@ function Index() {
   const [sizes, setSizes] = useState<number[]>([1]);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [testimonial, setTestimonial] = useState(0);
+  const [kitId, setKitId] = useState<number>(2);
+  const selectedKit = KITS.find((k) => k.id === kitId) ?? KITS[1];
+  const [stockBySize] = useState<number[]>(() =>
+    SIZES.map(() => 3 + Math.floor(Math.random() * 5)),
+  );
+  // Persist kit choice for checkout
+  useEffect(() => {
+    try {
+      localStorage.setItem(
+        "sb_kit",
+        JSON.stringify({ id: selectedKit.id, label: selectedKit.label, title: selectedKit.title, price: selectedKit.price, priceLabel: selectedKit.priceLabel }),
+      );
+    } catch {}
+  }, [selectedKit.id]);
   const [deliveryDates, setDeliveryDates] = useState<{ placed: string; processed: string; delivered: string } | null>(null);
   const [shippingRange, setShippingRange] = useState<{ from: string; to: string } | null>(null);
   const [city, setCity] = useState<{ name: string; region: string }>({ name: "Ourinhos", region: "SP" });
@@ -292,7 +331,10 @@ function Index() {
                 boxShadow: "0 4px 20px rgba(0,0,0,.06)",
               }}
             >
-              <h1 className="sb-title">KIT 02 Cinta Modeladora Cintura Alta — Slim Belly</h1>
+              <h1 className="sb-title">Leve 2 Cintas Modeladoras Slim Belly pelo preço de 1</h1>
+              <p style={{ fontSize: 14, color: "#6b6b6b", marginTop: 6, marginBottom: 4 }}>
+                Escolha 2 cores e 2 tamanhos — frete grátis incluído
+              </p>
               <div className="sb-rating">
                 <span className="sb-stars">⭐⭐⭐⭐⭐</span>
                 <strong>4.9</strong>
@@ -300,8 +342,62 @@ function Index() {
               </div>
               <div style={{ width: "100%", height: 1, background: "#e5e5e5", margin: "12px 0" }} />
 
+            <div className="sb-selector">
+              <label className="sb-label">
+                Escolha seu kit: <strong>{selectedKit.label} — {selectedKit.title}</strong>
+              </label>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
+                {KITS.map((k) => {
+                  const active = k.id === kitId;
+                  return (
+                    <button
+                      key={k.id}
+                      type="button"
+                      onClick={() => setKitId(k.id)}
+                      style={{
+                        position: "relative",
+                        padding: "12px 6px 10px",
+                        border: `2px solid ${active ? "var(--sb-cta)" : "#e5e5e5"}`,
+                        background: active ? "#fff5f8" : "#fff",
+                        borderRadius: 12,
+                        cursor: "pointer",
+                        textAlign: "center",
+                        transition: "all .15s ease",
+                      }}
+                    >
+                      {k.badge && (
+                        <span
+                          style={{
+                            position: "absolute",
+                            top: -10,
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                            background: k.badge === "MAIS VENDIDO" ? "var(--sb-cta)" : "#1a1a1a",
+                            color: "#fff",
+                            fontSize: 9,
+                            fontWeight: 800,
+                            padding: "3px 8px",
+                            borderRadius: 999,
+                            whiteSpace: "nowrap",
+                            letterSpacing: 0.3,
+                          }}
+                        >
+                          {k.badge}
+                        </span>
+                      )}
+                      <div style={{ fontSize: 12, fontWeight: 700, color: "#1a1a1a" }}>{k.label}</div>
+                      <div style={{ fontSize: 11, color: "#6b6b6b", marginTop: 2 }}>{k.title}</div>
+                      <div style={{ fontSize: 15, fontWeight: 800, marginTop: 6, color: active ? "var(--sb-cta)" : "#1a1a1a" }}>
+                        {k.priceLabel}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
 
             <div className="sb-selector">
+
               <label className="sb-label">
                 Cores (<strong>escolha 2, pode repetir</strong>):{" "}
                 <strong>
@@ -398,11 +494,49 @@ function Index() {
                   );
                 })}
               </div>
+              {sizes.length > 0 && (
+                <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 4 }}>
+                  {Array.from(new Set(sizes)).map((idx) => (
+                    <div
+                      key={idx}
+                      style={{
+                        fontSize: 12,
+                        color: "#b45309",
+                        background: "#fff7ed",
+                        border: "1px solid #fed7aa",
+                        padding: "6px 10px",
+                        borderRadius: 8,
+                        fontWeight: 600,
+                      }}
+                    >
+                      ⚠️ Apenas {stockBySize[idx]} unidades restantes no tamanho {SIZES[idx]}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
-            <div className="sb-price">
-              <span className="sb-price-new">R$ 79,90</span>
+            <div className="sb-price" style={{ flexWrap: "wrap", alignItems: "center", gap: 10 }}>
+              <span className="sb-price-old">De R$ 149,90</span>
+              <span className="sb-price-new">{selectedKit.priceLabel}</span>
+              <span
+                style={{
+                  background: "var(--sb-cta)",
+                  color: "#fff",
+                  fontSize: 12,
+                  fontWeight: 800,
+                  padding: "4px 10px",
+                  borderRadius: 999,
+                  letterSpacing: 0.4,
+                }}
+              >
+                47% OFF
+              </span>
             </div>
+            <div className="sb-installments">
+              ou 3x de {(selectedKit.price / 3 / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} sem juros
+            </div>
+
 
             <Link to="/checkout" ref={ctaRef} className="sb-cta sb-cta-primary" onClick={ripple}>
               🛒 COMPRAR AGORA
@@ -533,7 +667,65 @@ function Index() {
         </div>
       </section>
 
+      {/* SEÇÃO ANTES/DEPOIS */}
+      <section className="sb-section" style={{ background: "#fff8f5" }}>
+        <div className="sb-container">
+          <h2 className="sb-h2" data-reveal style={{ textAlign: "center", marginBottom: 24 }}>
+            Resultado real das nossas clientes
+          </h2>
+          <div
+            data-reveal
+            style={{
+              display: "flex",
+              gap: 16,
+              overflowX: "auto",
+              scrollSnapType: "x mandatory",
+              paddingBottom: 8,
+              WebkitOverflowScrolling: "touch",
+            }}
+          >
+            {[
+              { before: IMAGES[2], after: IMAGES[0] },
+              { before: IMAGES[3], after: IMAGES[5] },
+              { before: IMAGES[4], after: IMAGES[6] },
+            ].map((pair, i) => (
+              <div
+                key={i}
+                style={{
+                  flex: "0 0 auto",
+                  width: "min(320px, 85vw)",
+                  background: "#fff",
+                  borderRadius: 16,
+                  overflow: "hidden",
+                  boxShadow: "0 4px 16px rgba(0,0,0,.08)",
+                  scrollSnapAlign: "start",
+                }}
+              >
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0 }}>
+                  <div style={{ position: "relative" }}>
+                    <img src={pair.before} alt="Antes" loading="lazy" style={{ width: "100%", height: 240, objectFit: "cover", filter: "grayscale(.3) brightness(.92)" }} />
+                    <span style={{ position: "absolute", top: 8, left: 8, background: "rgba(0,0,0,.7)", color: "#fff", fontSize: 11, fontWeight: 800, padding: "4px 8px", borderRadius: 4, letterSpacing: 0.5 }}>
+                      ANTES
+                    </span>
+                  </div>
+                  <div style={{ position: "relative" }}>
+                    <img src={pair.after} alt="Depois" loading="lazy" style={{ width: "100%", height: 240, objectFit: "cover" }} />
+                    <span style={{ position: "absolute", top: 8, left: 8, background: "var(--sb-cta)", color: "#fff", fontSize: 11, fontWeight: 800, padding: "4px 8px", borderRadius: 4, letterSpacing: 0.5 }}>
+                      DEPOIS
+                    </span>
+                  </div>
+                </div>
+                <div style={{ padding: "12px 14px", fontSize: 13, color: "#1a1a1a", fontWeight: 600, textAlign: "center" }}>
+                  Resultado em poucas semanas de uso
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* 7. TABELA DE TAMANHOS */}
+
       <section className="sb-section sb-section-soft">
         <div className="sb-container">
           <h2 className="sb-h2" data-reveal>
@@ -569,41 +761,7 @@ function Index() {
           <h2 className="sb-h2" data-reveal>
             O que dizem nossas clientes
           </h2>
-          <div className="sb-testimonial" data-reveal>
-            <div className="sb-avatar">{TESTIMONIALS[testimonial].initials}</div>
-            <div className="sb-stars sb-stars-big">⭐⭐⭐⭐⭐</div>
-            <p className="sb-quote">"{TESTIMONIALS[testimonial].text}"</p>
-            <div className="sb-author">
-              <strong>{TESTIMONIALS[testimonial].name}</strong>
-              <span>{TESTIMONIALS[testimonial].city}</span>
-            </div>
-            <div className="sb-carousel-nav">
-              <button
-                onClick={() =>
-                  setTestimonial((t) => (t - 1 + TESTIMONIALS.length) % TESTIMONIALS.length)
-                }
-                aria-label="Anterior"
-              >
-                ←
-              </button>
-              <div className="sb-dots">
-                {TESTIMONIALS.map((_, i) => (
-                  <button
-                    key={i}
-                    className={`sb-dot ${testimonial === i ? "is-active" : ""}`}
-                    onClick={() => setTestimonial(i)}
-                    aria-label={`Depoimento ${i + 1}`}
-                  />
-                ))}
-              </div>
-              <button
-                onClick={() => setTestimonial((t) => (t + 1) % TESTIMONIALS.length)}
-                aria-label="Próximo"
-              >
-                →
-              </button>
-            </div>
-          </div>
+          <TestimonialsCarousel current={testimonial} setCurrent={setTestimonial} />
         </div>
       </section>
 
@@ -699,10 +857,110 @@ function Index() {
       </footer>
       {/* Sticky mobile CTA */}
       <div className={`sb-sticky-cta ${!isCtaVisible ? "is-visible" : ""}`}>
+        <div style={{ fontSize: 11, color: "#b45309", textAlign: "center", marginBottom: 6, fontWeight: 600 }}>
+          ⏰ Oferta por tempo limitado
+        </div>
         <Link to="/checkout" className="sb-cta sb-cta-primary" onClick={ripple}>
-          🛒 COMPRAR AGORA — R$ 79,90
+          🛒 QUERO MEU KIT — {selectedKit.priceLabel}
         </Link>
       </div>
     </div>
   );
 }
+
+function TestimonialsCarousel({
+  current,
+  setCurrent,
+}: {
+  current: number;
+  setCurrent: (updater: number | ((c: number) => number)) => void;
+}) {
+  const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
+  const perView = isMobile ? 1 : 2;
+  const pages = Math.max(1, TESTIMONIALS.length - perView + 1);
+  const safe = Math.min(current, pages - 1);
+  const visible = TESTIMONIALS.slice(safe, safe + perView);
+
+  return (
+    <div data-reveal>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: `repeat(${perView}, 1fr)`,
+          gap: 16,
+        }}
+      >
+        {visible.map((t, idx) => (
+          <div
+            key={`${safe}-${idx}`}
+            style={{
+              background: "#fff",
+              borderRadius: 16,
+              padding: 20,
+              boxShadow: "0 4px 16px rgba(0,0,0,.06)",
+              display: "flex",
+              flexDirection: "column",
+              gap: 10,
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <div
+                className="sb-avatar"
+                style={{
+                  width: 48,
+                  height: 48,
+                  background: ["#c8265a", "#c8a96e", "#1a1a2e", "#2ecc71", "#e67e22", "#8e44ad"][
+                    (safe + idx) % 6
+                  ],
+                  color: "#fff",
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontWeight: 800,
+                  fontSize: 16,
+                  flexShrink: 0,
+                }}
+              >
+                {t.initials}
+              </div>
+              <div>
+                <strong style={{ display: "block", fontSize: 14 }}>{t.name}</strong>
+                <span style={{ fontSize: 12, color: "#6b6b6b" }}>{t.city}</span>
+              </div>
+            </div>
+            <div style={{ color: "#f5b301", fontSize: 14 }}>⭐⭐⭐⭐⭐</div>
+            <p style={{ fontSize: 14, lineHeight: 1.55, color: "#1a1a1a", margin: 0 }}>
+              "{t.text}"
+            </p>
+          </div>
+        ))}
+      </div>
+      <div className="sb-carousel-nav" style={{ marginTop: 16 }}>
+        <button
+          onClick={() => setCurrent((c: number) => (c - 1 + pages) % pages)}
+          aria-label="Anterior"
+        >
+          ←
+        </button>
+        <div className="sb-dots">
+          {Array.from({ length: pages }).map((_, i) => (
+            <button
+              key={i}
+              className={`sb-dot ${safe === i ? "is-active" : ""}`}
+              onClick={() => setCurrent(i)}
+              aria-label={`Depoimento ${i + 1}`}
+            />
+          ))}
+        </div>
+        <button
+          onClick={() => setCurrent((c: number) => (c + 1) % pages)}
+          aria-label="Próximo"
+        >
+          →
+        </button>
+      </div>
+    </div>
+  );
+}
+
