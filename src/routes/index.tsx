@@ -537,9 +537,9 @@ function Index() {
             </div>
 
 
-            <Link to="/checkout" ref={ctaRef} className="sb-cta sb-cta-primary" onClick={ripple}>
+            <a href="/checkout" ref={ctaRef as any} className="sb-cta sb-cta-primary" onClick={ripple}>
               🛒 COMPRAR AGORA
-            </Link>
+            </a>
 
             <div className="sb-social-count">
               <span className="sb-pulse" /> {viewers} pessoas estão vendo agora
