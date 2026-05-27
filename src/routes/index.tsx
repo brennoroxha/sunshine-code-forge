@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { ClipboardList, Package, PackageCheck, ShieldCheck, RefreshCw, Truck } from "lucide-react";
+import { ClipboardList, Package, PackageCheck, ShieldCheck, RefreshCw } from "lucide-react";
 import desc1 from "@/assets/desc-1.png";
 import desc2 from "@/assets/desc-2.png";
 import desc3 from "@/assets/desc-3.png";
@@ -114,7 +114,22 @@ function Index() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [testimonial, setTestimonial] = useState(0);
   const [deliveryDates, setDeliveryDates] = useState<{ placed: string; processed: string; delivered: string } | null>(null);
+  const [shippingRange, setShippingRange] = useState<{ from: string; to: string } | null>(null);
+  const [city, setCity] = useState<{ name: string; region: string }>({ name: "Ourinhos", region: "SP" });
   const [viewers, setViewers] = useState(21);
+
+  useEffect(() => {
+    const ctrl = new AbortController();
+    fetch("https://ipapi.co/json/", { signal: ctrl.signal })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (d && d.city) {
+          setCity({ name: d.city, region: d.region_code || d.region || "" });
+        }
+      })
+      .catch(() => {});
+    return () => ctrl.abort();
+  }, []);
 
   useEffect(() => {
     let current = 21;
@@ -150,6 +165,11 @@ function Index() {
       processed: fmt(plus(1)),
       delivered: fmt(plus(5)),
     });
+    const fmtShort = (d: Date) => {
+      const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+      return `${d.getDate()} de ${meses[d.getMonth()]}`;
+    };
+    setShippingRange({ from: fmtShort(plus(2)), to: fmtShort(plus(5)) });
   }, []);
 
   const toggleSelection = (
@@ -403,10 +423,10 @@ function Index() {
 
             <div className="sb-info-box">
               <div className="sb-info-row">
-                <Truck size={22} className="sb-info-ico" style={{ color: "#FFD400" }} />
+                <img src="/correios.svg" alt="Correios" className="sb-info-correios" />
                 <div className="sb-info-text">
-                  <div><strong>Frete Grátis:</strong> para Ourinhos, SP e Região</div>
-                  <div>Receba entre: {deliveryDates?.placed ?? "—"} e {deliveryDates?.delivered ?? "—"}</div>
+                  <div><strong>Frete Grátis:</strong> para {city.name}{city.region ? `, ${city.region}` : ""} e Região</div>
+                  <div>Receba entre: {shippingRange?.from ?? "—"} e {shippingRange?.to ?? "—"}</div>
                 </div>
               </div>
             </div>
