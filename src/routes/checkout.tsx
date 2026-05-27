@@ -462,12 +462,14 @@ function CheckoutPage() {
             <strong>{formatBRL(TOTAL)}</strong>
           </div>
           <div className="ck-summary-row">
-            <span><Truck size={14} /> Frete</span>
-            <strong style={{ color: "#16a34a" }}>Grátis</strong>
+            <span><Truck size={14} /> Frete {frete === "full" ? "(Entrega Full)" : "(Transportadora)"}</span>
+            {freteCost === 0
+              ? <strong style={{ color: "#16a34a" }}>Grátis</strong>
+              : <strong>{formatBRL(freteCost)}</strong>}
           </div>
           <div className="ck-summary-row ck-summary-total">
             <span>Total</span>
-            <strong>{formatBRL(TOTAL)}</strong>
+            <strong>{formatBRL(totalComFrete)}</strong>
           </div>
         </div>
 
