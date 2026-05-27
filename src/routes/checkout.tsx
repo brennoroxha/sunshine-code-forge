@@ -196,9 +196,11 @@ function CheckoutPage() {
             <img src={logo} alt="ConfiaShop" />
           </Link>
           <div className="ck-secure">
-            <ShieldCheck size={18} />
-            <span>Compra 100% Segura</span>
-            <Lock size={14} style={{ opacity: 0.7 }} />
+            <Lock size={18} />
+            <div className="ck-secure-text">
+              <strong>PAGAMENTO</strong>
+              <span>100% SEGURO</span>
+            </div>
           </div>
         </div>
       </header>
