@@ -223,8 +223,10 @@ function CheckoutPage() {
 
         {step === 2 && (
           <div className="ck-card" style={{ marginBottom: 16 }}>
-            <div className="ck-info-summary-head">
-              <span className="ck-info-summary-title"><User size={18} /> Dados pessoais</span>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, marginBottom: 10 }}>
+              <h2 className="ck-h2" style={{ display: "inline-flex", alignItems: "center", gap: 8, margin: 0 }}>
+                <User size={20} color="#0b2447" /> Dados pessoais
+              </h2>
               <button type="button" className="ck-info-summary-link" onClick={() => setStep(1)}>Não é você? Sair</button>
             </div>
             <p style={{ margin: "2px 0", fontSize: 13, color: "#374151" }}>{form.email}</p>
