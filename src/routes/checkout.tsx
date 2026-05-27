@@ -390,7 +390,7 @@ function CheckoutPage() {
           {/* Navegação */}
           {step !== "pix" ? (
             <div className="ck-nav">
-              {step !== 1 && (
+              {step === 3 && (
                 <button type="button" className="ck-pay-btn ck-btn-secondary" onClick={back}>
                   <ChevronLeft size={16} /> Voltar
                 </button>
