@@ -23,7 +23,7 @@ export const Route = createFileRoute("/")({
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=Inter:wght@400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap",
       },
     ],
   }),
@@ -210,7 +210,6 @@ function Index() {
               <span className="sb-price-old">R$ 129,90</span>
               <span className="sb-price-new">R$ 79,90</span>
             </div>
-            <p className="sb-installments">ou 12x de R$ 7,98 sem juros</p>
 
             <div className="sb-selector">
               <label className="sb-label">
