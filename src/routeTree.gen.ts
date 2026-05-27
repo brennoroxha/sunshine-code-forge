@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PagamentoConfirmadoRouteImport } from './routes/pagamento-confirmado'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiPublicKlivopayWebhookRouteImport } from './routes/api/public/klivopay-webhook'
 
+const PagamentoConfirmadoRoute = PagamentoConfirmadoRouteImport.update({
+  id: '/pagamento-confirmado',
+  path: '/pagamento-confirmado',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CheckoutRoute = CheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
@@ -33,35 +39,59 @@ const ApiPublicKlivopayWebhookRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/checkout': typeof CheckoutRoute
+  '/pagamento-confirmado': typeof PagamentoConfirmadoRoute
   '/api/public/klivopay-webhook': typeof ApiPublicKlivopayWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/checkout': typeof CheckoutRoute
+  '/pagamento-confirmado': typeof PagamentoConfirmadoRoute
   '/api/public/klivopay-webhook': typeof ApiPublicKlivopayWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/checkout': typeof CheckoutRoute
+  '/pagamento-confirmado': typeof PagamentoConfirmadoRoute
   '/api/public/klivopay-webhook': typeof ApiPublicKlivopayWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/checkout' | '/api/public/klivopay-webhook'
+  fullPaths:
+    | '/'
+    | '/checkout'
+    | '/pagamento-confirmado'
+    | '/api/public/klivopay-webhook'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/checkout' | '/api/public/klivopay-webhook'
-  id: '__root__' | '/' | '/checkout' | '/api/public/klivopay-webhook'
+  to:
+    | '/'
+    | '/checkout'
+    | '/pagamento-confirmado'
+    | '/api/public/klivopay-webhook'
+  id:
+    | '__root__'
+    | '/'
+    | '/checkout'
+    | '/pagamento-confirmado'
+    | '/api/public/klivopay-webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CheckoutRoute: typeof CheckoutRoute
+  PagamentoConfirmadoRoute: typeof PagamentoConfirmadoRoute
   ApiPublicKlivopayWebhookRoute: typeof ApiPublicKlivopayWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/pagamento-confirmado': {
+      id: '/pagamento-confirmado'
+      path: '/pagamento-confirmado'
+      fullPath: '/pagamento-confirmado'
+      preLoaderRoute: typeof PagamentoConfirmadoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/checkout': {
       id: '/checkout'
       path: '/checkout'
@@ -89,6 +119,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CheckoutRoute: CheckoutRoute,
+  PagamentoConfirmadoRoute: PagamentoConfirmadoRoute,
   ApiPublicKlivopayWebhookRoute: ApiPublicKlivopayWebhookRoute,
 }
 export const routeTree = rootRouteImport
