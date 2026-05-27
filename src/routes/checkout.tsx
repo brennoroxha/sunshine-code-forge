@@ -271,14 +271,16 @@ function CheckoutPage() {
           {step === 2 && (
             <>
               <h2 className="ck-h2">Entrega</h2>
+              <label className="ck-label">CEP</label>
               <input
-                placeholder="CEP"
+                placeholder="00000-000"
                 value={form.cep}
                 onChange={upd("cep")}
                 className={inputCls("cep")}
                 inputMode="numeric"
               />
               {fieldErr("cep")}
+              <label className="ck-label">Endereço</label>
               <div className="ck-row">
                 <div style={{ flex: 1 }}>
                   <input placeholder="Endereço" value={form.endereco} onChange={upd("endereco")} className={inputCls("endereco")} />
@@ -291,14 +293,18 @@ function CheckoutPage() {
               </div>
               <div className="ck-row">
                 <div style={{ flex: 1 }}>
+                  <label className="ck-label">Cidade</label>
                   <input placeholder="Cidade" value={form.cidade} onChange={upd("cidade")} className={inputCls("cidade")} />
                   {fieldErr("cidade")}
                 </div>
-                <select value={form.estado} onChange={upd("estado")} className="ck-input">
-                  {["AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO"].map((uf) => (
-                    <option key={uf} value={uf}>{uf}</option>
-                  ))}
-                </select>
+                <div>
+                  <label className="ck-label">Estado</label>
+                  <select value={form.estado} onChange={upd("estado")} className="ck-input">
+                    {["AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO"].map((uf) => (
+                      <option key={uf} value={uf}>{uf}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
             </>
           )}
