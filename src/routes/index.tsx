@@ -408,7 +408,6 @@ function Index() {
                         </span>
                       )}
                       <div style={{ fontSize: 12, fontWeight: 700, color: "#1a1a1a" }}>{k.label}</div>
-                      <div style={{ fontSize: 11, color: "#6b6b6b", marginTop: 2 }}>{k.title}</div>
                       <div style={{ fontSize: 15, fontWeight: 800, marginTop: 6, color: active ? "var(--sb-cta)" : "#1a1a1a" }}>
                         {k.priceLabel}
                       </div>
