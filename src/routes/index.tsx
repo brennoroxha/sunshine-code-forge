@@ -226,7 +226,15 @@ function Index() {
 
           {/* Info */}
           <div className="sb-info">
-            
+            <div
+              style={{
+                background: "#ffffff",
+                color: "#1a1a1a",
+                borderRadius: 16,
+                padding: "clamp(20px, 4vw, 32px)",
+                boxShadow: "0 4px 20px rgba(0,0,0,.06)",
+              }}
+            >
             <h1 className="sb-title">KIT 02 Cinta Modeladora Cintura Alta — Slim Belly</h1>
             <div className="sb-rating">
               <span className="sb-stars">⭐⭐⭐⭐⭐</span>
