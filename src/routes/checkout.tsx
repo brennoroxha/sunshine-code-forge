@@ -85,15 +85,14 @@ function CheckoutPage() {
   const [step, setStep] = useState<Step>(1);
   const [form, setForm] = useState({
     email: "",
-    nome: "",
-    sobrenome: "",
+    nomeCompleto: "",
     cpf: "",
+    telefone: "",
     cep: "",
     endereco: "",
     numero: "",
     cidade: "",
     estado: "SP",
-    telefone: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [copied, setCopied] = useState(false);
