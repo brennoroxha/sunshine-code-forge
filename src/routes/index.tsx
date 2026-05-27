@@ -222,9 +222,11 @@ function Index() {
                     key={c.name}
                     onClick={() => setColor(i)}
                     className={`sb-swatch ${color === i ? "is-active" : ""}`}
-                    style={{ background: c.hex }}
                     aria-label={c.name}
-                  />
+                    title={c.name}
+                  >
+                    <img src={c.img} alt={c.name} loading="lazy" />
+                  </button>
                 ))}
               </div>
             </div>
