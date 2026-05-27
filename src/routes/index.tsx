@@ -336,6 +336,10 @@ function Index() {
               </div>
             </div>
 
+            <div className="sb-price">
+              <span className="sb-price-new">R$ 79,90</span>
+            </div>
+
             <a href="#comprar" className="sb-cta sb-cta-primary" onClick={ripple}>
               🛒 COMPRAR AGORA
             </a>
