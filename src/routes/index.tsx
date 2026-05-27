@@ -368,7 +368,7 @@ function Index() {
               <label className="sb-label">
                 Escolha seu kit: <strong>{selectedKit.label} — {selectedKit.title}</strong>
               </label>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 8 }}>
                 {KITS.map((k) => {
                   const active = k.id === kitId;
                   return (
