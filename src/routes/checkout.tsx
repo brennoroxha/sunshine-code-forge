@@ -230,31 +230,35 @@ function CheckoutPage() {
               <p className="ck-muted" style={{ fontSize: 13, marginTop: -4 }}>
                 Solicitamos apenas as informações essenciais para a realização da compra.
               </p>
+              <label className="ck-label">E-mail</label>
               <input
                 type="email"
-                placeholder="E-mail"
+                placeholder="seu@email.com"
                 value={form.email}
                 onChange={upd("email")}
                 className={inputCls("email")}
               />
               {fieldErr("email")}
+              <label className="ck-label">Nome completo</label>
               <input
-                placeholder="Nome completo"
+                placeholder="Nome e sobrenome"
                 value={form.nomeCompleto}
                 onChange={upd("nomeCompleto")}
                 className={inputCls("nomeCompleto")}
               />
               {fieldErr("nomeCompleto")}
+              <label className="ck-label">CPF</label>
               <input
-                placeholder="CPF (999.999.999-99)"
+                placeholder="999.999.999-99"
                 value={form.cpf}
                 onChange={upd("cpf")}
                 className={inputCls("cpf")}
                 inputMode="numeric"
               />
               {fieldErr("cpf")}
+              <label className="ck-label">Telefone</label>
               <input
-                placeholder="Telefone (11) 99999-9999"
+                placeholder="(11) 99999-9999"
                 value={form.telefone}
                 onChange={upd("telefone")}
                 className={inputCls("telefone")}
