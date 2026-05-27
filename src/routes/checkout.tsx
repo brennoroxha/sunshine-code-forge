@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { ShieldCheck, Lock, Copy, Check, ChevronRight, ChevronLeft, ShoppingBag, Truck, Tag, User, QrCode, CheckCircle2, Star, Calculator, ArrowDown } from "lucide-react";
 import logo from "@/assets/logo.png";
+import { createPixTransaction } from "@/lib/klivopay.functions";
 
 export const Route = createFileRoute("/checkout")({
   component: CheckoutPage,
@@ -99,6 +101,9 @@ function CheckoutPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [copied, setCopied] = useState(false);
   const [expira, setExpira] = useState(15 * 60);
+  const [pixData, setPixData] = useState<{ hash: string; pix_copy_paste: string; pix_qr_code: string } | null>(null);
+  const [pixError, setPixError] = useState<string | null>(null);
+  const createPix = useServerFn(createPixTransaction);
 
   useEffect(() => {
     if (step !== "pix") return;
@@ -164,11 +169,46 @@ function CheckoutPage() {
 
   useEffect(() => {
     if (step !== "loading") return;
-    const t = setTimeout(() => {
-      setStep("pix");
-      setExpira(15 * 60);
-    }, 2200);
-    return () => clearTimeout(t);
+    let canceled = false;
+    setPixError(null);
+    (async () => {
+      try {
+        const res = await createPix({
+          data: {
+            amount: totalComFrete,
+            customer: {
+              name: form.nomeCompleto.trim(),
+              email: form.email.trim(),
+              phone_number: onlyDigits(form.telefone),
+              document: onlyDigits(form.cpf),
+            },
+            cart: [
+              { name: "Pedido ConfiaShop", quantity: 1, unit_price: totalComFrete },
+            ],
+          },
+        });
+        if (canceled) return;
+        if (!res.ok) {
+          setPixError(res.error);
+          setStep(3);
+          return;
+        }
+        setPixData({
+          hash: res.hash,
+          pix_copy_paste: res.pix_copy_paste,
+          pix_qr_code: res.pix_qr_code,
+        });
+        setExpira(15 * 60);
+        setStep("pix");
+      } catch (e: any) {
+        if (canceled) return;
+        setPixError("Falha ao gerar Pix. Tente novamente.");
+        setStep(3);
+      }
+    })();
+    return () => {
+      canceled = true;
+    };
   }, [step]);
 
   const back = () => {
@@ -197,8 +237,10 @@ function CheckoutPage() {
 
   const freteCost = frete === "full" ? 997 : 0;
   const totalComFrete = TOTAL + freteCost;
-  const pixPayload = makePixPayload(totalComFrete);
-  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(pixPayload)}`;
+  const pixPayload = pixData?.pix_copy_paste || makePixPayload(totalComFrete);
+  const qrUrl = pixData?.pix_qr_code
+    ? `https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(pixData.pix_qr_code)}`
+    : `https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(pixPayload)}`;
   const mm = String(Math.floor(expira / 60)).padStart(2, "0");
   const ss = String(expira % 60).padStart(2, "0");
 
@@ -406,6 +448,11 @@ function CheckoutPage() {
                   </div>
                 </div>
               </div>
+              {pixError && (
+                <div style={{ marginTop: 12, padding: "10px 12px", background: "#fef2f2", border: "1px solid #fecaca", color: "#b91c1c", borderRadius: 8, fontSize: 13 }}>
+                  {pixError}
+                </div>
+              )}
             </>
           )}
 
@@ -514,7 +561,7 @@ function CheckoutPage() {
             <strong>{formatBRL(TOTAL)}</strong>
           </div>
           <div className="ck-summary-row">
-            <span><Truck size={14} /> Frete {frete === "full" ? "(Entrega Full)" : "(Transportadora)"}</span>
+            <span><Truck size={14} />{` Frete ${frete === "full" ? "(Entrega Full)" : "(Transportadora)"}`}</span>
             {freteCost === 0
               ? <strong style={{ color: "#16a34a" }}>Grátis</strong>
               : <strong>{formatBRL(freteCost)}</strong>}
