@@ -423,10 +423,10 @@ function Index() {
 
             <div className="sb-info-box">
               <div className="sb-info-row">
-                <Truck size={22} className="sb-info-ico" style={{ color: "#FFD400" }} />
+                <img src="/correios.svg" alt="Correios" className="sb-info-correios" />
                 <div className="sb-info-text">
-                  <div><strong>Frete Grátis:</strong> para Ourinhos, SP e Região</div>
-                  <div>Receba entre: {deliveryDates?.placed ?? "—"} e {deliveryDates?.delivered ?? "—"}</div>
+                  <div><strong>Frete Grátis:</strong> para {city.name}{city.region ? `, ${city.region}` : ""} e Região</div>
+                  <div>Receba entre: {shippingRange?.from ?? "—"} e {shippingRange?.to ?? "—"}</div>
                 </div>
               </div>
             </div>
