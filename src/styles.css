@@ -1191,3 +1191,11 @@ button {
 .ck-label + input.ck-input { margin-top: 0; }
 
 @keyframes ck-spin { to { transform: rotate(360deg); } }
+
+/* Success page pop-in animation */
+@keyframes sb-pop-in {
+  0% { transform: scale(0.6); opacity: 0; }
+  60% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
