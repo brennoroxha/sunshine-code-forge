@@ -459,19 +459,26 @@ button {
   height: 8px;
   border-radius: 50%;
   background: var(--sb-red);
-  animation: sb-pulse 1.5s infinite;
+  animation: sb-pulse 1.2s ease-in-out infinite;
 }
 @keyframes sb-pulse {
-  0%,
-  100% {
+  0%, 100% {
+    width: 8px;
+    height: 8px;
     opacity: 1;
-    transform: scale(1);
   }
-  50% {
-    opacity: 0.5;
-    transform: scale(1.3);
+  25% {
+    width: 13px;
+    height: 13px;
+    opacity: 0.85;
+  }
+  75% {
+    width: 6px;
+    height: 6px;
+    opacity: 0.6;
   }
 }
+
 
 /* =========== SECTIONS =========== */
 .sb-section {

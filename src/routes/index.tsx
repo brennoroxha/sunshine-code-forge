@@ -344,6 +344,10 @@ function Index() {
               🛒 COMPRAR AGORA
             </a>
 
+            <div className="sb-social-count">
+              <span className="sb-pulse" /> 21 pessoas estão vendo agora
+            </div>
+
             <div className="sb-timeline" suppressHydrationWarning>
               <div className="sb-tl-step">
                 <div className="sb-tl-icon"><ClipboardList size={20} /></div>
@@ -364,10 +368,6 @@ function Index() {
               </div>
             </div>
 
-
-            <div className="sb-social-count">
-              <span className="sb-pulse" /> 👁️ 21 pessoas estão vendo agora
-            </div>
             </div>
           </div>
         </div>
