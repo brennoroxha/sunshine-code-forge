@@ -20,15 +20,28 @@ const InputSchema = z.object({
     .optional(),
 });
 
+const PRODUCT_HASH = "pz2q1dqx2h";
+const OFFER_HASH = "3ob4wuqw4p";
+
 export const createPixTransaction = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => InputSchema.parse(input))
   .handler(async ({ data }) => {
     const token = process.env.KLIVOPAY_API_TOKEN;
-    const offerHash = "3ob4wuqw4p";
-
     if (!token) {
       return { ok: false as const, error: "KLIVOPAY_API_TOKEN não configurado" };
     }
+
+    const items = (data.cart && data.cart.length > 0 ? data.cart : [
+      { name: "Pedido", quantity: 1, unit_price: data.amount },
+    ]).map((it) => ({
+      product_hash: PRODUCT_HASH,
+      title: it.name,
+      name: it.name,
+      quantity: it.quantity,
+      price: it.unit_price,
+      unit_price: it.unit_price,
+      operation_type: 1,
+    }));
 
     try {
       const res = await fetch("https://api.klivopay.com.br/api/public/v1/transactions", {
@@ -37,30 +50,34 @@ export const createPixTransaction = createServerFn({ method: "POST" })
         body: JSON.stringify({
           api_token: token,
           amount: data.amount,
-          offer_hash: offerHash,
+          offer_hash: OFFER_HASH,
           payment_method: "pix",
+          operation_type: 1,
           customer: data.customer,
-          cart: data.cart,
+          cart: items,
         }),
       });
 
       const json: any = await res.json().catch(() => ({}));
-      if (!res.ok || !json?.success) {
-        console.error("KlivoPAY error:", res.status, json);
+      const pixCode: string | undefined =
+        json?.pix?.pix_qr_code || json?.data?.pix_qr_code || json?.data?.pix_copy_paste;
+
+      if (!res.ok || json?.success === false || !pixCode) {
+        console.error("KlivoPAY error:", res.status, JSON.stringify(json));
         return {
           ok: false as const,
           error: json?.message || `Falha ao criar transação (${res.status})`,
         };
       }
 
-      const d = json.data || {};
       return {
         ok: true as const,
-        hash: d.hash as string,
-        pix_qr_code: (d.pix_qr_code || d.pix_copy_paste) as string,
-        pix_copy_paste: (d.pix_copy_paste || d.pix_qr_code) as string,
-        expires_at: d.expires_at as string | undefined,
-        amount: d.amount as number,
+        hash: (json.hash || json?.data?.hash) as string,
+        pix_qr_code: pixCode,
+        pix_copy_paste: pixCode,
+        qr_code_base64: (json?.pix?.qr_code_base64 || null) as string | null,
+        expires_at: (json?.expires_at || json?.data?.expires_at) as string | undefined,
+        amount: (json.amount || json?.data?.amount) as number,
       };
     } catch (err: any) {
       console.error("KlivoPAY request failed:", err);
