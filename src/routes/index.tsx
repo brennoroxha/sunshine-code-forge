@@ -270,13 +270,6 @@ function Index() {
             <a href="#comprar" className="sb-cta sb-cta-primary" onClick={ripple}>
               🛒 COMPRAR AGORA
             </a>
-            <a
-              href="https://wa.me/5500000000000"
-              className="sb-cta sb-cta-wa"
-              onClick={ripple}
-            >
-              💬 Comprar via WhatsApp
-            </a>
 
             <div className="sb-trust">
               <span>🔒 Compra Segura</span>
