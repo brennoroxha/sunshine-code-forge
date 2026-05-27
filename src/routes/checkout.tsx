@@ -79,7 +79,7 @@ function makePixPayload(amountCents: number) {
   return `00020126360014BR.GOV.BCB.PIX0114${PIX_KEY}5204000053039865406${amount}5802BR5910ConfiaShop6009SAO PAULO62070503***6304ABCD`;
 }
 
-type Step = 1 | 2 | 3 | "pix";
+type Step = 1 | 2 | 3 | "loading" | "pix";
 
 function CheckoutPage() {
   const [step, setStep] = useState<Step>(1);
