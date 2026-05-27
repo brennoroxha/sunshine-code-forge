@@ -224,11 +224,11 @@ button {
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   padding-bottom: 4px;
 }
-.sb-thumbs::-webkit-scrollbar { height: 4px; }
-.sb-thumbs::-webkit-scrollbar-thumb { background: var(--sb-primary); border-radius: 4px; }
+.sb-thumbs::-webkit-scrollbar { display: none; }
 .sb-thumb {
   flex: 0 0 22%;
   max-width: 90px;
