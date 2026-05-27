@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ShieldCheck, Lock, Copy, Check, ChevronRight, ChevronLeft } from "lucide-react";
+import { ShieldCheck, Lock, Copy, Check, ChevronRight, ChevronLeft, ShoppingBag, Truck, Tag } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 export const Route = createFileRoute("/checkout")({
@@ -204,24 +204,21 @@ function CheckoutPage() {
       </header>
 
       <main className="ck-main">
-        <div className="ck-card">
-          {/* Stepper */}
-          <div className="ck-stepper">
-            {steps.map((s, i) => (
-              <div key={s.n} className="ck-step-wrap">
-                <div className={`ck-step ${stepNum >= s.n ? "is-on" : ""} ${stepNum === s.n && step !== "pix" ? "is-active" : ""}`}>
-                  <div className="ck-step-num">{stepNum > s.n || step === "pix" ? <Check size={14} /> : s.n}</div>
-                  <span>{s.label}</span>
-                </div>
-                {i < steps.length - 1 && <div className={`ck-step-line ${stepNum > s.n ? "is-on" : ""}`} />}
+        {/* Stepper fora do card */}
+        <div className="ck-stepper">
+          {steps.map((s, i) => (
+            <div key={s.n} className="ck-step-wrap">
+              <div className={`ck-step ${stepNum >= s.n ? "is-on" : ""} ${stepNum === s.n && step !== "pix" ? "is-active" : ""}`}>
+                <div className="ck-step-num">{stepNum > s.n || step === "pix" ? <Check size={14} /> : s.n}</div>
+                <span>{s.label}</span>
               </div>
-            ))}
-          </div>
+              {i < steps.length - 1 && <div className={`ck-step-line ${stepNum > s.n ? "is-on" : ""}`} />}
+            </div>
+          ))}
+        </div>
 
-          <div className="ck-summary">
-            <span>Resumo do pedido</span>
-            <strong>{formatBRL(TOTAL)}</strong>
-          </div>
+        <div className="ck-card">
+
 
           {step === 1 && (
             <>
@@ -360,7 +357,27 @@ function CheckoutPage() {
             <ShieldCheck size={14} /> Pagamento processado em ambiente seguro
           </div>
         </div>
+
+        {/* Resumo do pedido — sempre embaixo */}
+        <div className="ck-summary-card">
+          <div className="ck-summary-title">
+            <ShoppingBag size={18} /> Resumo do pedido
+          </div>
+          <div className="ck-summary-row">
+            <span><Tag size={14} /> Subtotal</span>
+            <strong>{formatBRL(TOTAL)}</strong>
+          </div>
+          <div className="ck-summary-row">
+            <span><Truck size={14} /> Frete</span>
+            <strong style={{ color: "#16a34a" }}>Grátis</strong>
+          </div>
+          <div className="ck-summary-row ck-summary-total">
+            <span>Total</span>
+            <strong>{formatBRL(TOTAL)}</strong>
+          </div>
+        </div>
       </main>
+
 
       <footer className="ck-footer">
         Confia Shop LTDA · CNPJ 64.119.790/0001-01
