@@ -531,21 +531,7 @@ function Index() {
             </div>
 
             <div className="sb-price" style={{ flexWrap: "wrap", alignItems: "center", gap: 10 }}>
-              <span className="sb-price-old">De R$ 149,90</span>
               <span className="sb-price-new">{selectedKit.priceLabel}</span>
-              <span
-                style={{
-                  background: "var(--sb-cta)",
-                  color: "#fff",
-                  fontSize: 12,
-                  fontWeight: 800,
-                  padding: "4px 10px",
-                  borderRadius: 999,
-                  letterSpacing: 0.4,
-                }}
-              >
-                47% OFF
-              </span>
             </div>
             <div className="sb-installments">
               ou 3x de {(selectedKit.price / 3 / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} sem juros
