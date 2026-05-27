@@ -202,7 +202,7 @@ function CheckoutPage() {
     } catch {}
   };
 
-  const stepNum = step === "pix" ? 3 : step;
+  const stepNum: number = step === "pix" || step === "loading" ? 3 : step;
   const steps = [
     { n: 1, label: "Dados Pessoais", Icon: User },
     { n: 2, label: "Entrega", Icon: Truck },
