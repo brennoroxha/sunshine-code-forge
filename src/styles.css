@@ -334,7 +334,7 @@ button {
   font-family: "Inter", system-ui, sans-serif;
   font-size: 42px;
   font-weight: 900;
-  color: var(--sb-cta);
+  color: var(--sb-text);
 }
 .sb-installments {
   color: var(--sb-muted);
