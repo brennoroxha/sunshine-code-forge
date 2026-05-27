@@ -348,7 +348,7 @@ function CheckoutPage() {
                 </button>
               )}
               <button type="button" className="ck-pay-btn" onClick={next}>
-                {step === 3 ? "Pagar agora" : <>Continuar <ChevronRight size={16} /></>}
+                {step === 3 ? "Pagar agora" : step === 1 ? <>Avançar para a entrega <ChevronRight size={16} /></> : <>Continuar <ChevronRight size={16} /></>}
               </button>
             </div>
           ) : (
