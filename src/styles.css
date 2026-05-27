@@ -373,7 +373,7 @@ button {
 .sb-sizes {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 4px;
 }
 .sb-size {
   min-width: 48px;
