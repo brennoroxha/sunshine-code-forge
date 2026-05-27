@@ -390,10 +390,12 @@ function CheckoutPage() {
                   <img
                     src="https://logospng.org/download/pix/logo-pix-512.png"
                     alt="Pix"
-                    style={{ height: 56, margin: "0 auto 14px", display: "block" }}
+                    style={{ height: 90, margin: "0 auto 14px", display: "block" }}
                   />
                   <p style={{ fontWeight: 700, color: "#111", margin: "0 0 10px" }}>Para pagar, finalize sua compra abaixo</p>
-                  <ArrowDown size={20} color="#111" />
+                  <div style={{ display: "flex", justifyContent: "center" }}>
+                    <ArrowDown size={20} color="#111" />
+                  </div>
                 </div>
               </div>
             </>
