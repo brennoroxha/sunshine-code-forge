@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
+import { ClipboardList, Package, PackageCheck } from "lucide-react";
 import desc1 from "@/assets/desc-1.png";
 import desc2 from "@/assets/desc-2.png";
 import desc3 from "@/assets/desc-3.png";
@@ -297,21 +298,21 @@ function Index() {
 
             <div className="sb-timeline" suppressHydrationWarning>
               <div className="sb-tl-step">
-                <div className="sb-tl-icon">🛍️</div>
+                <div className="sb-tl-icon"><ClipboardList size={20} /></div>
                 <div className="sb-tl-date">{deliveryDates?.placed ?? "—"}</div>
-                <div className="sb-tl-label sb-tl-placed">Pedido realizado</div>
+                <div className="sb-tl-label">Pedido realizado</div>
               </div>
               <div className="sb-tl-line" />
               <div className="sb-tl-step">
-                <div className="sb-tl-icon">🚚</div>
+                <div className="sb-tl-icon"><Package size={20} /></div>
                 <div className="sb-tl-date">{deliveryDates?.processed ?? "—"}</div>
-                <div className="sb-tl-label sb-tl-processed">Processado</div>
+                <div className="sb-tl-label">Processado</div>
               </div>
               <div className="sb-tl-line" />
               <div className="sb-tl-step">
-                <div className="sb-tl-icon">🎁</div>
+                <div className="sb-tl-icon"><PackageCheck size={20} /></div>
                 <div className="sb-tl-date">{deliveryDates?.delivered ?? "—"}</div>
-                <div className="sb-tl-label sb-tl-delivered">Entregue</div>
+                <div className="sb-tl-label">Entregue</div>
               </div>
             </div>
 
