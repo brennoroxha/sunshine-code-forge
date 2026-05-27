@@ -114,6 +114,24 @@ function Index() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [testimonial, setTestimonial] = useState(0);
   const [deliveryDates, setDeliveryDates] = useState<{ placed: string; processed: string; delivered: string } | null>(null);
+  const [viewers, setViewers] = useState(21);
+
+  useEffect(() => {
+    let current = 21;
+    let direction: 1 | -1 = 1;
+    const tick = () => {
+      if (direction === 1) {
+        current += 1;
+        if (current >= 33) direction = -1;
+      } else {
+        current -= 1;
+        if (current <= 21) direction = 1;
+      }
+      setViewers(current);
+    };
+    const interval = setInterval(tick, 3500);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const fmt = (d: Date) => {
