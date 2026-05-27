@@ -512,7 +512,7 @@ function Index() {
                       key={s}
                       onClick={() =>
                         setSizes((prev) =>
-                          prev.length >= 2 ? [i] : [...prev, i]
+                          prev.length >= maxItems ? [i] : [...prev, i]
                         )
                       }
                       className={`sb-size ${count > 0 ? "is-active" : ""}`}
