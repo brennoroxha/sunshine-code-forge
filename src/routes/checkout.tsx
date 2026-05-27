@@ -165,6 +165,23 @@ function CheckoutPage() {
     else if (step === "pix") setStep(3);
   };
 
+  const isStepValid = (s: Step): boolean => {
+    if (s === 1) {
+      return isValidEmail(form.email)
+        && form.nomeCompleto.trim().split(/\s+/).length >= 2
+        && isValidCPF(form.cpf)
+        && isValidPhone(form.telefone);
+    }
+    if (s === 2) {
+      return isValidCEP(form.cep)
+        && !!form.endereco.trim()
+        && !!form.numero.trim()
+        && !!form.cidade.trim();
+    }
+    return true;
+  };
+  const canAdvance = step !== "pix" && isStepValid(step as Step);
+
   const pixPayload = makePixPayload(TOTAL);
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(pixPayload)}`;
   const mm = String(Math.floor(expira / 60)).padStart(2, "0");
