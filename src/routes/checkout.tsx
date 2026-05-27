@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ShieldCheck, Lock, Copy, Check, ChevronRight, ChevronLeft, ShoppingBag, Truck, Tag, User, QrCode, CheckCircle2, Star } from "lucide-react";
+import { ShieldCheck, Lock, Copy, Check, ChevronRight, ChevronLeft, ShoppingBag, Truck, Tag, User, QrCode, CheckCircle2, Star, Calculator, ArrowDown } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 export const Route = createFileRoute("/checkout")({
