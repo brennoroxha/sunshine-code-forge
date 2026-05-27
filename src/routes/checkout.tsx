@@ -180,7 +180,7 @@ function CheckoutPage() {
 
   const stepNum = step === "pix" ? 3 : step;
   const steps = [
-    { n: 1, label: "Contato" },
+    { n: 1, label: "Dados Pessoais" },
     { n: 2, label: "Entrega" },
     { n: 3, label: "Pagamento" },
   ];
