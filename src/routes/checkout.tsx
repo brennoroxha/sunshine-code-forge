@@ -125,6 +125,7 @@ function CheckoutPage() {
         setForm((p) => ({
           ...p,
           endereco: data.logradouro || p.endereco,
+          bairro: data.bairro || p.bairro,
           cidade: data.localidade || p.cidade,
           estado: data.uf || p.estado,
         }));
