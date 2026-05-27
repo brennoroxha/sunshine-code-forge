@@ -112,6 +112,26 @@ function Index() {
   const [sizes, setSizes] = useState<number[]>([1]);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [testimonial, setTestimonial] = useState(0);
+  const [deliveryDates, setDeliveryDates] = useState<{ placed: string; processed: string; delivered: string } | null>(null);
+
+  useEffect(() => {
+    const fmt = (d: Date) => {
+      const dias = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+      const meses = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+      return `${dias[d.getDay()]}, ${d.getDate()}. ${meses[d.getMonth()]}`;
+    };
+    const now = new Date();
+    const plus = (n: number) => {
+      const d = new Date(now);
+      d.setDate(now.getDate() + n);
+      return d;
+    };
+    setDeliveryDates({
+      placed: fmt(now),
+      processed: fmt(plus(1)),
+      delivered: fmt(plus(5)),
+    });
+  }, []);
 
   const toggleSelection = (
     current: number[],
@@ -274,6 +294,26 @@ function Index() {
             <a href="#comprar" className="sb-cta sb-cta-primary" onClick={ripple}>
               🛒 COMPRAR AGORA
             </a>
+
+            <div className="sb-timeline" suppressHydrationWarning>
+              <div className="sb-tl-step">
+                <div className="sb-tl-icon">🛍️</div>
+                <div className="sb-tl-date">{deliveryDates?.placed ?? "—"}</div>
+                <div className="sb-tl-label sb-tl-placed">Pedido realizado</div>
+              </div>
+              <div className="sb-tl-line" />
+              <div className="sb-tl-step">
+                <div className="sb-tl-icon">🚚</div>
+                <div className="sb-tl-date">{deliveryDates?.processed ?? "—"}</div>
+                <div className="sb-tl-label sb-tl-processed">Processado</div>
+              </div>
+              <div className="sb-tl-line" />
+              <div className="sb-tl-step">
+                <div className="sb-tl-icon">🎁</div>
+                <div className="sb-tl-date">{deliveryDates?.delivered ?? "—"}</div>
+                <div className="sb-tl-label sb-tl-delivered">Entregue</div>
+              </div>
+            </div>
 
             <div className="sb-trust">
               <span>🔒 Compra Segura</span>
