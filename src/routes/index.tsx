@@ -364,10 +364,6 @@ function Index() {
       {/* 4. DESCRIÇÃO */}
       <section className="sb-section">
         <div className="sb-container sb-container-sm">
-          <h2 className="sb-h2" data-reveal>
-            Descrição
-          </h2>
-
           <div
             data-reveal
             style={{
@@ -378,6 +374,9 @@ function Index() {
               boxShadow: "0 4px 20px rgba(0,0,0,.06)",
             }}
           >
+            <h2 className="sb-h2" style={{ marginBottom: 24 }}>
+              Descrição
+            </h2>
             <h3
               style={{
                 fontSize: "clamp(1.1rem, 2.2vw, 1.4rem)",
