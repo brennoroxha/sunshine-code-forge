@@ -1161,3 +1161,5 @@ button {
 .ck-label { display: block; font-size: 13px; font-weight: 600; color: #111; margin-top: 10px; margin-bottom: 6px; }
 .ck-label + .ck-input,
 .ck-label + input.ck-input { margin-top: 0; }
+
+@keyframes ck-spin { to { transform: rotate(360deg); } }
