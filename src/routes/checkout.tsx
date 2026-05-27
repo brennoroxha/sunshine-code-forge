@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ShieldCheck, Lock, Copy, Check, ChevronRight, ChevronLeft, ShoppingBag, Truck, Tag } from "lucide-react";
+import { ShieldCheck, Lock, Copy, Check, ChevronRight, ChevronLeft, ShoppingBag, Truck, Tag, User, QrCode, CheckCircle2, Star } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 export const Route = createFileRoute("/checkout")({
@@ -180,9 +180,9 @@ function CheckoutPage() {
 
   const stepNum = step === "pix" ? 3 : step;
   const steps = [
-    { n: 1, label: "Dados Pessoais" },
-    { n: 2, label: "Entrega" },
-    { n: 3, label: "Pagamento" },
+    { n: 1, label: "Dados Pessoais", Icon: User },
+    { n: 2, label: "Entrega", Icon: Truck },
+    { n: 3, label: "Pagamento", Icon: QrCode },
   ];
 
   const fieldErr = (k: string) => errors[k] && <div className="ck-err">{errors[k]}</div>;
@@ -209,7 +209,9 @@ function CheckoutPage() {
           {steps.map((s, i) => (
             <div key={s.n} className="ck-step-wrap">
               <div className={`ck-step ${stepNum >= s.n ? "is-on" : ""} ${stepNum === s.n && step !== "pix" ? "is-active" : ""}`}>
-                <div className="ck-step-num">{stepNum > s.n || step === "pix" ? <Check size={14} /> : s.n}</div>
+                <div className="ck-step-num">
+                  <s.Icon size={16} />
+                </div>
                 <span>{s.label}</span>
               </div>
               {i < steps.length - 1 && <div className={`ck-step-line ${stepNum > s.n ? "is-on" : ""}`} />}
@@ -353,10 +355,8 @@ function CheckoutPage() {
             </button>
           )}
 
-          <div className="ck-trust">
-            <ShieldCheck size={14} /> Pagamento processado em ambiente seguro
-          </div>
         </div>
+
 
         {/* Resumo do pedido — sempre embaixo */}
         <div className="ck-summary-card">
@@ -389,6 +389,37 @@ function CheckoutPage() {
             <strong>{formatBRL(TOTAL)}</strong>
           </div>
         </div>
+
+
+
+        {/* Trust card */}
+        <div className="ck-trust-card">
+          <div className="ck-trust-badge">
+            <CheckCircle2 size={16} color="#16a34a" />
+            <span>Garantia de Devolução do Dinheiro em <strong>14 dias</strong></span>
+          </div>
+          <div className="ck-trust-divider" />
+          <div className="ck-trust-heading">Compre com confiança!</div>
+          <ul className="ck-trust-list">
+            <li><Check size={16} color="#16a34a" /> Garantia de Devolução de 100% do Dinheiro</li>
+            <li><Check size={16} color="#16a34a" /> Devoluções Sem Complicações</li>
+            <li><Check size={16} color="#16a34a" /> Transações Seguras</li>
+            <li><Check size={16} color="#16a34a" /> Atendimento ao Cliente 24/7</li>
+          </ul>
+          <div className="ck-trust-divider" />
+          <div className="ck-trust-reviews">
+            <div className="ck-trust-heading" style={{ marginBottom: 0 }}>5000+ Avaliações de Clientes</div>
+            <div className="ck-trust-stars">
+              {[0,1,2,3,4].map((i) => <Star key={i} size={14} fill="#facc15" color="#facc15" />)}
+              <span>5/5</span>
+            </div>
+          </div>
+          <p className="ck-trust-quote">
+            "Fiquei encantada com o atendimento! A entrega foi rápida e o processo de compra, super fácil. Recomendo a todos!"
+          </p>
+          <div className="ck-trust-author">— Isabela Marcondes</div>
+        </div>
+
       </main>
 
 
