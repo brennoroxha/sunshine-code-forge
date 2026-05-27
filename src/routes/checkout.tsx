@@ -209,7 +209,9 @@ function CheckoutPage() {
           {steps.map((s, i) => (
             <div key={s.n} className="ck-step-wrap">
               <div className={`ck-step ${stepNum >= s.n ? "is-on" : ""} ${stepNum === s.n && step !== "pix" ? "is-active" : ""}`}>
-                <div className="ck-step-num">{stepNum > s.n || step === "pix" ? <Check size={14} /> : s.n}</div>
+                <div className="ck-step-num">
+                  <s.Icon size={16} />
+                </div>
                 <span>{s.label}</span>
               </div>
               {i < steps.length - 1 && <div className={`ck-step-line ${stepNum > s.n ? "is-on" : ""}`} />}
