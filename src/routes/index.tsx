@@ -210,7 +210,6 @@ function Index() {
               <span className="sb-price-old">R$ 129,90</span>
               <span className="sb-price-new">R$ 79,90</span>
             </div>
-            <p className="sb-installments">ou 12x de R$ 7,98 sem juros</p>
 
             <div className="sb-selector">
               <label className="sb-label">
