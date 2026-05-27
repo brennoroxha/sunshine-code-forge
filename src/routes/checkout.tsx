@@ -409,20 +409,63 @@ function CheckoutPage() {
             </>
           )}
 
+          {step === "loading" && (
+            <div style={{ padding: "60px 16px", textAlign: "center" }}>
+              <div style={{ width: 64, height: 64, margin: "0 auto 24px", border: "4px solid #e5e7eb", borderTopColor: "#2563eb", borderRadius: "50%", animation: "ck-spin 1s linear infinite" }} />
+              <p style={{ color: "#374151", fontSize: 16, margin: 0 }}>Aguarde, estamos preparando o pagamento</p>
+            </div>
+          )}
+
           {step === "pix" && (
             <div className="ck-pix-box">
-              <div className="ck-pix-timer">
-                Expira em <strong>{mm}:{ss}</strong>
+              <h2 style={{ textAlign: "center", color: "#111", fontSize: 18, margin: "4px 0 6px" }}>Falta pouco! Seu pedido está quase concluído.</h2>
+              <p style={{ textAlign: "center", color: "#6b7280", fontSize: 13, margin: "0 0 14px" }}>Pague com PIX no app do seu banco seguindo as orientações a seguir</p>
+
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, margin: "6px 0 14px", color: "#111", fontWeight: 600 }}>
+                <span>🕐 Tempo restante para pagar:</span>
+                <strong style={{ color: "#dc2626" }}>{mm}:{ss}</strong>
               </div>
-              <img src={qrUrl} alt="QR Code Pix" className="ck-qr" />
-              <p className="ck-muted" style={{ textAlign: "center" }}>
-                Abra o app do seu banco, escolha pagar com Pix e escaneie o QR Code.
-              </p>
-              <label className="ck-h2" style={{ fontSize: 14, marginTop: 8 }}>Pix Copia e Cola</label>
-              <div className="ck-copy">
-                <code>{pixPayload}</code>
-                <button type="button" onClick={copy} className="ck-copy-btn">
-                  {copied ? <><Check size={16} /> Copiado</> : <><Copy size={16} /> Copiar</>}
+
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <img src={qrUrl} alt="QR Code Pix" style={{ width: 240, height: 240, border: "1px solid #e5e7eb", borderRadius: 8, padding: 8, background: "#fff" }} />
+              </div>
+
+              <div style={{ marginTop: 16, border: "1px solid #e5e7eb", borderRadius: 8, padding: "10px 12px", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis", fontSize: 13, color: "#374151" }}>
+                {pixPayload}
+              </div>
+
+              <button type="button" onClick={copy} style={{ marginTop: 12, width: "100%", background: "#1d4ed8", color: "#fff", border: 0, borderRadius: 8, padding: "14px 16px", fontWeight: 700, fontSize: 15, display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, cursor: "pointer", textTransform: "uppercase" }}>
+                {copied ? <><Check size={18} /> Copiado</> : <><Copy size={18} /> Copiar código</>}
+              </button>
+
+              <ol style={{ marginTop: 18, paddingLeft: 20, color: "#374151", fontSize: 14, lineHeight: 1.9 }}>
+                <li>Copie o código PIX;</li>
+                <li>Acesse o APP do seu banco;</li>
+                <li>Escolha pagar com PIX;</li>
+                <li>Cole o código do PIX;</li>
+                <li>Confirme o pagamento.</li>
+              </ol>
+
+              <div style={{ textAlign: "center", margin: "10px 0" }}>
+                <a href="#" style={{ color: "#2563eb", fontSize: 14, fontWeight: 600 }}>❓ Preciso de ajuda para pagar com PIX</a>
+              </div>
+
+              <div style={{ borderTop: "1px solid #e5e7eb", marginTop: 8, paddingTop: 14, textAlign: "center", color: "#374151", fontSize: 14 }}>
+                Assim que o seu pagamento for confirmado pela instituição financeira nós te avisaremos pelo seu email:
+                <div style={{ marginTop: 6, color: "#2563eb", fontWeight: 700 }}>{form.email || "seu@email.com"}</div>
+              </div>
+
+              <div style={{ marginTop: 14, background: "#f3f4f6", borderRadius: 8, padding: "14px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
+                <span style={{ color: "#374151", fontWeight: 600 }}>Número do pedido:</span>
+                <strong style={{ fontSize: 22, color: "#111", letterSpacing: 0.5 }}>620359715</strong>
+              </div>
+
+              <div style={{ marginTop: 16, border: "2px dashed #ef4444", borderRadius: 12, padding: 16, textAlign: "center", background: "#fff" }}>
+                <div style={{ width: 44, height: 44, margin: "0 auto 8px", background: "#ef4444", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: 22 }}>⬆</div>
+                <div style={{ fontWeight: 700, color: "#111", marginBottom: 4 }}>Já pagou? Envie o comprovante</div>
+                <div style={{ fontSize: 12, color: "#6b7280", marginBottom: 12 }}>Se o sistema demorar para confirmar, anexe aqui o print/PDF do Pix para agilizar a liberação do seu pedido.</div>
+                <button type="button" style={{ width: "100%", background: "#ef4444", color: "#fff", border: 0, borderRadius: 8, padding: "12px 14px", fontWeight: 700, cursor: "pointer", textTransform: "uppercase", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                  ⬆ Anexar comprovante
                 </button>
               </div>
             </div>
