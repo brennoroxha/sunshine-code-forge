@@ -655,62 +655,6 @@ function Index() {
         </div>
       </section>
 
-      {/* SEÇÃO ANTES/DEPOIS */}
-      <section className="sb-section" style={{ background: "#fff8f5" }}>
-        <div className="sb-container">
-          <h2 className="sb-h2" data-reveal style={{ textAlign: "center", marginBottom: 24 }}>
-            Resultado real das nossas clientes
-          </h2>
-          <div
-            data-reveal
-            style={{
-              display: "flex",
-              gap: 16,
-              overflowX: "auto",
-              scrollSnapType: "x mandatory",
-              paddingBottom: 8,
-              WebkitOverflowScrolling: "touch",
-            }}
-          >
-            {[
-              { before: IMAGES[2], after: IMAGES[0] },
-              { before: IMAGES[3], after: IMAGES[5] },
-              { before: IMAGES[4], after: IMAGES[6] },
-            ].map((pair, i) => (
-              <div
-                key={i}
-                style={{
-                  flex: "0 0 auto",
-                  width: "min(320px, 85vw)",
-                  background: "#fff",
-                  borderRadius: 16,
-                  overflow: "hidden",
-                  boxShadow: "0 4px 16px rgba(0,0,0,.08)",
-                  scrollSnapAlign: "start",
-                }}
-              >
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0 }}>
-                  <div style={{ position: "relative" }}>
-                    <img src={pair.before} alt="Antes" loading="lazy" style={{ width: "100%", height: 240, objectFit: "cover", filter: "grayscale(.3) brightness(.92)" }} />
-                    <span style={{ position: "absolute", top: 8, left: 8, background: "rgba(0,0,0,.7)", color: "#fff", fontSize: 11, fontWeight: 800, padding: "4px 8px", borderRadius: 4, letterSpacing: 0.5 }}>
-                      ANTES
-                    </span>
-                  </div>
-                  <div style={{ position: "relative" }}>
-                    <img src={pair.after} alt="Depois" loading="lazy" style={{ width: "100%", height: 240, objectFit: "cover" }} />
-                    <span style={{ position: "absolute", top: 8, left: 8, background: "var(--sb-cta)", color: "#fff", fontSize: 11, fontWeight: 800, padding: "4px 8px", borderRadius: 4, letterSpacing: 0.5 }}>
-                      DEPOIS
-                    </span>
-                  </div>
-                </div>
-                <div style={{ padding: "12px 14px", fontSize: 13, color: "#1a1a1a", fontWeight: 600, textAlign: "center" }}>
-                  Resultado em poucas semanas de uso
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* 7. TABELA DE TAMANHOS */}
 
