@@ -1,5 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
+import desc1 from "@/assets/desc-1.png";
+import desc2 from "@/assets/desc-2.png";
+import desc3 from "@/assets/desc-3.png";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -285,66 +288,65 @@ function Index() {
         </div>
       </section>
 
-      {/* 4. BENEFÍCIOS */}
+      {/* 4. DESCRIÇÃO */}
       <section className="sb-section">
-        <div className="sb-container">
+        <div className="sb-container sb-container-sm">
           <h2 className="sb-h2" data-reveal>
-            Por que escolher a Slim Belly?
+            Cinta Modeladora Cintura Alta - Slim Belly
           </h2>
-          <div className="sb-benefits">
-            {[
-              { i: "🧲", t: "Terapia Magnética", d: "Melhora a circulação sanguínea" },
-              { i: "🏋️", t: "Controle de Barriga", d: "Cintura alta modeladora" },
-              { i: "🍑", t: "Lifting de Bumbum", d: "Realça suas curvas naturais" },
-              { i: "🌬️", t: "Tecido Respirável", d: "Conforto o dia todo" },
-            ].map((b) => (
-              <div key={b.t} className="sb-benefit" data-reveal>
-                <div className="sb-benefit-icon">{b.i}</div>
-                <h3>{b.t}</h3>
-                <p>{b.d}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* 5. COMO FUNCIONA */}
-      <section className="sb-section sb-dark">
-        <div className="sb-container">
-          <h2 className="sb-h2 sb-h2-light" data-reveal>
-            Como funciona
-          </h2>
-          <div className="sb-steps">
-            {[
-              { n: "01", t: "Vista a Cinta", d: "Coloque com facilidade, ajustando suavemente." },
-              { n: "02", t: "Sinta o Suporte", d: "Tecido firme abraça e modela na hora." },
-              { n: "03", t: "Exiba sua Silhueta", d: "Curvas realçadas com total conforto." },
-            ].map((s, i) => (
-              <div key={s.n} className="sb-step" data-reveal>
-                <div className="sb-step-num">{s.n}</div>
-                <h3>{s.t}</h3>
-                <p>{s.d}</p>
-                {i < 2 && <div className="sb-step-arrow">→</div>}
-              </div>
-            ))}
+          <div className="sb-desc-img" data-reveal>
+            <img src={desc1} alt="Elasticidade Superior em Quatro Direções" loading="lazy" />
           </div>
-        </div>
-      </section>
 
-      {/* 6. GALERIA RESULTADOS */}
-      <section className="sb-section">
-        <div className="sb-container">
-          <h2 className="sb-h2" data-reveal>
-            Resultados Reais de Clientes
-          </h2>
-          <div className="sb-results">
-            {IMAGES.slice(0, 6).map((src) => (
-              <div key={src} className="sb-result" data-reveal>
-                <img src={src} alt="Resultado cliente" loading="lazy" />
-                <div className="sb-result-overlay" />
-              </div>
-            ))}
+          <p className="sb-desc-text" data-reveal>
+            A Cinta Modeladora Cintura Alta - Slim Belly é a escolha ideal para quem busca conforto
+            e eficácia na modelagem corporal. Seu design sem costura elimina qualquer desconforto,
+            enquanto a cintura alta oferece um controle efetivo do abdômen, realçando a silhueta
+            natural. Além disso, a peça incorpora terapia magnética que ajuda a melhorar a
+            circulação sanguínea e reduzir as cólicas menstruais. Com suporte sem fio que elimina
+            qualquer pressão desconfortável, esta calcinha ajuda a atingir o formato desejado de
+            maneira sutil e natural, sendo perfeita para o uso diário.
+          </p>
+
+          <div className="sb-desc-img" data-reveal>
+            <img src={desc2} alt="Tecido antibacteriano e ativação térmica" loading="lazy" />
           </div>
+
+          <div className="sb-desc-img" data-reveal>
+            <img src={desc3} alt="Tabela de tamanhos Slim Belly" loading="lazy" />
+          </div>
+
+          <h3 className="sb-desc-h3" data-reveal>
+            Características
+          </h3>
+          <ul className="sb-desc-list" data-reveal>
+            <li>80% Náilon + 20% Elastano</li>
+            <li>Conforto perfeito: contorna perfeitamente o seu corpo para a liberdade irrestrita.</li>
+            <li>Adesivo Aquecedor: Proporciona calor e cuidado para o seu bem-estar.</li>
+            <li>Controle de barriga de cintura alta: molda sua cintura sem esforço para suporte extra.</li>
+            <li>Efeito lifting de bumbum: realça instantaneamente suas curvas para uma aparência mais atraente.</li>
+            <li>Resistência: Mantém a forma ao longo do tempo, resistindo à deformação.</li>
+            <li>Tecido Respirável: frescor e respirabilidade durante todo o dia.</li>
+            <li>
+              Tamanho: M: Cintura 55-65cm, quadril 70-80cm, peso 45-55kg / G: Cintura 60-70cm,
+              quadril 75-85cm, peso 55-65kg / XL: Cintura 65-75cm, quadril 80-90cm, peso 65-75kg /
+              XXL: Cintura 70-80cm, quadril 85-95cm, peso 75-85kg
+            </li>
+            <li>Cores: Preta, Bege e Vermelha</li>
+          </ul>
+
+          <h3 className="sb-desc-h3" data-reveal>
+            Embalagem Contém
+          </h3>
+          <ul className="sb-desc-list" data-reveal>
+            <li>01x Cinta Modeladora Cintura Alta - Slim Belly</li>
+            <li>KIT 3 - 03 Cintas Modeladoras Cintura Alta - Slim Belly (Preta, Bege e Vermelha)</li>
+            <li>
+              KIT 5 - 05 Cintas Modeladoras Cintura Alta - Slim Belly (2x Pretas, 2x Bege e 01x
+              Vermelha)
+            </li>
+          </ul>
         </div>
       </section>
 
