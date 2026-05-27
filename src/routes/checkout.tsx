@@ -395,7 +395,7 @@ function CheckoutPage() {
                   <ChevronLeft size={16} /> Voltar
                 </button>
               )}
-              <button type="button" className="ck-pay-btn" onClick={next}>
+              <button type="button" className="ck-pay-btn" onClick={next} disabled={!canAdvance} style={!canAdvance ? { opacity: 0.5, cursor: "not-allowed" } : undefined}>
                 {step === 3 ? "Pagar agora" : step === 1 ? <>Avançar para a entrega <ChevronRight size={16} /></> : <>Avançar para o pagamento <ChevronRight size={16} /></>}
               </button>
             </div>
