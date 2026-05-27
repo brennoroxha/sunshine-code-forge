@@ -104,10 +104,25 @@ const FAQS = [
 
 function Index() {
   const [mainImg, setMainImg] = useState(0);
-  const [color, setColor] = useState(0);
-  const [size, setSize] = useState(1);
+  const [colors, setColors] = useState<number[]>([0]);
+  const [sizes, setSizes] = useState<number[]>([1]);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [testimonial, setTestimonial] = useState(0);
+
+  const toggleSelection = (
+    current: number[],
+    index: number,
+    max: number,
+    onAdd?: (i: number) => void,
+  ): number[] => {
+    if (current.includes(index)) {
+      if (current.length === 1) return current; // keep at least 1
+      return current.filter((i) => i !== index);
+    }
+    onAdd?.(index);
+    if (current.length >= max) return [...current.slice(1), index];
+    return [...current, index];
+  };
 
   // Fade in on scroll
   useEffect(() => {
@@ -199,7 +214,7 @@ function Index() {
           {/* Info */}
           <div className="sb-info">
             <span className="sb-badge sb-badge-best">🏆 MAIS VENDIDO</span>
-            <h1 className="sb-title">Cinta Modeladora Cintura Alta — Slim Belly</h1>
+            <h1 className="sb-title">KIT 02 Cinta Modeladora Cintura Alta — Slim Belly</h1>
             <div className="sb-rating">
               <span className="sb-stars">⭐⭐⭐⭐⭐</span>
               <strong>4.9</strong>
@@ -207,23 +222,24 @@ function Index() {
             </div>
 
             <div className="sb-price">
-              <span className="sb-price-old">R$ 129,90</span>
               <span className="sb-price-new">R$ 79,90</span>
             </div>
 
             <div className="sb-selector">
               <label className="sb-label">
-                Cor: <strong>{COLORS[color].name}</strong>
+                Cores (escolha 2):{" "}
+                <strong>{colors.map((i) => COLORS[i].name).join(" + ")}</strong>
               </label>
               <div className="sb-swatches">
                 {COLORS.map((c, i) => (
                   <button
                     key={c.name}
                     onClick={() => {
-                      setColor(i);
-                      setMainImg(c.imgIndex);
+                      setColors((prev) =>
+                        toggleSelection(prev, i, 2, (added) => setMainImg(COLORS[added].imgIndex)),
+                      );
                     }}
-                    className={`sb-swatch ${color === i ? "is-active" : ""}`}
+                    className={`sb-swatch ${colors.includes(i) ? "is-active" : ""}`}
                     aria-label={c.name}
                     title={c.name}
                   >
@@ -235,14 +251,15 @@ function Index() {
 
             <div className="sb-selector">
               <label className="sb-label">
-                Tamanho: <strong>{SIZES[size]}</strong>
+                Tamanhos (escolha 2):{" "}
+                <strong>{sizes.map((i) => SIZES[i]).join(" + ")}</strong>
               </label>
               <div className="sb-sizes">
                 {SIZES.map((s, i) => (
                   <button
                     key={s}
-                    onClick={() => setSize(i)}
-                    className={`sb-size ${size === i ? "is-active" : ""}`}
+                    onClick={() => setSizes((prev) => toggleSelection(prev, i, 2))}
+                    className={`sb-size ${sizes.includes(i) ? "is-active" : ""}`}
                   >
                     {s}
                   </button>
