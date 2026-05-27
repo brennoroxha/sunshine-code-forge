@@ -703,41 +703,7 @@ function Index() {
           <h2 className="sb-h2" data-reveal>
             O que dizem nossas clientes
           </h2>
-          <div className="sb-testimonial" data-reveal>
-            <div className="sb-avatar">{TESTIMONIALS[testimonial].initials}</div>
-            <div className="sb-stars sb-stars-big">⭐⭐⭐⭐⭐</div>
-            <p className="sb-quote">"{TESTIMONIALS[testimonial].text}"</p>
-            <div className="sb-author">
-              <strong>{TESTIMONIALS[testimonial].name}</strong>
-              <span>{TESTIMONIALS[testimonial].city}</span>
-            </div>
-            <div className="sb-carousel-nav">
-              <button
-                onClick={() =>
-                  setTestimonial((t) => (t - 1 + TESTIMONIALS.length) % TESTIMONIALS.length)
-                }
-                aria-label="Anterior"
-              >
-                ←
-              </button>
-              <div className="sb-dots">
-                {TESTIMONIALS.map((_, i) => (
-                  <button
-                    key={i}
-                    className={`sb-dot ${testimonial === i ? "is-active" : ""}`}
-                    onClick={() => setTestimonial(i)}
-                    aria-label={`Depoimento ${i + 1}`}
-                  />
-                ))}
-              </div>
-              <button
-                onClick={() => setTestimonial((t) => (t + 1) % TESTIMONIALS.length)}
-                aria-label="Próximo"
-              >
-                →
-              </button>
-            </div>
-          </div>
+          <TestimonialsCarousel current={testimonial} setCurrent={setTestimonial} />
         </div>
       </section>
 
