@@ -7,9 +7,9 @@ export const Route = createFileRoute("/pagamento-confirmado")({
   component: PagamentoConfirmadoPage,
   head: () => ({
     meta: [
-      { title: "Pagamento Confirmado — ConfiaShop" },
+      { title: "Pagamento Confirmado \u2014 ConfiaShop" },
       { name: "description", content: "Seu pagamento foi confirmado com sucesso! Agradecemos pela compra." },
-      { property: "og:title", content: "Pagamento Confirmado — ConfiaShop" },
+      { property: "og:title", content: "Pagamento Confirmado \u2014 ConfiaShop" },
       { property: "og:description", content: "Seu pagamento foi confirmado com sucesso!" },
     ],
   }),
@@ -18,6 +18,8 @@ export const Route = createFileRoute("/pagamento-confirmado")({
 function PagamentoConfirmadoPage() {
   const search = useSearch({ from: "/pagamento-confirmado" }) as Record<string, string>;
   const hash = search.hash || "620359715";
+  const waText = encodeURIComponent(`Olá! Acabei de fazer meu pedido #${hash} e gostaria de acompanhar o status.`);
+  const waHref = `https://wa.me/5511999999999?text=${waText}`;
 
   return (
     <div className="sb-root" style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
@@ -76,7 +78,8 @@ function PagamentoConfirmadoPage() {
           </h1>
 
           <p style={{ fontSize: 15, color: "var(--sb-muted)", marginBottom: 24, lineHeight: 1.6 }}>
-            Seu pagamento foi confirmado com sucesso.<br />
+            Seu pagamento foi confirmado com sucesso.
+            <br />
             Agradecemos pela compra e confiança!
           </p>
 
@@ -91,7 +94,7 @@ function PagamentoConfirmadoPage() {
             }}
           >
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-              <span style={{ fontSize: 13, color: "var(--sb-muted)", fontWeight: 500 }}>Número do pedido</span>
+              <span style={{ fontSize: 13, color: "var(--sb-muted)", fontWeight: 500 }}>N\u00famero do pedido</span>
               <strong style={{ fontSize: 18, color: "var(--sb-text)", letterSpacing: 0.5, fontFamily: "Inter, system-ui, sans-serif" }}>
                 #{hash}
               </strong>
@@ -104,7 +107,7 @@ function PagamentoConfirmadoPage() {
                 </div>
                 <div>
                   <div style={{ fontWeight: 600, fontSize: 14, color: "var(--sb-text)" }}>KIT 02 Cinta Modeladora Cintura Alta</div>
-                  <div style={{ fontSize: 12, color: "var(--sb-muted)" }}>Slim Belly — Qtd: 1</div>
+                  <div style={{ fontSize: 12, color: "var(--sb-muted)" }}>Slim Belly \u2014 Qtd: 1</div>
                 </div>
               </div>
 
@@ -113,8 +116,8 @@ function PagamentoConfirmadoPage() {
                   <Truck size={16} color="#fff" />
                 </div>
                 <div>
-                  <div style={{ fontWeight: 600, fontSize: 14, color: "var(--sb-text)" }}>Frete Grátis</div>
-                  <div style={{ fontSize: 12, color: "var(--sb-muted)" }}>Entrega em 4 a 5 dias úteis</div>
+                  <div style={{ fontWeight: 600, fontSize: 14, color: "var(--sb-text)" }}>Frete Gr\u00e1tis</div>
+                  <div style={{ fontSize: 12, color: "var(--sb-muted)" }}>Entrega em 4 a 5 dias \u00fateis</div>
                 </div>
               </div>
             </div>
@@ -122,7 +125,7 @@ function PagamentoConfirmadoPage() {
 
           {/* WhatsApp CTA */}
           <a
-            href="https://wa.me/5511999999999?text=Ol%C3%A1%21%20Acabei%20de%20fazer%20meu%20pedido%20%23" + hash + "%20e%20gostaria%20de%20acompanhar%20o%20status."
+            href={waHref}
             target="_blank"
             rel="noreferrer"
             style={{
@@ -170,7 +173,7 @@ function PagamentoConfirmadoPage() {
           </Link>
 
           <p style={{ marginTop: 18, fontSize: 13, color: "var(--sb-muted)" }}>
-            Um e-mail com os detalhes do seu pedido foi enviado para você.
+            Um e-mail com os detalhes do seu pedido foi enviado para voc\u00ea.
           </p>
         </div>
       </main>
@@ -179,10 +182,10 @@ function PagamentoConfirmadoPage() {
       <footer style={{ background: "var(--sb-dark)", color: "#aaa", padding: "20px", textAlign: "center", fontSize: 13 }}>
         <div style={{ marginBottom: 8 }}>
           <Link to="/" style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "#fff", fontWeight: 600 }}>
-            <ArrowLeft size={14} /> Voltar para a página inicial
+            <ArrowLeft size={14} /> Voltar para a p\u00e1gina inicial
           </Link>
         </div>
-        Confia Shop LTDA · CNPJ 64.119.790/0001-01
+        Confia Shop LTDA \u00b7 CNPJ 64.119.790/0001-01
       </footer>
     </div>
   );
