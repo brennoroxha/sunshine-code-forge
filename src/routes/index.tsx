@@ -368,8 +368,8 @@ function Index() {
             </div>
           </div>
         </div>
-        </div>
       </section>
+
 
 
 
