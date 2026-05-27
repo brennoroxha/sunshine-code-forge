@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { getRequestHeader } from "@tanstack/react-start/server";
 import { z } from "zod";
 
 const InputSchema = z.object({
@@ -43,6 +44,13 @@ export const createPixTransaction = createServerFn({ method: "POST" })
       operation_type: 1,
     }));
 
+    // Captura IP real do cliente para enviar à Utmify depois
+    const clientIp =
+      getRequestHeader("cf-connecting-ip") ||
+      getRequestHeader("x-forwarded-for")?.split(",")[0]?.trim() ||
+      getRequestHeader("x-real-ip") ||
+      null;
+
     try {
       const res = await fetch("https://api.klivopay.com.br/api/public/v1/transactions", {
         method: "POST",
@@ -53,8 +61,10 @@ export const createPixTransaction = createServerFn({ method: "POST" })
           offer_hash: OFFER_HASH,
           payment_method: "pix",
           operation_type: 1,
-          customer: data.customer,
+          customer: { ...data.customer, ip: clientIp ?? undefined },
           cart: items,
+          metadata: { client_ip: clientIp },
+          tracking: typeof globalThis !== "undefined" ? undefined : undefined,
         }),
       });
 

@@ -120,7 +120,10 @@ export const Route = createFileRoute("/api/public/klivopay-webhook")({
 
         if (isPaid) {
           console.log("[klivopay-webhook] Pagamento confirmado:", hash);
-          await sendUtmifyOrder({ payload, hash, amount, paymentMethod, status: "paid" });
+          await Promise.all([
+            sendUtmifyOrder({ payload, hash, amount, paymentMethod, status: "paid" }),
+            sendMetaPurchase({ payload, hash, amountCents }),
+          ]);
         } else if (status === "waiting_payment" || status === "pending" || event === "pix.generated") {
           await sendUtmifyOrder({ payload, hash, amount, paymentMethod, status: "waiting_payment" });
         }
@@ -168,7 +171,13 @@ async function sendUtmifyOrder({ payload, hash, amount, paymentMethod, status }:
         phone: customer?.phone || customer?.phone_number || null,
         document: customer?.document || customer?.cpf || null,
         country: "BR",
-        ip: customer?.ip || null,
+        ip:
+          customer?.ip ||
+          payload?.metadata?.client_ip ||
+          payload?.data?.metadata?.client_ip ||
+          payload?.transaction?.metadata?.client_ip ||
+          payload?.ip ||
+          "0.0.0.0",
       },
       products: [
         {
@@ -209,5 +218,98 @@ async function sendUtmifyOrder({ payload, hash, amount, paymentMethod, status }:
     console.log("[utmify] status=", res.status, "resp=", text.substring(0, 300));
   } catch (e) {
     console.error("[utmify] erro ao enviar pedido", e);
+  }
+}
+
+// ============================================================
+// Meta Conversions API (server-side Purchase)
+// ============================================================
+const FB_PIXEL_ID = "1503415234565345";
+
+async function sha256Hex(input: string) {
+  const data = new TextEncoder().encode(input.trim().toLowerCase());
+  const buf = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(buf))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+async function sendMetaPurchase({
+  payload,
+  hash,
+  amountCents,
+}: {
+  payload: any;
+  hash: string;
+  amountCents: number;
+}) {
+  const accessToken = process.env.META_CAPI_ACCESS_TOKEN;
+  if (!accessToken) {
+    console.warn("[meta-capi] META_CAPI_ACCESS_TOKEN ausente — pulando envio");
+    return;
+  }
+  try {
+    const customer =
+      payload?.customer ||
+      payload?.data?.customer ||
+      payload?.transaction?.customer ||
+      {};
+    const clientIp =
+      customer?.ip ||
+      payload?.metadata?.client_ip ||
+      payload?.data?.metadata?.client_ip ||
+      null;
+    const valueBRL = amountCents / 100;
+    const eventId = String(hash || `evt_${Date.now()}`);
+
+    const [emailHash, phoneHash, fnHash, docHash] = await Promise.all([
+      customer?.email ? sha256Hex(String(customer.email)) : Promise.resolve(undefined),
+      customer?.phone || customer?.phone_number
+        ? sha256Hex(String(customer.phone || customer.phone_number).replace(/\D/g, ""))
+        : Promise.resolve(undefined),
+      customer?.name ? sha256Hex(String(customer.name).split(" ")[0]) : Promise.resolve(undefined),
+      customer?.document || customer?.cpf
+        ? sha256Hex(String(customer.document || customer.cpf).replace(/\D/g, ""))
+        : Promise.resolve(undefined),
+    ]);
+
+    const body = {
+      data: [
+        {
+          event_name: "Purchase",
+          event_time: Math.floor(Date.now() / 1000),
+          event_id: eventId,
+          action_source: "website",
+          event_source_url: "https://confia-shop.com/pagamento-confirmado",
+          user_data: {
+            em: emailHash ? [emailHash] : undefined,
+            ph: phoneHash ? [phoneHash] : undefined,
+            fn: fnHash ? [fnHash] : undefined,
+            external_id: docHash ? [docHash] : undefined,
+            client_ip_address: clientIp || undefined,
+            country: ["62cf61b8a87dc8951b50f7c0aabe92dcd2c84ad9b95eef74b7fad1d10ff09f8a"], // sha256("br")
+          },
+          custom_data: {
+            currency: "BRL",
+            value: valueBRL,
+            content_ids: ["kit-02-slim-belly"],
+            content_type: "product",
+            num_items: 1,
+            order_id: eventId,
+          },
+        },
+      ],
+    };
+
+    const url = `https://graph.facebook.com/v19.0/${FB_PIXEL_ID}/events?access_token=${encodeURIComponent(accessToken)}`;
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    const text = await res.text();
+    console.log("[meta-capi] status=", res.status, "resp=", text.substring(0, 400));
+  } catch (e) {
+    console.error("[meta-capi] erro ao enviar Purchase", e);
   }
 }
