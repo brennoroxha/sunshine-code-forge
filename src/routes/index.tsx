@@ -165,6 +165,11 @@ function Index() {
       processed: fmt(plus(1)),
       delivered: fmt(plus(5)),
     });
+    const fmtShort = (d: Date) => {
+      const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+      return `${d.getDate()} de ${meses[d.getMonth()]}`;
+    };
+    setShippingRange({ from: fmtShort(plus(2)), to: fmtShort(plus(5)) });
   }, []);
 
   const toggleSelection = (
