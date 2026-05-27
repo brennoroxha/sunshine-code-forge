@@ -746,9 +746,9 @@ function Index() {
         <div style={{ fontSize: 11, color: "#b45309", textAlign: "center", marginBottom: 6, fontWeight: 600 }}>
           ⏰ Oferta por tempo limitado
         </div>
-        <Link to="/checkout" className="sb-cta sb-cta-primary" onClick={ripple}>
+        <a href="/checkout" className="sb-cta sb-cta-primary" onClick={ripple}>
           🛒 QUERO MEU KIT — {selectedKit.priceLabel}
-        </Link>
+        </a>
       </div>
     </div>
   );
