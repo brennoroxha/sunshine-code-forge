@@ -240,26 +240,75 @@ function Index() {
 
             <div className="sb-selector">
               <label className="sb-label">
-                Cores (escolha 2):{" "}
-                <strong>{colors.map((i) => COLORS[i].name).join(" + ")}</strong>
+                Cores (escolha 2, pode repetir):{" "}
+                <strong>
+                  {colors.length === 0
+                    ? "—"
+                    : colors.length === 2 && colors[0] === colors[1]
+                    ? `2x ${COLORS[colors[0]].name}`
+                    : colors.map((i) => COLORS[i].name).join(" + ")}
+                </strong>
               </label>
               <div className="sb-swatches">
-                {COLORS.map((c, i) => (
-                  <button
-                    key={c.name}
-                    onClick={() => {
-                      setColors((prev) =>
-                        toggleSelection(prev, i, 2, (added) => setMainImg(COLORS[added].imgIndex)),
-                      );
-                    }}
-                    className={`sb-swatch ${colors.includes(i) ? "is-active" : ""}`}
-                    aria-label={c.name}
-                    title={c.name}
-                  >
-                    <img src={IMAGES[c.imgIndex]} alt={c.name} loading="lazy" />
-                  </button>
-                ))}
+                {COLORS.map((c, i) => {
+                  const count = colors.filter((x) => x === i).length;
+                  return (
+                    <button
+                      key={c.name}
+                      onClick={() => {
+                        setMainImg(c.imgIndex);
+                        setColors((prev) => (prev.length >= 2 ? [i] : [...prev, i]));
+                      }}
+                      className={`sb-swatch ${count > 0 ? "is-active" : ""}`}
+                      aria-label={c.name}
+                      title={c.name}
+                      style={{ position: "relative" }}
+                    >
+                      <img src={IMAGES[c.imgIndex]} alt={c.name} loading="lazy" />
+                      {count > 0 && (
+                        <span
+                          style={{
+                            position: "absolute",
+                            top: -6,
+                            right: -6,
+                            background: "hsl(var(--primary))",
+                            color: "hsl(var(--primary-foreground))",
+                            borderRadius: "999px",
+                            minWidth: 20,
+                            height: 20,
+                            fontSize: 12,
+                            fontWeight: 700,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            padding: "0 6px",
+                            boxShadow: "0 1px 4px rgba(0,0,0,.25)",
+                          }}
+                        >
+                          ×{count}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
+              {colors.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setColors([])}
+                  style={{
+                    marginTop: 8,
+                    background: "transparent",
+                    border: "none",
+                    color: "hsl(var(--muted-foreground))",
+                    fontSize: 12,
+                    textDecoration: "underline",
+                    cursor: "pointer",
+                  }}
+                >
+                  Limpar seleção
+                </button>
+              )}
             </div>
 
             <div className="sb-selector">
