@@ -537,7 +537,7 @@ function Index() {
             </div>
 
 
-            <a href="/checkout" ref={ctaRef as any} className="sb-cta sb-cta-primary" onClick={ripple}>
+            <a href={`/checkout?kit=${selectedKit.id}`} ref={ctaRef as any} className="sb-cta sb-cta-primary" onClick={ripple}>
               🛒 COMPRAR AGORA
             </a>
 
@@ -681,7 +681,7 @@ function Index() {
         <div className="sb-container" data-reveal>
           <h2>Garanta já a sua com desconto de lançamento</h2>
           <p>Estoque limitado — Últimas unidades</p>
-          <a href="/checkout" className="sb-cta-light" onClick={ripple as any}>
+          <a href={`/checkout?kit=${selectedKit.id}`} className="sb-cta-light" onClick={ripple as any}>
             QUERO MINHA CINTA AGORA →
           </a>
         </div>
@@ -746,7 +746,7 @@ function Index() {
         <div style={{ fontSize: 11, color: "#b45309", textAlign: "center", marginBottom: 6, fontWeight: 600 }}>
           ⏰ Oferta por tempo limitado
         </div>
-        <a href="/checkout" className="sb-cta sb-cta-primary" onClick={ripple}>
+        <a href={`/checkout?kit=${selectedKit.id}`} className="sb-cta sb-cta-primary" onClick={ripple}>
           🛒 QUERO MEU KIT — {selectedKit.priceLabel}
         </a>
       </div>
