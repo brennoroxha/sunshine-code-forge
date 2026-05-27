@@ -27,7 +27,6 @@ function PagamentoConfirmadoPage() {
     if (typeof window === "undefined") return;
     const key = `sb_purchase_fired_${hash}`;
     if (sessionStorage.getItem(key)) return;
-    sessionStorage.setItem(key, "1");
 
     const payload = {
       orderId: hash,
@@ -38,22 +37,41 @@ function PagamentoConfirmadoPage() {
       products: [{ id: "kit-02-slim-belly", name: "KIT 02 Cinta Modeladora Cintura Alta", quantity: 1, price: amount }],
     };
 
-    try {
+    let attempts = 0;
+    const fire = () => {
+      attempts++;
       const w = window as any;
-      // Utmify pixel
-      if (typeof w.utmify?.track === "function") w.utmify.track("Purchase", payload);
-      if (typeof w.utmifyTrack === "function") w.utmifyTrack("Purchase", payload);
-      if (typeof w.pixel?.track === "function") w.pixel.track("Purchase", payload);
-      // Meta Pixel fallback (caso esteja injetado pela Utmify)
-      if (typeof w.fbq === "function") w.fbq("track", "Purchase", { value: amount, currency: "BRL" });
-      // dataLayer (GTM)
-      w.dataLayer = w.dataLayer || [];
-      w.dataLayer.push({ event: "purchase", ecommerce: { transaction_id: hash, value: amount, currency: "BRL" } });
-      // Custom event
-      window.dispatchEvent(new CustomEvent("purchase", { detail: payload }));
-    } catch (e) {
-      console.error("[purchase] tracking error", e);
-    }
+      let fired = false;
+      try {
+        // Meta Pixel (base code garantido no __root)
+        if (typeof w.fbq === "function") {
+          w.fbq("track", "Purchase", { value: amount, currency: "BRL", content_ids: ["kit-02-slim-belly"], content_type: "product", num_items: 1 });
+          fired = true;
+        }
+        // Utmify pixel
+        if (typeof w.utmify?.track === "function") { w.utmify.track("Purchase", payload); fired = true; }
+        if (typeof w.utmifyTrack === "function") { w.utmifyTrack("Purchase", payload); fired = true; }
+        if (typeof w.pixel?.track === "function") { w.pixel.track("Purchase", payload); fired = true; }
+        // GTM dataLayer
+        w.dataLayer = w.dataLayer || [];
+        w.dataLayer.push({ event: "purchase", ecommerce: { transaction_id: hash, value: amount, currency: "BRL" } });
+        // Custom event
+        window.dispatchEvent(new CustomEvent("purchase", { detail: payload }));
+      } catch (e) {
+        console.error("[purchase] tracking error", e);
+      }
+      if (fired) {
+        sessionStorage.setItem(key, "1");
+        return true;
+      }
+      return false;
+    };
+
+    if (fire()) return;
+    const iv = setInterval(() => {
+      if (fire() || attempts >= 20) clearInterval(iv);
+    }, 500);
+    return () => clearInterval(iv);
   }, [hash, amount]);
 
   return (
