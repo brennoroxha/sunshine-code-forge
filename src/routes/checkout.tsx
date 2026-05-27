@@ -448,6 +448,11 @@ function CheckoutPage() {
                   </div>
                 </div>
               </div>
+              {pixError && (
+                <div style={{ marginTop: 12, padding: "10px 12px", background: "#fef2f2", border: "1px solid #fecaca", color: "#b91c1c", borderRadius: 8, fontSize: 13 }}>
+                  {pixError}
+                </div>
+              )}
             </>
           )}
 
