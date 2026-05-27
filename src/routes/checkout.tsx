@@ -107,13 +107,57 @@ function CheckoutPage() {
     { id: 2, label: "KIT 2", title: "2 Cintas", price: 7990, priceLabel: "R$ 79,90" },
   );
   useEffect(() => {
+    let loadedKit = { id: 2, label: "KIT 2", title: "2 Cintas", price: 7990, priceLabel: "R$ 79,90" };
     try {
       const raw = localStorage.getItem("sb_kit");
       if (raw) {
         const parsed = JSON.parse(raw);
-        if (parsed && typeof parsed.price === "number") setKit(parsed);
+        if (parsed && typeof parsed.price === "number") {
+          loadedKit = parsed;
+          setKit(parsed);
+        }
       }
     } catch {}
+
+    // Dispara InitiateCheckout (Meta Pixel + Utmify + dataLayer)
+    if (typeof window === "undefined") return;
+    const key = "sb_ic_fired";
+    if (sessionStorage.getItem(key)) return;
+    const value = (loadedKit.price || 7990) / 100;
+    const payload = {
+      value,
+      currency: "BRL",
+      content_ids: [`kit-0${loadedKit.id}-slim-belly`],
+      content_type: "product",
+      num_items: loadedKit.id,
+      contents: [{ id: `kit-0${loadedKit.id}-slim-belly`, quantity: loadedKit.id, item_price: value }],
+    };
+    let attempts = 0;
+    const fire = () => {
+      attempts++;
+      const w = window as any;
+      let fired = false;
+      try {
+        if (typeof w.fbq === "function") {
+          w.fbq("track", "InitiateCheckout", payload);
+          fired = true;
+        }
+        if (typeof w.utmify?.track === "function") { w.utmify.track("InitiateCheckout", payload); }
+        if (typeof w.utmifyTrack === "function") { w.utmifyTrack("InitiateCheckout", payload); }
+        if (typeof w.pixel?.track === "function") { w.pixel.track("InitiateCheckout", payload); }
+        w.dataLayer = w.dataLayer || [];
+        w.dataLayer.push({ event: "begin_checkout", ecommerce: { value, currency: "BRL", items: payload.contents } });
+      } catch (e) {
+        console.error("[InitiateCheckout] tracking error", e);
+      }
+      if (fired) sessionStorage.setItem(key, "1");
+      return fired;
+    };
+    if (fire()) return;
+    const iv = setInterval(() => {
+      if (fire() || attempts >= 20) clearInterval(iv);
+    }, 500);
+    return () => clearInterval(iv);
   }, []);
   const createPix = useServerFn(createPixTransaction);
 
