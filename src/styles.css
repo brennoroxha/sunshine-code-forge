@@ -443,16 +443,18 @@ button {
 }
 
 .sb-social-count {
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   background: #fff4e1;
   color: #8a5a00;
-  padding: 8px 14px;
+  padding: 10px 14px;
   border-radius: 8px;
   font-size: 13px;
   font-weight: 600;
-  align-self: flex-start;
+  width: 100%;
+  margin-top: 12px;
 }
 .sb-pulse {
   width: 8px;
