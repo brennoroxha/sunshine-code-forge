@@ -138,6 +138,20 @@ function Index() {
   const [sizes, setSizes] = useState<number[]>([1]);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [testimonial, setTestimonial] = useState(0);
+  const [kitId, setKitId] = useState<number>(2);
+  const selectedKit = KITS.find((k) => k.id === kitId) ?? KITS[1];
+  const [stockBySize] = useState<number[]>(() =>
+    SIZES.map(() => 3 + Math.floor(Math.random() * 5)),
+  );
+  // Persist kit choice for checkout
+  useEffect(() => {
+    try {
+      localStorage.setItem(
+        "sb_kit",
+        JSON.stringify({ id: selectedKit.id, label: selectedKit.label, title: selectedKit.title, price: selectedKit.price, priceLabel: selectedKit.priceLabel }),
+      );
+    } catch {}
+  }, [selectedKit.id]);
   const [deliveryDates, setDeliveryDates] = useState<{ placed: string; processed: string; delivered: string } | null>(null);
   const [shippingRange, setShippingRange] = useState<{ from: string; to: string } | null>(null);
   const [city, setCity] = useState<{ name: string; region: string }>({ name: "Ourinhos", region: "SP" });
