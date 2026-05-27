@@ -422,7 +422,11 @@ function Index() {
             <div className="sb-selector">
 
               <label className="sb-label">
-                Cores (<strong>escolha 2, pode repetir</strong>):{" "}
+                <strong>{selectedKit.label}:</strong>{" "}
+                {remainingColors > 0
+                  ? `${colors.length === 0 ? "escolha" : "escolha mais"} ${remainingColors} ${pieceWord(remainingColors, "cor", "cores")}${maxItems > 1 ? " (pode repetir)" : ""}`
+                  : `Cores: ${buildHint("cor", 0, colors, COLORS.map((c) => c.name))}`}
+                {" "}
                 <strong>
                   {colors.length === 0
                     ? "—"
