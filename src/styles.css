@@ -1144,3 +1144,7 @@ button {
 .ck-secure { display: flex; align-items: center; gap: 8px; color: #0b2447; }
 .ck-secure-text { display: flex; flex-direction: column; line-height: 1.1; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
 .ck-secure-text strong { font-size: 12px; }
+
+.ck-label { display: block; font-size: 13px; font-weight: 600; color: #111; margin-top: 10px; margin-bottom: 6px; }
+.ck-label + .ck-input,
+.ck-label + input.ck-input { margin-top: 0; }

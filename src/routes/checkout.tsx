@@ -230,31 +230,35 @@ function CheckoutPage() {
               <p className="ck-muted" style={{ fontSize: 13, marginTop: -4 }}>
                 Solicitamos apenas as informações essenciais para a realização da compra.
               </p>
+              <label className="ck-label">E-mail</label>
               <input
                 type="email"
-                placeholder="E-mail"
+                placeholder="seu@email.com"
                 value={form.email}
                 onChange={upd("email")}
                 className={inputCls("email")}
               />
               {fieldErr("email")}
+              <label className="ck-label">Nome completo</label>
               <input
-                placeholder="Nome completo"
+                placeholder="Nome e sobrenome"
                 value={form.nomeCompleto}
                 onChange={upd("nomeCompleto")}
                 className={inputCls("nomeCompleto")}
               />
               {fieldErr("nomeCompleto")}
+              <label className="ck-label">CPF</label>
               <input
-                placeholder="CPF (999.999.999-99)"
+                placeholder="999.999.999-99"
                 value={form.cpf}
                 onChange={upd("cpf")}
                 className={inputCls("cpf")}
                 inputMode="numeric"
               />
               {fieldErr("cpf")}
+              <label className="ck-label">Telefone</label>
               <input
-                placeholder="Telefone (11) 99999-9999"
+                placeholder="(11) 99999-9999"
                 value={form.telefone}
                 onChange={upd("telefone")}
                 className={inputCls("telefone")}
@@ -267,14 +271,16 @@ function CheckoutPage() {
           {step === 2 && (
             <>
               <h2 className="ck-h2">Entrega</h2>
+              <label className="ck-label">CEP</label>
               <input
-                placeholder="CEP"
+                placeholder="00000-000"
                 value={form.cep}
                 onChange={upd("cep")}
                 className={inputCls("cep")}
                 inputMode="numeric"
               />
               {fieldErr("cep")}
+              <label className="ck-label">Endereço</label>
               <div className="ck-row">
                 <div style={{ flex: 1 }}>
                   <input placeholder="Endereço" value={form.endereco} onChange={upd("endereco")} className={inputCls("endereco")} />
@@ -287,14 +293,18 @@ function CheckoutPage() {
               </div>
               <div className="ck-row">
                 <div style={{ flex: 1 }}>
+                  <label className="ck-label">Cidade</label>
                   <input placeholder="Cidade" value={form.cidade} onChange={upd("cidade")} className={inputCls("cidade")} />
                   {fieldErr("cidade")}
                 </div>
-                <select value={form.estado} onChange={upd("estado")} className="ck-input">
-                  {["AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO"].map((uf) => (
-                    <option key={uf} value={uf}>{uf}</option>
-                  ))}
-                </select>
+                <div>
+                  <label className="ck-label">Estado</label>
+                  <select value={form.estado} onChange={upd("estado")} className="ck-input">
+                    {["AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO"].map((uf) => (
+                      <option key={uf} value={uf}>{uf}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
             </>
           )}
