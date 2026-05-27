@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { ClipboardList, Package, PackageCheck } from "lucide-react";
+import { ClipboardList, Package, PackageCheck, ShieldCheck, RefreshCw, Truck } from "lucide-react";
 import desc1 from "@/assets/desc-1.png";
 import desc2 from "@/assets/desc-2.png";
 import desc3 from "@/assets/desc-3.png";
@@ -383,6 +383,31 @@ function Index() {
                 <div className="sb-tl-icon"><PackageCheck size={20} /></div>
                 <div className="sb-tl-date">{deliveryDates?.delivered ?? "—"}</div>
                 <div className="sb-tl-label">Entregue</div>
+              </div>
+            </div>
+
+            <div className="sb-info-box">
+              <div className="sb-info-row">
+                <ShieldCheck size={20} className="sb-info-ico" />
+                <div className="sb-info-text">
+                  <strong>Compra garantida:</strong> Você tem até 30 dias de Garantia
+                </div>
+              </div>
+              <div className="sb-info-row">
+                <RefreshCw size={20} className="sb-info-ico" />
+                <div className="sb-info-text">
+                  <strong>Troca Grátis:</strong> Você tem até 7 dias para testar o produto
+                </div>
+              </div>
+            </div>
+
+            <div className="sb-info-box">
+              <div className="sb-info-row">
+                <Truck size={22} className="sb-info-ico" style={{ color: "#FFD400" }} />
+                <div className="sb-info-text">
+                  <div><strong>Frete Grátis:</strong> para Ourinhos, SP e Região</div>
+                  <div>Receba entre: {deliveryDates?.placed ?? "—"} e {deliveryDates?.delivered ?? "—"}</div>
+                </div>
               </div>
             </div>
 
