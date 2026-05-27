@@ -417,7 +417,7 @@ function CheckoutPage() {
             </div>
           </div>
           <p className="ck-trust-quote">
-            "Fiquei encantada com o atendimento! A entrega foi rápida e o processo de compra, super fácil. Recomendo a todos!"
+            {`"Fiquei encantada com o atendimento! A entrega foi rápida e o processo de compra, super fácil. Recomendo a todos!"`}
           </p>
           <div className="ck-trust-author">— Isabela Marcondes</div>
         </div>
