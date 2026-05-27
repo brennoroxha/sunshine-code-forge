@@ -857,10 +857,110 @@ function Index() {
       </footer>
       {/* Sticky mobile CTA */}
       <div className={`sb-sticky-cta ${!isCtaVisible ? "is-visible" : ""}`}>
+        <div style={{ fontSize: 11, color: "#b45309", textAlign: "center", marginBottom: 6, fontWeight: 600 }}>
+          ⏰ Oferta por tempo limitado
+        </div>
         <Link to="/checkout" className="sb-cta sb-cta-primary" onClick={ripple}>
-          🛒 COMPRAR AGORA — R$ 79,90
+          🛒 QUERO MEU KIT — {selectedKit.priceLabel}
         </Link>
       </div>
     </div>
   );
 }
+
+function TestimonialsCarousel({
+  current,
+  setCurrent,
+}: {
+  current: number;
+  setCurrent: (updater: number | ((c: number) => number)) => void;
+}) {
+  const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
+  const perView = isMobile ? 1 : 2;
+  const pages = Math.max(1, TESTIMONIALS.length - perView + 1);
+  const safe = Math.min(current, pages - 1);
+  const visible = TESTIMONIALS.slice(safe, safe + perView);
+
+  return (
+    <div data-reveal>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: `repeat(${perView}, 1fr)`,
+          gap: 16,
+        }}
+      >
+        {visible.map((t, idx) => (
+          <div
+            key={`${safe}-${idx}`}
+            style={{
+              background: "#fff",
+              borderRadius: 16,
+              padding: 20,
+              boxShadow: "0 4px 16px rgba(0,0,0,.06)",
+              display: "flex",
+              flexDirection: "column",
+              gap: 10,
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <div
+                className="sb-avatar"
+                style={{
+                  width: 48,
+                  height: 48,
+                  background: ["#c8265a", "#c8a96e", "#1a1a2e", "#2ecc71", "#e67e22", "#8e44ad"][
+                    (safe + idx) % 6
+                  ],
+                  color: "#fff",
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontWeight: 800,
+                  fontSize: 16,
+                  flexShrink: 0,
+                }}
+              >
+                {t.initials}
+              </div>
+              <div>
+                <strong style={{ display: "block", fontSize: 14 }}>{t.name}</strong>
+                <span style={{ fontSize: 12, color: "#6b6b6b" }}>{t.city}</span>
+              </div>
+            </div>
+            <div style={{ color: "#f5b301", fontSize: 14 }}>⭐⭐⭐⭐⭐</div>
+            <p style={{ fontSize: 14, lineHeight: 1.55, color: "#1a1a1a", margin: 0 }}>
+              "{t.text}"
+            </p>
+          </div>
+        ))}
+      </div>
+      <div className="sb-carousel-nav" style={{ marginTop: 16 }}>
+        <button
+          onClick={() => setCurrent((c: number) => (c - 1 + pages) % pages)}
+          aria-label="Anterior"
+        >
+          ←
+        </button>
+        <div className="sb-dots">
+          {Array.from({ length: pages }).map((_, i) => (
+            <button
+              key={i}
+              className={`sb-dot ${safe === i ? "is-active" : ""}`}
+              onClick={() => setCurrent(i)}
+              aria-label={`Depoimento ${i + 1}`}
+            />
+          ))}
+        </div>
+        <button
+          onClick={() => setCurrent((c: number) => (c + 1) % pages)}
+          aria-label="Próximo"
+        >
+          →
+        </button>
+      </div>
+    </div>
+  );
+}
+
