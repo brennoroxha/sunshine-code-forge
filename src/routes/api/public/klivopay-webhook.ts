@@ -67,9 +67,11 @@ export const Route = createFileRoute("/api/public/klivopay-webhook")({
           event === "transaction.paid" ||
           event === "pix.paid";
 
-        if (isPaid && paymentMethod === "pix") {
-          console.log("[klivopay-webhook] PIX confirmado:", hash);
-          // TODO: persistir status / disparar e-mail quando necessário
+        if (isPaid) {
+          console.log("[klivopay-webhook] Pagamento confirmado:", hash);
+          await sendUtmifyOrder({ payload, hash, amount, paymentMethod, status: "paid" });
+        } else if (status === "waiting_payment" || status === "pending" || event === "pix.generated") {
+          await sendUtmifyOrder({ payload, hash, amount, paymentMethod, status: "waiting_payment" });
         }
 
         return Response.json({ received: true });
