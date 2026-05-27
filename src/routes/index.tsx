@@ -681,9 +681,9 @@ function Index() {
         <div className="sb-container" data-reveal>
           <h2>Garanta já a sua com desconto de lançamento</h2>
           <p>Estoque limitado — Últimas unidades</p>
-          <Link to="/checkout" className="sb-cta-light" onClick={ripple as any}>
+          <a href="/checkout" className="sb-cta-light" onClick={ripple as any}>
             QUERO MINHA CINTA AGORA →
-          </Link>
+          </a>
         </div>
       </section>
 
