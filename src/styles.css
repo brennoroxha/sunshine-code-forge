@@ -578,7 +578,7 @@ button {
   max-width: 320px;
 }
 .sb-step-num {
-  font-family: "Playfair Display", serif;
+  font-family: "Inter", system-ui, sans-serif;
   font-size: 48px;
   font-weight: 900;
   color: var(--sb-primary);
