@@ -187,7 +187,9 @@ function CheckoutPage() {
   };
   const canAdvance = step !== "pix" && isStepValid(step as Step);
 
-  const pixPayload = makePixPayload(TOTAL);
+  const freteCost = frete === "full" ? 997 : 0;
+  const totalComFrete = TOTAL + freteCost;
+  const pixPayload = makePixPayload(totalComFrete);
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(pixPayload)}`;
   const mm = String(Math.floor(expira / 60)).padStart(2, "0");
   const ss = String(expira % 60).padStart(2, "0");
