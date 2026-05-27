@@ -134,16 +134,15 @@ function CheckoutPage() {
     const e: Record<string, string> = {};
     if (s === 1) {
       if (!isValidEmail(form.email)) e.email = "E-mail inválido";
+      if (form.nomeCompleto.trim().split(/\s+/).length < 2) e.nomeCompleto = "Informe nome e sobrenome";
+      if (!isValidCPF(form.cpf)) e.cpf = "CPF inválido";
+      if (!isValidPhone(form.telefone)) e.telefone = "Telefone inválido";
     }
     if (s === 2) {
-      if (!form.nome.trim()) e.nome = "Informe o nome";
-      if (!form.sobrenome.trim()) e.sobrenome = "Informe o sobrenome";
-      if (!isValidCPF(form.cpf)) e.cpf = "CPF inválido";
       if (!isValidCEP(form.cep)) e.cep = "CEP inválido (8 dígitos)";
       if (!form.endereco.trim()) e.endereco = "Informe o endereço";
       if (!form.numero.trim()) e.numero = "Nº";
       if (!form.cidade.trim()) e.cidade = "Informe a cidade";
-      if (!isValidPhone(form.telefone)) e.telefone = "Telefone inválido";
     }
     setErrors(e);
     return Object.keys(e).length === 0;
