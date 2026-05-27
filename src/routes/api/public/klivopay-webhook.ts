@@ -80,3 +80,82 @@ export const Route = createFileRoute("/api/public/klivopay-webhook")({
     },
   },
 });
+
+type UtmifyArgs = {
+  payload: any;
+  hash: string;
+  amount: number;
+  paymentMethod?: string;
+  status: "waiting_payment" | "paid" | "refused" | "refunded" | "chargedback";
+};
+
+async function sendUtmifyOrder({ payload, hash, amount, paymentMethod, status }: UtmifyArgs) {
+  const token = process.env.UTMIFY_API_TOKEN;
+  if (!token) {
+    console.warn("[utmify] UTMIFY_API_TOKEN ausente — pulando envio");
+    return;
+  }
+  try {
+    const customer = payload?.customer || payload?.data?.customer || payload?.transaction?.customer || {};
+    const utms = payload?.tracking || payload?.utm || payload?.data?.utm || {};
+    const now = new Date().toISOString().replace("T", " ").substring(0, 19);
+    const amountCents = Math.round(Number(amount || 0) * (Number(amount) > 1000 ? 1 : 100));
+    const finalAmount = Number(amount) > 1000 ? Number(amount) : Math.round(Number(amount || 79.9) * 100);
+
+    const body = {
+      orderId: String(hash || `order_${Date.now()}`),
+      platform: "ConfiaShop",
+      paymentMethod: paymentMethod === "pix" ? "pix" : (paymentMethod || "pix"),
+      status,
+      createdAt: now,
+      approvedDate: status === "paid" ? now : null,
+      refundedAt: null,
+      customer: {
+        name: customer?.name || "Cliente",
+        email: customer?.email || "cliente@confia-shop.com",
+        phone: customer?.phone || customer?.phone_number || null,
+        document: customer?.document || customer?.cpf || null,
+        country: "BR",
+        ip: customer?.ip || null,
+      },
+      products: [
+        {
+          id: "kit-02-slim-belly",
+          name: "KIT 02 Cinta Modeladora Cintura Alta",
+          planId: null,
+          planName: null,
+          quantity: 1,
+          priceInCents: finalAmount,
+        },
+      ],
+      trackingParameters: {
+        src: utms?.src || null,
+        sck: utms?.sck || null,
+        utm_source: utms?.utm_source || null,
+        utm_campaign: utms?.utm_campaign || null,
+        utm_medium: utms?.utm_medium || null,
+        utm_content: utms?.utm_content || null,
+        utm_term: utms?.utm_term || null,
+      },
+      commission: {
+        totalPriceInCents: finalAmount,
+        gatewayFeeInCents: 0,
+        userCommissionInCents: finalAmount,
+      },
+      isTest: false,
+    };
+
+    const res = await fetch("https://api.utmify.com.br/api-credentials/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-token": token,
+      },
+      body: JSON.stringify(body),
+    });
+    const text = await res.text();
+    console.log("[utmify] status=", res.status, "resp=", text.substring(0, 300));
+  } catch (e) {
+    console.error("[utmify] erro ao enviar pedido", e);
+  }
+}
