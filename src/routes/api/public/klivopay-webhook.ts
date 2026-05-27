@@ -72,6 +72,22 @@ export const Route = createFileRoute("/api/public/klivopay-webhook")({
         const numAmount = Number(amount || 0);
         const amountCents = numAmount > 1000 ? Math.round(numAmount) : Math.round((numAmount || 0) * 100);
 
+        // Filtro: só salvar pedidos da Cinta Slim Belly (ignorar webhooks de outros produtos KlivoPay)
+        const items = payload?.items || payload?.data?.items || payload?.transaction?.items || [];
+        const itemTitles = Array.isArray(items)
+          ? items.map((it: any) => String(it?.title || it?.name || "").toLowerCase()).join(" | ")
+          : "";
+        const titleMatches = /cinta|slim|belly|confia/.test(itemTitles);
+        const amountAllowed = [5990, 7990, 6987, 8987].includes(amountCents);
+        if (!titleMatches && !amountAllowed) {
+          console.warn("[klivopay-webhook] pedido ignorado (não é da ConfiaShop):", {
+            hash,
+            amountCents,
+            itemTitles,
+          });
+          return Response.json({ received: true, ignored: true });
+        }
+
         const dbStatus = isPaid
           ? "paid"
           : status === "refused" || status === "refunded" || status === "chargedback"
