@@ -190,7 +190,7 @@ button {
 
 .sb-main-img {
   background: var(--sb-white);
-  border-radius: 16px;
+  border-radius: 0;
   overflow: hidden;
   aspect-ratio: 1;
   box-shadow: 0 10px 30px rgba(200, 169, 110, 0.15);
