@@ -227,6 +227,7 @@ function Index() {
           {/* Info */}
           <div className="sb-info">
             <div
+              className="sb-info-card"
               style={{
                 background: "#ffffff",
                 color: "#1a1a1a",
