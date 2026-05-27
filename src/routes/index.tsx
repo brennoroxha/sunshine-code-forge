@@ -42,9 +42,9 @@ const IMAGES = [
 ];
 
 const COLORS = [
-  { name: "Bege", hex: "#c8a96e" },
-  { name: "Preto", hex: "#1a1a1a" },
-  { name: "Vermelho", hex: "#c8265a" },
+  { name: "Bege", hex: "#c8a96e", img: IMAGES[0] },
+  { name: "Preto", hex: "#1a1a1a", img: IMAGES[5] },
+  { name: "Vermelho", hex: "#c8265a", img: IMAGES[6] },
 ];
 const SIZES = ["P", "M", "G", "GG", "XG", "XXG", "G2"];
 
