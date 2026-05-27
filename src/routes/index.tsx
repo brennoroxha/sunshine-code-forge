@@ -653,10 +653,17 @@ function Index() {
             </div>
           </div>
           <div>
-            <h4>Segurança</h4>
-            <div className="sb-pay">
-              <span>🔒 SSL</span>
-              <span>✅ SITE SEGURO</span>
+            <h4>Segurança e Qualidade</h4>
+            <div style={{ textAlign: "center", display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
+              <a href="https://www.sslshopper.com/ssl-checker.html#hostname=https://zuban.com.br" target="_blank" rel="noopener noreferrer">
+                <img src="https://i.imgur.com/tqgH7PX.png" alt="SSL Seguro" width={83} loading="lazy" style={{ verticalAlign: "middle" }} />
+              </a>
+              <a href="https://transparencyreport.google.com/safe-browsing/search?url=https://zuban.com.br&hl=pt_BR" target="_blank" rel="noopener noreferrer">
+                <img src="https://i.imgur.com/DZLVXlL.png" alt="Google Safe Browsing" width={83} loading="lazy" style={{ verticalAlign: "middle" }} />
+              </a>
+              <a href="https://transparencyreport.google.com/safe-browsing/search?url=https://zuban.com.br&hl=pt_BR" target="_blank" rel="noopener noreferrer">
+                <img src="https://i.imgur.com/Jnct9y7.png" alt="Site Seguro" width={83} loading="lazy" style={{ verticalAlign: "middle" }} />
+              </a>
             </div>
           </div>
         </div>
