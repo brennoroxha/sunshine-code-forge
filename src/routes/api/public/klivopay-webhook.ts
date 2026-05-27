@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createHmac, timingSafeEqual } from "crypto";
+import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 export const Route = createFileRoute("/api/public/klivopay-webhook")({
   server: {
@@ -66,6 +67,40 @@ export const Route = createFileRoute("/api/public/klivopay-webhook")({
           status === "completed" ||
           event === "transaction.paid" ||
           event === "pix.paid";
+
+        const customer = payload?.customer || payload?.data?.customer || payload?.transaction?.customer || {};
+        const numAmount = Number(amount || 0);
+        const amountCents = numAmount > 1000 ? Math.round(numAmount) : Math.round((numAmount || 0) * 100);
+
+        const dbStatus = isPaid
+          ? "paid"
+          : status === "refused" || status === "refunded" || status === "chargedback"
+          ? String(status)
+          : "waiting_payment";
+
+        try {
+          const { error: dbErr } = await supabaseAdmin
+            .from("sales")
+            .upsert(
+              {
+                transaction_hash: hash ? String(hash) : `evt_${Date.now()}`,
+                status: dbStatus,
+                payment_method: paymentMethod ? String(paymentMethod) : "pix",
+                amount_cents: amountCents,
+                customer_name: customer?.name ?? null,
+                customer_email: customer?.email ?? null,
+                customer_phone: customer?.phone ?? customer?.phone_number ?? null,
+                customer_document: customer?.document ?? customer?.cpf ?? null,
+                raw_payload: payload,
+                paid_at: isPaid ? new Date().toISOString() : null,
+                updated_at: new Date().toISOString(),
+              },
+              { onConflict: "transaction_hash" },
+            );
+          if (dbErr) console.error("[klivopay-webhook] erro ao salvar venda:", dbErr);
+        } catch (e) {
+          console.error("[klivopay-webhook] exceção ao salvar venda:", e);
+        }
 
         if (isPaid) {
           console.log("[klivopay-webhook] Pagamento confirmado:", hash);
