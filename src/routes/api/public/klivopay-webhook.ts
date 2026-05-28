@@ -91,6 +91,36 @@ export const Route = createFileRoute("/api/public/klivopay-webhook")({
             : "waiting_payment";
 
         try {
+          let existingPayload: any = {};
+          if (hash) {
+            const { data: existingSale, error: existingErr } = await supabaseAdmin
+              .from("sales")
+              .select("raw_payload")
+              .eq("transaction_hash", String(hash))
+              .maybeSingle();
+            if (existingErr) {
+              console.error("[klivopay-webhook] erro ao buscar venda existente:", existingErr);
+            }
+            existingPayload = existingSale?.raw_payload || {};
+          }
+          const mergedPayload = {
+            ...existingPayload,
+            ...payload,
+            tracking: {
+              ...(existingPayload?.tracking || {}),
+              ...(existingPayload?.checkout_tracking || {}),
+              ...(payload?.tracking || {}),
+              ...(payload?.data?.tracking || {}),
+              ...(payload?.transaction?.tracking || {}),
+            },
+            metadata: {
+              ...(existingPayload?.metadata || {}),
+              ...(payload?.metadata || {}),
+              ...(payload?.data?.metadata || {}),
+              ...(payload?.transaction?.metadata || {}),
+            },
+            webhook_payload: payload,
+          };
           const { error: dbErr } = await supabaseAdmin.from("sales").upsert(
             {
               transaction_hash: hash ? String(hash) : `evt_${Date.now()}`,
@@ -101,7 +131,7 @@ export const Route = createFileRoute("/api/public/klivopay-webhook")({
               customer_email: customer?.email ?? null,
               customer_phone: customer?.phone ?? customer?.phone_number ?? null,
               customer_document: customer?.document ?? customer?.cpf ?? null,
-              raw_payload: payload,
+              raw_payload: mergedPayload,
               paid_at: isPaid ? new Date().toISOString() : null,
               updated_at: new Date().toISOString(),
             },
@@ -114,7 +144,7 @@ export const Route = createFileRoute("/api/public/klivopay-webhook")({
 
         if (isPaid) {
           console.log("[klivopay-webhook] Pagamento confirmado:", hash);
-          await sendUtmifyOrder({ payload, hash, amount, paymentMethod, status: "paid" });
+          await sendUtmifyOrder({ payload: mergedWebhookPayload(payload), hash, amount, paymentMethod, status: "paid" });
         } else if (
           status === "waiting_payment" ||
           status === "pending" ||
