@@ -194,15 +194,53 @@ button {
   overflow: hidden;
   aspect-ratio: 1;
   box-shadow: 0 10px 30px rgba(200, 169, 110, 0.15);
+  position: relative;
+  user-select: none;
+  -webkit-user-select: none;
 }
 .sb-main-img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s;
+  transition: opacity 0.25s ease, transform 0.4s;
+  pointer-events: none;
 }
 .sb-main-img:hover img {
   transform: scale(1.04);
+}
+
+/* Dots de posição no mobile */
+.sb-gallery-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+.sb-gallery-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  border: none;
+  padding: 0;
+  background: #d4d4d4;
+  cursor: pointer;
+  transition: background 0.2s, width 0.2s;
+}
+.sb-gallery-dot.is-active {
+  background: var(--sb-primary);
+  width: 20px;
+}
+
+@media (min-width: 768px) {
+  .sb-gallery-dots { display: none; }
+  .sb-main-img:hover img { transform: scale(1.04); }
+}
+
+/* Mobile: desabilita zoom hover, habilita cursor de grab */
+@media (max-width: 767px) {
+  .sb-main-img:hover img { transform: none; }
+  .sb-main-img { cursor: grab; }
+  .sb-main-img:active { cursor: grabbing; }
 }
 .sb-thumbs {
   display: flex;
