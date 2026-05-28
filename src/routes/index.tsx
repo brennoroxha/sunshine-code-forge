@@ -415,8 +415,56 @@ function Index() {
         <div className="sb-container sb-hero-grid">
           {/* Galeria */}
           <div className="sb-gallery">
-            <div className="sb-main-img">
-              <img src={IMAGES[mainImg]} alt="Cinta Slim Belly" loading="eager" />
+            <div
+              className="sb-main-img"
+              onTouchStart={(e) => {
+                const t = e.touches[0];
+                (e.currentTarget as HTMLDivElement).dataset.touchStartX = String(t.clientX);
+                (e.currentTarget as HTMLDivElement).dataset.isDragging = "false";
+              }}
+              onTouchMove={(e) => {
+                const startX = parseFloat((e.currentTarget as HTMLDivElement).dataset.touchStartX || "0");
+                const currentX = e.touches[0].clientX;
+                const diff = Math.abs(currentX - startX);
+                if (diff > 10) {
+                  (e.currentTarget as HTMLDivElement).dataset.isDragging = "true";
+                }
+              }}
+              onTouchEnd={(e) => {
+                const el = e.currentTarget as HTMLDivElement;
+                const startX = parseFloat(el.dataset.touchStartX || "0");
+                const endX = e.changedTouches[0].clientX;
+                const diff = endX - startX;
+                const minSwipe = 50;
+                if (el.dataset.isDragging === "true" && Math.abs(diff) > minSwipe) {
+                  if (diff > 0) {
+                    setMainImg((prev) => (prev === 0 ? IMAGES.length - 1 : prev - 1));
+                  } else {
+                    setMainImg((prev) => (prev === IMAGES.length - 1 ? 0 : prev + 1));
+                  }
+                }
+                el.dataset.touchStartX = "";
+                el.dataset.isDragging = "false";
+              }}
+              style={{ touchAction: "pan-y" }}
+            >
+              <img
+                key={mainImg}
+                src={IMAGES[mainImg]}
+                alt="Cinta Slim Belly"
+                loading="eager"
+                draggable={false}
+              />
+            </div>
+            <div className="sb-gallery-dots">
+              {IMAGES.map((_, i) => (
+                <button
+                  key={i}
+                  className={`sb-gallery-dot ${mainImg === i ? "is-active" : ""}`}
+                  onClick={() => setMainImg(i)}
+                  aria-label={`Ir para imagem ${i + 1}`}
+                />
+              ))}
             </div>
             <div className="sb-thumbs">
               {IMAGES.map((src, i) => (
