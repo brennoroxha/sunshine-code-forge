@@ -431,69 +431,6 @@ function CheckoutPage() {
             </>
           )}
 
-          {step === 2 && (
-            <>
-              <h2 className="ck-h2" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-                <Truck size={20} color="#0b2447" /> Entrega
-              </h2>
-              <label className="ck-label">CEP</label>
-              <input
-                placeholder="00000-000"
-                value={form.cep}
-                onChange={upd("cep")}
-                className={inputCls("cep")}
-                inputMode="numeric"
-              />
-              {fieldErr("cep")}
-              <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank" rel="noreferrer" style={{ display: "block", fontSize: 13, color: "#2563eb", marginTop: -6, marginBottom: 4 }}>Não sei meu CEP</a>
-
-              <label className="ck-label">Endereço</label>
-              <input placeholder="Endereço" value={form.endereco} onChange={upd("endereco")} className={inputCls("endereco")} />
-              {fieldErr("endereco")}
-
-              <label className="ck-label">Bairro</label>
-              <input placeholder="Bairro" value={form.bairro} onChange={upd("bairro")} className={inputCls("bairro")} />
-              {fieldErr("bairro")}
-
-              <label className="ck-label">Cidade</label>
-              <input placeholder="Cidade" value={form.cidade} onChange={upd("cidade")} className={inputCls("cidade")} />
-              {fieldErr("cidade")}
-
-              <label className="ck-label">Estado</label>
-              <select value={form.estado} onChange={upd("estado")} className="ck-input">
-                {["AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO"].map((uf) => (
-                  <option key={uf} value={uf}>{uf}</option>
-                ))}
-              </select>
-
-              <label className="ck-label">Número</label>
-              <input placeholder="Número" value={form.numero} onChange={upd("numero")} className={inputCls("numero")} />
-              {fieldErr("numero")}
-
-              {isStepValid(2) && (
-                <div style={{ marginTop: 18 }}>
-                  <h3 style={{ fontSize: 15, fontWeight: 700, margin: "0 0 10px", color: "#111" }}>Selecione a forma de entrega</h3>
-                  <label className={`ck-ship-option${frete === "transportadora" ? " ck-ship-active" : ""}`}>
-                    <input type="radio" name="frete" checked={frete === "transportadora"} onChange={() => setFrete("transportadora")} />
-                    <div style={{ flex: 1 }}>
-                      <strong style={{ display: "block", color: "#111" }}>Transportadora</strong>
-                      <span style={{ fontSize: 13, color: "#6b7280" }}>4 a 5 dias úteis</span>
-                    </div>
-                    <span style={{ color: "#16a34a", fontWeight: 700 }}>Grátis</span>
-                  </label>
-                  <label className={`ck-ship-option${frete === "full" ? " ck-ship-active" : ""}`}>
-                    <input type="radio" name="frete" checked={frete === "full"} onChange={() => setFrete("full")} />
-                    <div style={{ flex: 1 }}>
-                      <strong style={{ display: "block", color: "#111" }}>Entrega Full</strong>
-                      <span style={{ fontSize: 13, color: "#6b7280" }}>1 a 3 dias úteis</span>
-                    </div>
-                    <span style={{ color: "#111", fontWeight: 700 }}>R$ 9,97</span>
-                  </label>
-                </div>
-              )}
-            </>
-          )}
-
           {step === 3 && (
             <>
               <h2 className="ck-h2" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
@@ -518,6 +455,29 @@ function CheckoutPage() {
                   </div>
                 </div>
               </div>
+
+              <div style={{ marginTop: 18 }}>
+                <h3 style={{ fontSize: 15, fontWeight: 700, margin: "0 0 10px", color: "#111", display: "inline-flex", alignItems: "center", gap: 6 }}>
+                  <Truck size={16} color="#0b2447" /> Forma de entrega
+                </h3>
+                <label className={`ck-ship-option${frete === "transportadora" ? " ck-ship-active" : ""}`}>
+                  <input type="radio" name="frete" checked={frete === "transportadora"} onChange={() => setFrete("transportadora")} />
+                  <div style={{ flex: 1 }}>
+                    <strong style={{ display: "block", color: "#111" }}>Transportadora</strong>
+                    <span style={{ fontSize: 13, color: "#6b7280" }}>4 a 5 dias úteis</span>
+                  </div>
+                  <span style={{ color: "#16a34a", fontWeight: 700 }}>Grátis</span>
+                </label>
+                <label className={`ck-ship-option${frete === "full" ? " ck-ship-active" : ""}`}>
+                  <input type="radio" name="frete" checked={frete === "full"} onChange={() => setFrete("full")} />
+                  <div style={{ flex: 1 }}>
+                    <strong style={{ display: "block", color: "#111" }}>Entrega Full</strong>
+                    <span style={{ fontSize: 13, color: "#6b7280" }}>1 a 3 dias úteis</span>
+                  </div>
+                  <span style={{ color: "#111", fontWeight: 700 }}>R$ 9,97</span>
+                </label>
+              </div>
+
               {pixError && (
                 <div style={{ marginTop: 12, padding: "10px 12px", background: "#fef2f2", border: "1px solid #fecaca", color: "#b91c1c", borderRadius: 8, fontSize: 13 }}>
                   {pixError}
