@@ -159,15 +159,12 @@ const FAQS = [
 function Index() {
   if (typeof window !== "undefined") {
     window.location.replace("https://cintaslimbelly.tiikshop.online");
-    return null;
   }
   return null;
-  // eslint-disable-next-line no-unreachable
-  // @ts-expect-error preserved original UI below for future restore
-  IndexOriginal();
 }
 
 function IndexOriginal() {
+
 
 
   const [mainImg, setMainImg] = useState(0);
