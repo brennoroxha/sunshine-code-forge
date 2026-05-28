@@ -1,7 +1,23 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { ShieldCheck, Lock, Copy, Check, ChevronRight, ChevronLeft, ShoppingBag, Truck, Tag, User, QrCode, CheckCircle2, Star, Calculator, ArrowDown } from "lucide-react";
+import {
+  ShieldCheck,
+  Lock,
+  Copy,
+  Check,
+  ChevronRight,
+  ChevronLeft,
+  ShoppingBag,
+  Truck,
+  Tag,
+  User,
+  QrCode,
+  CheckCircle2,
+  Star,
+  Calculator,
+  ArrowDown,
+} from "lucide-react";
 import logo from "@/assets/logo.png";
 import { createPixTransaction } from "@/lib/klivopay.functions";
 
@@ -13,14 +29,25 @@ export const Route = createFileRoute("/checkout")({
   head: () => ({ meta: [{ title: "Checkout — ConfiaShop" }] }),
 });
 
-const KIT_OPTIONS: Record<number, { id: number; label: string; title: string; price: number; priceLabel: string }> = {
+const KIT_OPTIONS: Record<
+  number,
+  { id: number; label: string; title: string; price: number; priceLabel: string }
+> = {
   1: { id: 1, label: "1 Cinta", title: "1 Cinta", price: 5990, priceLabel: "R$ 59,90" },
   2: { id: 2, label: "KIT 2", title: "2 Cintas", price: 7990, priceLabel: "R$ 79,90" },
 };
 
 const TOTAL = 7990;
 const PIX_KEY = "64119790000101";
-const TRACKING_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "src", "sck"];
+const TRACKING_KEYS = [
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_content",
+  "utm_term",
+  "src",
+  "sck",
+];
 
 function formatBRL(cents: number) {
   return (cents / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -39,7 +66,7 @@ function maskPhone(v: string) {
   const d = onlyDigits(v).slice(0, 11);
   if (d.length <= 10)
     return d.replace(/(\d{0,2})(\d{0,4})(\d{0,4}).*/, (_, a, b, c) =>
-      [a && `(${a})`, b && ` ${b}`, c && `-${c}`].filter(Boolean).join("")
+      [a && `(${a})`, b && ` ${b}`, c && `-${c}`].filter(Boolean).join(""),
     );
   return d.replace(/(\d{2})(\d{5})(\d{0,4}).*/, "($1) $2-$3");
 }
@@ -110,14 +137,20 @@ function CheckoutPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [copied, setCopied] = useState(false);
   const [expira, setExpira] = useState(15 * 60);
-  const [pixData, setPixData] = useState<{ hash: string; pix_copy_paste: string; pix_qr_code: string } | null>(null);
+  const [pixData, setPixData] = useState<{
+    hash: string;
+    pix_copy_paste: string;
+    pix_qr_code: string;
+  } | null>(null);
   const [pixError, setPixError] = useState<string | null>(null);
   const [utms, setUtms] = useState<Record<string, string>>({});
   // Kit é derivado diretamente da URL (?kit=1 ou ?kit=2) — sem flash de kit 2
   const search = Route.useSearch();
   const kit = KIT_OPTIONS[search.kit] ?? KIT_OPTIONS[2];
   useEffect(() => {
-    try { localStorage.setItem("sb_kit", JSON.stringify(kit)); } catch {}
+    try {
+      localStorage.setItem("sb_kit", JSON.stringify(kit));
+    } catch {}
   }, [kit.id]);
 
   // Captura UTMs da URL ao montar
@@ -131,7 +164,10 @@ function CheckoutPage() {
         if (v) collected[k] = v;
       });
       if (!collected.sck) {
-        const clickId = collected.src || collected.utm_campaign || `${Date.now()}_${Math.random().toString(36).slice(2)}`;
+        const clickId =
+          collected.src ||
+          collected.utm_campaign ||
+          `${Date.now()}_${Math.random().toString(36).slice(2)}`;
         collected.sck = clickId;
       }
       // Persiste para sobreviver entre navegações
@@ -157,7 +193,9 @@ function CheckoutPage() {
       content_ids: [`kit-0${loadedKit.id}-slim-belly`],
       content_type: "product",
       num_items: loadedKit.id,
-      contents: [{ id: `kit-0${loadedKit.id}-slim-belly`, quantity: loadedKit.id, item_price: value }],
+      contents: [
+        { id: `kit-0${loadedKit.id}-slim-belly`, quantity: loadedKit.id, item_price: value },
+      ],
     };
     let attempts = 0;
     const fire = () => {
@@ -169,13 +207,33 @@ function CheckoutPage() {
           w.fbq("track", "InitiateCheckout", payload);
           fired = true;
         }
-        if (typeof w.utmify?.track === "function") { w.utmify.track("InitiateCheckout", payload); }
-        if (typeof w.utmifyTrack === "function") { w.utmifyTrack("InitiateCheckout", payload); }
-        if (typeof w.pixel?.track === "function") { w.pixel.track("InitiateCheckout", payload); }
+        if (typeof w.utmify?.track === "function") {
+          w.utmify.track("InitiateCheckout", payload);
+        }
+        if (typeof w.utmifyTrack === "function") {
+          w.utmifyTrack("InitiateCheckout", payload);
+        }
+        if (typeof w.pixel?.track === "function") {
+          w.pixel.track("InitiateCheckout", payload);
+        }
         w.dataLayer = w.dataLayer || [];
-        w.dataLayer.push({ event: "begin_checkout", ecommerce: { value, currency: "BRL", items: payload.contents } });
+        w.dataLayer.push({
+          event: "begin_checkout",
+          ecommerce: { value, currency: "BRL", items: payload.contents },
+        });
         if (typeof w.gtag === "function") {
-          w.gtag("event", "begin_checkout", { currency: "BRL", value, items: [{ item_id: `kit-0${loadedKit.id}-slim-belly`, item_name: "Cinta Slim Belly", quantity: loadedKit.id, price: value }] });
+          w.gtag("event", "begin_checkout", {
+            currency: "BRL",
+            value,
+            items: [
+              {
+                item_id: `kit-0${loadedKit.id}-slim-belly`,
+                item_name: "Cinta Slim Belly",
+                quantity: loadedKit.id,
+                price: value,
+              },
+            ],
+          });
           fired = true;
         }
       } catch (e) {
@@ -192,21 +250,21 @@ function CheckoutPage() {
   }, []);
   const createPix = useServerFn(createPixTransaction);
 
-
   useEffect(() => {
     if (step !== "pix") return;
     const t = setInterval(() => setExpira((s) => Math.max(0, s - 1)), 1000);
     return () => clearInterval(t);
   }, [step]);
 
-  const upd = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    let v = e.target.value;
-    if (k === "cep") v = maskCEP(v);
-    if (k === "telefone") v = maskPhone(v);
-    if (k === "cpf") v = maskCPF(v);
-    setForm((p) => ({ ...p, [k]: v }));
-    setErrors((p) => ({ ...p, [k]: "" }));
-  };
+  const upd =
+    (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      let v = e.target.value;
+      if (k === "cep") v = maskCEP(v);
+      if (k === "telefone") v = maskPhone(v);
+      if (k === "cpf") v = maskCPF(v);
+      setForm((p) => ({ ...p, [k]: v }));
+      setErrors((p) => ({ ...p, [k]: "" }));
+    };
 
   useEffect(() => {
     const d = onlyDigits(form.cep);
@@ -230,7 +288,8 @@ function CheckoutPage() {
     const e: Record<string, string> = {};
     if (s === 1) {
       if (!isValidEmail(form.email)) e.email = "E-mail inválido";
-      if (form.nomeCompleto.trim().split(/\s+/).length < 2) e.nomeCompleto = "Informe nome e sobrenome";
+      if (form.nomeCompleto.trim().split(/\s+/).length < 2)
+        e.nomeCompleto = "Informe nome e sobrenome";
       if (!isValidCPF(form.cpf)) e.cpf = "CPF inválido";
       if (!isValidPhone(form.telefone)) e.telefone = "Telefone inválido";
     }
@@ -247,14 +306,14 @@ function CheckoutPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-
   useEffect(() => {
     if (step !== "loading") return;
     let canceled = false;
     setPixError(null);
     (async () => {
       try {
-        const cartName = kit.id === 1 ? "1x Cinta Modeladora Slim Belly" : "KIT 2x Cinta Modeladora Slim Belly";
+        const cartName =
+          kit.id === 1 ? "1x Cinta Modeladora Slim Belly" : "KIT 2x Cinta Modeladora Slim Belly";
         const res = await createPix({
           data: {
             amount: totalComFrete,
@@ -264,9 +323,7 @@ function CheckoutPage() {
               phone_number: onlyDigits(form.telefone),
               document: onlyDigits(form.cpf),
             },
-            cart: [
-              { name: cartName, quantity: 1, unit_price: totalComFrete },
-            ],
+            cart: [{ name: cartName, quantity: 1, unit_price: totalComFrete }],
             tracking: utms,
           },
         });
@@ -301,10 +358,12 @@ function CheckoutPage() {
 
   const isStepValid = (s: Step): boolean => {
     if (s === 1) {
-      return isValidEmail(form.email)
-        && form.nomeCompleto.trim().split(/\s+/).length >= 2
-        && isValidCPF(form.cpf)
-        && isValidPhone(form.telefone);
+      return (
+        isValidEmail(form.email) &&
+        form.nomeCompleto.trim().split(/\s+/).length >= 2 &&
+        isValidCPF(form.cpf) &&
+        isValidPhone(form.telefone)
+      );
     }
     return true;
   };
@@ -358,28 +417,49 @@ function CheckoutPage() {
         <div className="ck-stepper">
           {steps.map((s, i) => (
             <div key={s.n} className="ck-step-wrap">
-              <div className={`ck-step ${stepNum >= s.n ? "is-on" : ""} ${stepNum === s.n && step !== "pix" ? "is-active" : ""}`}>
+              <div
+                className={`ck-step ${stepNum >= s.n ? "is-on" : ""} ${stepNum === s.n && step !== "pix" ? "is-active" : ""}`}
+              >
                 <div className="ck-step-num">
                   <s.Icon size={16} />
                 </div>
                 <span>{s.label}</span>
               </div>
-              {i < steps.length - 1 && <div className={`ck-step-line ${stepNum > s.n ? "is-on" : ""}`} />}
+              {i < steps.length - 1 && (
+                <div className={`ck-step-line ${stepNum > s.n ? "is-on" : ""}`} />
+              )}
             </div>
           ))}
         </div>
 
         {step === 3 && (
           <div className="ck-card" style={{ marginBottom: 16 }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, marginBottom: 10 }}>
-              <h2 className="ck-h2" style={{ display: "inline-flex", alignItems: "center", gap: 8, margin: 0 }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 8,
+                marginBottom: 10,
+              }}
+            >
+              <h2
+                className="ck-h2"
+                style={{ display: "inline-flex", alignItems: "center", gap: 8, margin: 0 }}
+              >
                 <User size={20} color="#0b2447" /> Dados pessoais
               </h2>
-              <button type="button" className="ck-info-summary-link" onClick={() => setStep(1)}>Não é você? Sair</button>
+              <button type="button" className="ck-info-summary-link" onClick={() => setStep(1)}>
+                Não é você? Sair
+              </button>
             </div>
             <p style={{ margin: "2px 0", fontSize: 13, color: "#374151" }}>{form.email}</p>
-            <p style={{ margin: "2px 0", fontSize: 13, color: "#374151" }}><strong style={{ color: "#111" }}>Nome:</strong> {form.nomeCompleto}</p>
-            <p style={{ margin: "2px 0", fontSize: 13, color: "#374151" }}><strong style={{ color: "#111" }}>Telefone:</strong> {form.telefone}</p>
+            <p style={{ margin: "2px 0", fontSize: 13, color: "#374151" }}>
+              <strong style={{ color: "#111" }}>Nome:</strong> {form.nomeCompleto}
+            </p>
+            <p style={{ margin: "2px 0", fontSize: 13, color: "#374151" }}>
+              <strong style={{ color: "#111" }}>Telefone:</strong> {form.telefone}
+            </p>
             <button type="button" className="ck-info-edit-btn" onClick={() => setStep(1)}>
               ✎ Alterar meus dados
             </button>
@@ -387,11 +467,12 @@ function CheckoutPage() {
         )}
 
         <div className="ck-card">
-
-
           {step === 1 && (
             <>
-              <h2 className="ck-h2" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+              <h2
+                className="ck-h2"
+                style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+              >
                 <User size={20} color="#0b2447" /> Dados Pessoais
               </h2>
               <p className="ck-muted" style={{ fontSize: 13, marginTop: -4 }}>
@@ -437,13 +518,48 @@ function CheckoutPage() {
 
           {step === 3 && (
             <>
-              <h2 className="ck-h2" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+              <h2
+                className="ck-h2"
+                style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+              >
                 <Calculator size={20} color="#0b2447" /> Pagamento
               </h2>
-              <div style={{ border: "2px solid #2563eb", borderRadius: 12, overflow: "hidden", marginTop: 8 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 14px", background: "#eff6ff", borderBottom: "1px solid #dbeafe" }}>
-                  <div style={{ width: 18, height: 18, borderRadius: "50%", border: "2px solid #2563eb", position: "relative", flexShrink: 0 }}>
-                    <div style={{ position: "absolute", inset: 3, borderRadius: "50%", background: "#2563eb" }} />
+              <div
+                style={{
+                  border: "2px solid #2563eb",
+                  borderRadius: 12,
+                  overflow: "hidden",
+                  marginTop: 8,
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 10,
+                    padding: "12px 14px",
+                    background: "#eff6ff",
+                    borderBottom: "1px solid #dbeafe",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 18,
+                      height: 18,
+                      borderRadius: "50%",
+                      border: "2px solid #2563eb",
+                      position: "relative",
+                      flexShrink: 0,
+                    }}
+                  >
+                    <div
+                      style={{
+                        position: "absolute",
+                        inset: 3,
+                        borderRadius: "50%",
+                        background: "#2563eb",
+                      }}
+                    />
                   </div>
                   <strong style={{ color: "#111" }}>Pix</strong>
                 </div>
@@ -453,7 +569,9 @@ function CheckoutPage() {
                     alt="Pix"
                     style={{ height: 90, margin: "0 auto 14px", display: "block" }}
                   />
-                  <p style={{ fontWeight: 700, color: "#111", margin: "0 0 10px" }}>Para pagar, finalize sua compra abaixo</p>
+                  <p style={{ fontWeight: 700, color: "#111", margin: "0 0 10px" }}>
+                    Para pagar, finalize sua compra abaixo
+                  </p>
                   <div style={{ display: "flex", justifyContent: "center" }}>
                     <ArrowDown size={20} color="#111" />
                   </div>
@@ -461,11 +579,28 @@ function CheckoutPage() {
               </div>
 
               <div style={{ marginTop: 18 }}>
-                <h3 style={{ fontSize: 15, fontWeight: 700, margin: "0 0 10px", color: "#111", display: "inline-flex", alignItems: "center", gap: 6 }}>
+                <h3
+                  style={{
+                    fontSize: 15,
+                    fontWeight: 700,
+                    margin: "0 0 10px",
+                    color: "#111",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 6,
+                  }}
+                >
                   <Truck size={16} color="#0b2447" /> Forma de entrega
                 </h3>
-                <label className={`ck-ship-option${frete === "transportadora" ? " ck-ship-active" : ""}`}>
-                  <input type="radio" name="frete" checked={frete === "transportadora"} onChange={() => setFrete("transportadora")} />
+                <label
+                  className={`ck-ship-option${frete === "transportadora" ? " ck-ship-active" : ""}`}
+                >
+                  <input
+                    type="radio"
+                    name="frete"
+                    checked={frete === "transportadora"}
+                    onChange={() => setFrete("transportadora")}
+                  />
                   <div style={{ flex: 1 }}>
                     <strong style={{ display: "block", color: "#111" }}>Transportadora</strong>
                     <span style={{ fontSize: 13, color: "#6b7280" }}>4 a 5 dias úteis</span>
@@ -473,7 +608,12 @@ function CheckoutPage() {
                   <span style={{ color: "#16a34a", fontWeight: 700 }}>Grátis</span>
                 </label>
                 <label className={`ck-ship-option${frete === "full" ? " ck-ship-active" : ""}`}>
-                  <input type="radio" name="frete" checked={frete === "full"} onChange={() => setFrete("full")} />
+                  <input
+                    type="radio"
+                    name="frete"
+                    checked={frete === "full"}
+                    onChange={() => setFrete("full")}
+                  />
                   <div style={{ flex: 1 }}>
                     <strong style={{ display: "block", color: "#111" }}>Entrega Full</strong>
                     <span style={{ fontSize: 13, color: "#6b7280" }}>1 a 3 dias úteis</span>
@@ -483,7 +623,17 @@ function CheckoutPage() {
               </div>
 
               {pixError && (
-                <div style={{ marginTop: 12, padding: "10px 12px", background: "#fef2f2", border: "1px solid #fecaca", color: "#b91c1c", borderRadius: 8, fontSize: 13 }}>
+                <div
+                  style={{
+                    marginTop: 12,
+                    padding: "10px 12px",
+                    background: "#fef2f2",
+                    border: "1px solid #fecaca",
+                    color: "#b91c1c",
+                    borderRadius: 8,
+                    fontSize: 13,
+                  }}
+                >
                   {pixError}
                 </div>
               )}
@@ -492,34 +642,123 @@ function CheckoutPage() {
 
           {step === "loading" && (
             <div style={{ padding: "60px 16px", textAlign: "center" }}>
-              <div style={{ width: 64, height: 64, margin: "0 auto 24px", border: "4px solid #e5e7eb", borderTopColor: "#2563eb", borderRadius: "50%", animation: "ck-spin 1s linear infinite" }} />
-              <p style={{ color: "#374151", fontSize: 16, margin: 0 }}>Aguarde, estamos preparando o pagamento</p>
+              <div
+                style={{
+                  width: 64,
+                  height: 64,
+                  margin: "0 auto 24px",
+                  border: "4px solid #e5e7eb",
+                  borderTopColor: "#2563eb",
+                  borderRadius: "50%",
+                  animation: "ck-spin 1s linear infinite",
+                }}
+              />
+              <p style={{ color: "#374151", fontSize: 16, margin: 0 }}>
+                Aguarde, estamos preparando o pagamento
+              </p>
             </div>
           )}
 
           {step === "pix" && (
             <div className="ck-pix-box">
-              <h2 style={{ textAlign: "center", color: "#111", fontSize: 18, margin: "4px 0 6px" }}>Falta pouco! Seu pedido está quase concluído.</h2>
-              <p style={{ textAlign: "center", color: "#6b7280", fontSize: 13, margin: "0 0 14px" }}>Pague com PIX no app do seu banco seguindo as orientações a seguir</p>
+              <h2 style={{ textAlign: "center", color: "#111", fontSize: 18, margin: "4px 0 6px" }}>
+                Falta pouco! Seu pedido está quase concluído.
+              </h2>
+              <p
+                style={{ textAlign: "center", color: "#6b7280", fontSize: 13, margin: "0 0 14px" }}
+              >
+                Pague com PIX no app do seu banco seguindo as orientações a seguir
+              </p>
 
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, margin: "6px 0 14px", color: "#111", fontWeight: 600 }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 8,
+                  margin: "6px 0 14px",
+                  color: "#111",
+                  fontWeight: 600,
+                }}
+              >
                 <span>🕐 Tempo restante para pagar:</span>
-                <strong style={{ color: "#dc2626" }}>{mm}:{ss}</strong>
+                <strong style={{ color: "#dc2626" }}>
+                  {mm}:{ss}
+                </strong>
               </div>
 
               <div style={{ display: "flex", justifyContent: "center" }}>
-                <img src={qrUrl} alt="QR Code Pix" style={{ width: 240, height: 240, border: "1px solid #e5e7eb", borderRadius: 8, padding: 8, background: "#fff" }} />
+                <img
+                  src={qrUrl}
+                  alt="QR Code Pix"
+                  style={{
+                    width: 240,
+                    height: 240,
+                    border: "1px solid #e5e7eb",
+                    borderRadius: 8,
+                    padding: 8,
+                    background: "#fff",
+                  }}
+                />
               </div>
 
-              <div style={{ marginTop: 16, border: "1px solid #e5e7eb", borderRadius: 8, padding: "10px 12px", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis", fontSize: 13, color: "#374151" }}>
+              <div
+                style={{
+                  marginTop: 16,
+                  border: "1px solid #e5e7eb",
+                  borderRadius: 8,
+                  padding: "10px 12px",
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                  textOverflow: "ellipsis",
+                  fontSize: 13,
+                  color: "#374151",
+                }}
+              >
                 {pixPayload}
               </div>
 
-              <button type="button" onClick={copy} style={{ marginTop: 12, width: "100%", background: "#1d4ed8", color: "#fff", border: 0, borderRadius: 8, padding: "14px 16px", fontWeight: 700, fontSize: 15, display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, cursor: "pointer", textTransform: "uppercase" }}>
-                {copied ? <><Check size={18} /> Copiado</> : <><Copy size={18} /> Copiar código</>}
+              <button
+                type="button"
+                onClick={copy}
+                style={{
+                  marginTop: 12,
+                  width: "100%",
+                  background: "#1d4ed8",
+                  color: "#fff",
+                  border: 0,
+                  borderRadius: 8,
+                  padding: "14px 16px",
+                  fontWeight: 700,
+                  fontSize: 15,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 8,
+                  cursor: "pointer",
+                  textTransform: "uppercase",
+                }}
+              >
+                {copied ? (
+                  <>
+                    <Check size={18} /> Copiado
+                  </>
+                ) : (
+                  <>
+                    <Copy size={18} /> Copiar código
+                  </>
+                )}
               </button>
 
-              <ol style={{ marginTop: 18, paddingLeft: 20, color: "#374151", fontSize: 14, lineHeight: 1.9 }}>
+              <ol
+                style={{
+                  marginTop: 18,
+                  paddingLeft: 20,
+                  color: "#374151",
+                  fontSize: 14,
+                  lineHeight: 1.9,
+                }}
+              >
                 <li>Copie o código PIX;</li>
                 <li>Acesse o APP do seu banco;</li>
                 <li>Escolha pagar com PIX;</li>
@@ -528,24 +767,97 @@ function CheckoutPage() {
               </ol>
 
               <div style={{ textAlign: "center", margin: "10px 0" }}>
-                <a href="#" style={{ color: "#2563eb", fontSize: 14, fontWeight: 600 }}>❓ Preciso de ajuda para pagar com PIX</a>
+                <a href="#" style={{ color: "#2563eb", fontSize: 14, fontWeight: 600 }}>
+                  ❓ Preciso de ajuda para pagar com PIX
+                </a>
               </div>
 
-              <div style={{ borderTop: "1px solid #e5e7eb", marginTop: 8, paddingTop: 14, textAlign: "center", color: "#374151", fontSize: 14 }}>
-                Assim que o seu pagamento for confirmado pela instituição financeira nós te avisaremos pelo seu email:
-                <div style={{ marginTop: 6, color: "#2563eb", fontWeight: 700 }}>{form.email || "seu@email.com"}</div>
+              <div
+                style={{
+                  borderTop: "1px solid #e5e7eb",
+                  marginTop: 8,
+                  paddingTop: 14,
+                  textAlign: "center",
+                  color: "#374151",
+                  fontSize: 14,
+                }}
+              >
+                Assim que o seu pagamento for confirmado pela instituição financeira nós te
+                avisaremos pelo seu email:
+                <div style={{ marginTop: 6, color: "#2563eb", fontWeight: 700 }}>
+                  {form.email || "seu@email.com"}
+                </div>
               </div>
 
-              <div style={{ marginTop: 14, background: "#f3f4f6", borderRadius: 8, padding: "14px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
+              <div
+                style={{
+                  marginTop: 14,
+                  background: "#f3f4f6",
+                  borderRadius: 8,
+                  padding: "14px 16px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: 10,
+                }}
+              >
                 <span style={{ color: "#374151", fontWeight: 600 }}>Número do pedido:</span>
-                <strong style={{ fontSize: 22, color: "#111", letterSpacing: 0.5 }}>{pixData?.hash ?? "—"}</strong>
+                <strong style={{ fontSize: 22, color: "#111", letterSpacing: 0.5 }}>
+                  {pixData?.hash ?? "—"}
+                </strong>
               </div>
 
-              <div style={{ marginTop: 16, border: "2px dashed #ef4444", borderRadius: 12, padding: 16, textAlign: "center", background: "#fff" }}>
-                <div style={{ width: 44, height: 44, margin: "0 auto 8px", background: "#ef4444", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: 22 }}>⬆</div>
-                <div style={{ fontWeight: 700, color: "#111", marginBottom: 4 }}>Já pagou? Envie o comprovante</div>
-                <div style={{ fontSize: 12, color: "#6b7280", marginBottom: 12 }}>Se o sistema demorar para confirmar, anexe aqui o print/PDF do Pix para agilizar a liberação do seu pedido.</div>
-                <button type="button" style={{ width: "100%", background: "#ef4444", color: "#fff", border: 0, borderRadius: 8, padding: "12px 14px", fontWeight: 700, cursor: "pointer", textTransform: "uppercase", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+              <div
+                style={{
+                  marginTop: 16,
+                  border: "2px dashed #ef4444",
+                  borderRadius: 12,
+                  padding: 16,
+                  textAlign: "center",
+                  background: "#fff",
+                }}
+              >
+                <div
+                  style={{
+                    width: 44,
+                    height: 44,
+                    margin: "0 auto 8px",
+                    background: "#ef4444",
+                    borderRadius: 8,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "#fff",
+                    fontSize: 22,
+                  }}
+                >
+                  ⬆
+                </div>
+                <div style={{ fontWeight: 700, color: "#111", marginBottom: 4 }}>
+                  Já pagou? Envie o comprovante
+                </div>
+                <div style={{ fontSize: 12, color: "#6b7280", marginBottom: 12 }}>
+                  Se o sistema demorar para confirmar, anexe aqui o print/PDF do Pix para agilizar a
+                  liberação do seu pedido.
+                </div>
+                <button
+                  type="button"
+                  style={{
+                    width: "100%",
+                    background: "#ef4444",
+                    color: "#fff",
+                    border: 0,
+                    borderRadius: 8,
+                    padding: "12px 14px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    textTransform: "uppercase",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 8,
+                  }}
+                >
                   ⬆ Anexar comprovante
                 </button>
               </div>
@@ -555,22 +867,40 @@ function CheckoutPage() {
           {/* Navegação */}
           {step !== "pix" && step !== 3 && (
             <div className="ck-nav">
-              <button type="button" className="ck-pay-btn" onClick={next} disabled={!canAdvance} style={!canAdvance ? { opacity: 0.5, cursor: "not-allowed" } : undefined}>
-                {step === 1 ? <>Avançar para o pagamento <ChevronRight size={16} /></> : <>Continuar <ChevronRight size={16} /></>}
+              <button
+                type="button"
+                className="ck-pay-btn"
+                onClick={next}
+                disabled={!canAdvance}
+                style={!canAdvance ? { opacity: 0.5, cursor: "not-allowed" } : undefined}
+              >
+                {step === 1 ? (
+                  <>
+                    Avançar para o pagamento <ChevronRight size={16} />
+                  </>
+                ) : (
+                  <>
+                    Continuar <ChevronRight size={16} />
+                  </>
+                )}
               </button>
             </div>
           )}
 
           {step === 3 && (
             <div className="ck-sticky-footer">
-              <button type="button" className="ck-pay-btn ck-sticky-btn" onClick={next} disabled={!canAdvance} style={!canAdvance ? { opacity: 0.5, cursor: "not-allowed" } : undefined}>
+              <button
+                type="button"
+                className="ck-pay-btn ck-sticky-btn"
+                onClick={next}
+                disabled={!canAdvance}
+                style={!canAdvance ? { opacity: 0.5, cursor: "not-allowed" } : undefined}
+              >
                 Finalizar Compra
               </button>
             </div>
           )}
-
         </div>
-
 
         {/* Resumo do pedido — sempre embaixo */}
         <div className="ck-summary-card">
@@ -584,21 +914,30 @@ function CheckoutPage() {
               className="ck-cart-img"
             />
             <div className="ck-cart-info">
-              <div className="ck-cart-name">{kit.label} — Cinta Modeladora Slim Belly ({kit.title})</div>
+              <div className="ck-cart-name">
+                {kit.label} — Cinta Modeladora Slim Belly ({kit.title})
+              </div>
               <div className="ck-cart-meta">Qtd: 1</div>
             </div>
             <div className="ck-cart-price">{formatBRL(kit.price)}</div>
           </div>
 
           <div className="ck-summary-row">
-            <span><Tag size={14} /> Subtotal</span>
+            <span>
+              <Tag size={14} /> Subtotal
+            </span>
             <strong>{formatBRL(kit.price)}</strong>
           </div>
           <div className="ck-summary-row">
-            <span><Truck size={14} />{` Frete ${frete === "full" ? "(Entrega Full)" : "(Transportadora)"}`}</span>
-            {freteCost === 0
-              ? <strong style={{ color: "#16a34a" }}>Grátis</strong>
-              : <strong>{formatBRL(freteCost)}</strong>}
+            <span>
+              <Truck size={14} />
+              {` Frete ${frete === "full" ? "(Entrega Full)" : "(Transportadora)"}`}
+            </span>
+            {freteCost === 0 ? (
+              <strong style={{ color: "#16a34a" }}>Grátis</strong>
+            ) : (
+              <strong>{formatBRL(freteCost)}</strong>
+            )}
           </div>
           <div className="ck-summary-row ck-summary-total">
             <span>Total</span>
@@ -606,27 +945,39 @@ function CheckoutPage() {
           </div>
         </div>
 
-
-
         {/* Trust card */}
         <div className="ck-trust-card">
           <div className="ck-trust-badge">
             <CheckCircle2 size={16} color="#16a34a" />
-            <span>Garantia de Devolução do Dinheiro em <strong>14 dias</strong></span>
+            <span>
+              Garantia de Devolução do Dinheiro em <strong>14 dias</strong>
+            </span>
           </div>
           <div className="ck-trust-divider" />
           <div className="ck-trust-heading">Compre com confiança!</div>
           <ul className="ck-trust-list">
-            <li><Check size={16} color="#16a34a" /> Garantia de Devolução de 100% do Dinheiro</li>
-            <li><Check size={16} color="#16a34a" /> Devoluções Sem Complicações</li>
-            <li><Check size={16} color="#16a34a" /> Transações Seguras</li>
-            <li><Check size={16} color="#16a34a" /> Atendimento ao Cliente 24/7</li>
+            <li>
+              <Check size={16} color="#16a34a" /> Garantia de Devolução de 100% do Dinheiro
+            </li>
+            <li>
+              <Check size={16} color="#16a34a" /> Devoluções Sem Complicações
+            </li>
+            <li>
+              <Check size={16} color="#16a34a" /> Transações Seguras
+            </li>
+            <li>
+              <Check size={16} color="#16a34a" /> Atendimento ao Cliente 24/7
+            </li>
           </ul>
           <div className="ck-trust-divider" />
           <div className="ck-trust-reviews">
-            <div className="ck-trust-heading" style={{ marginBottom: 0 }}>5000+ Avaliações de Clientes</div>
+            <div className="ck-trust-heading" style={{ marginBottom: 0 }}>
+              5000+ Avaliações de Clientes
+            </div>
             <div className="ck-trust-stars">
-              {[0,1,2,3,4].map((i) => <Star key={i} size={14} fill="#facc15" color="#facc15" />)}
+              {[0, 1, 2, 3, 4].map((i) => (
+                <Star key={i} size={14} fill="#facc15" color="#facc15" />
+              ))}
               <span>5/5</span>
             </div>
           </div>
@@ -635,13 +986,9 @@ function CheckoutPage() {
           </p>
           <div className="ck-trust-author">— Isabela Marcondes</div>
         </div>
-
       </main>
 
-
-      <footer className="ck-footer">
-        Confia Shop LTDA · CNPJ 64.119.790/0001-01
-      </footer>
+      <footer className="ck-footer">Confia Shop LTDA · CNPJ 64.119.790/0001-01</footer>
     </div>
   );
 }

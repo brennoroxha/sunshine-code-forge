@@ -19,8 +19,7 @@ export const Route = createFileRoute("/api/public/klivopay-webhook")({
           const expected = createHmac("sha256", secret).update(rawBody).digest("hex");
           const sigBuf = Buffer.from(sig);
           const expBuf = Buffer.from(expected);
-          const ok =
-            sigBuf.length === expBuf.length && timingSafeEqual(sigBuf, expBuf);
+          const ok = sigBuf.length === expBuf.length && timingSafeEqual(sigBuf, expBuf);
           if (!ok) {
             console.warn("[klivopay-webhook] assinatura inválida");
             return new Response("Invalid signature", { status: 401 });
@@ -34,19 +33,14 @@ export const Route = createFileRoute("/api/public/klivopay-webhook")({
           return new Response("Invalid JSON", { status: 400 });
         }
 
-        const event =
-          payload?.event || payload?.type || payload?.status || "unknown";
+        const event = payload?.event || payload?.type || payload?.status || "unknown";
         const hash =
           payload?.hash ||
           payload?.transaction_hash ||
           payload?.data?.hash ||
           payload?.transaction?.hash;
-        const status =
-          payload?.status ||
-          payload?.data?.status ||
-          payload?.transaction?.status;
-        const amount =
-          payload?.amount || payload?.data?.amount || payload?.transaction?.amount;
+        const status = payload?.status || payload?.data?.status || payload?.transaction?.status;
+        const amount = payload?.amount || payload?.data?.amount || payload?.transaction?.amount;
         const paymentMethod =
           payload?.payment_method ||
           payload?.data?.payment_method ||
@@ -68,9 +62,11 @@ export const Route = createFileRoute("/api/public/klivopay-webhook")({
           event === "transaction.paid" ||
           event === "pix.paid";
 
-        const customer = payload?.customer || payload?.data?.customer || payload?.transaction?.customer || {};
+        const customer =
+          payload?.customer || payload?.data?.customer || payload?.transaction?.customer || {};
         const numAmount = Number(amount || 0);
-        const amountCents = numAmount > 1000 ? Math.round(numAmount) : Math.round((numAmount || 0) * 100);
+        const amountCents =
+          numAmount > 1000 ? Math.round(numAmount) : Math.round((numAmount || 0) * 100);
 
         // Filtro: só salvar pedidos da Cinta Slim Belly (ignorar webhooks de outros produtos KlivoPay)
         const items = payload?.items || payload?.data?.items || payload?.transaction?.items || [];
@@ -91,28 +87,26 @@ export const Route = createFileRoute("/api/public/klivopay-webhook")({
         const dbStatus = isPaid
           ? "paid"
           : status === "refused" || status === "refunded" || status === "chargedback"
-          ? String(status)
-          : "waiting_payment";
+            ? String(status)
+            : "waiting_payment";
 
         try {
-          const { error: dbErr } = await supabaseAdmin
-            .from("sales")
-            .upsert(
-              {
-                transaction_hash: hash ? String(hash) : `evt_${Date.now()}`,
-                status: dbStatus,
-                payment_method: paymentMethod ? String(paymentMethod) : "pix",
-                amount_cents: amountCents,
-                customer_name: customer?.name ?? null,
-                customer_email: customer?.email ?? null,
-                customer_phone: customer?.phone ?? customer?.phone_number ?? null,
-                customer_document: customer?.document ?? customer?.cpf ?? null,
-                raw_payload: payload,
-                paid_at: isPaid ? new Date().toISOString() : null,
-                updated_at: new Date().toISOString(),
-              },
-              { onConflict: "transaction_hash" },
-            );
+          const { error: dbErr } = await supabaseAdmin.from("sales").upsert(
+            {
+              transaction_hash: hash ? String(hash) : `evt_${Date.now()}`,
+              status: dbStatus,
+              payment_method: paymentMethod ? String(paymentMethod) : "pix",
+              amount_cents: amountCents,
+              customer_name: customer?.name ?? null,
+              customer_email: customer?.email ?? null,
+              customer_phone: customer?.phone ?? customer?.phone_number ?? null,
+              customer_document: customer?.document ?? customer?.cpf ?? null,
+              raw_payload: payload,
+              paid_at: isPaid ? new Date().toISOString() : null,
+              updated_at: new Date().toISOString(),
+            },
+            { onConflict: "transaction_hash" },
+          );
           if (dbErr) console.error("[klivopay-webhook] erro ao salvar venda:", dbErr);
         } catch (e) {
           console.error("[klivopay-webhook] exceção ao salvar venda:", e);
@@ -121,8 +115,18 @@ export const Route = createFileRoute("/api/public/klivopay-webhook")({
         if (isPaid) {
           console.log("[klivopay-webhook] Pagamento confirmado:", hash);
           await sendUtmifyOrder({ payload, hash, amount, paymentMethod, status: "paid" });
-        } else if (status === "waiting_payment" || status === "pending" || event === "pix.generated") {
-          await sendUtmifyOrder({ payload, hash, amount, paymentMethod, status: "waiting_payment" });
+        } else if (
+          status === "waiting_payment" ||
+          status === "pending" ||
+          event === "pix.generated"
+        ) {
+          await sendUtmifyOrder({
+            payload,
+            hash,
+            amount,
+            paymentMethod,
+            status: "waiting_payment",
+          });
         }
 
         return Response.json({ received: true });
@@ -147,8 +151,10 @@ async function sendUtmifyOrder({ payload, hash, amount, paymentMethod, status }:
     return;
   }
   try {
-    const customer = payload?.customer || payload?.data?.customer || payload?.transaction?.customer || {};
-    const metadata = payload?.metadata || payload?.data?.metadata || payload?.transaction?.metadata || {};
+    const customer =
+      payload?.customer || payload?.data?.customer || payload?.transaction?.customer || {};
+    const metadata =
+      payload?.metadata || payload?.data?.metadata || payload?.transaction?.metadata || {};
     const utms = {
       ...metadata,
       ...(payload?.tracking || {}),
@@ -161,16 +167,19 @@ async function sendUtmifyOrder({ payload, hash, amount, paymentMethod, status }:
     const now = new Date().toISOString().replace("T", " ").substring(0, 19);
     // Klivopay normalmente envia em centavos; se já vier <= 1000, assume reais
     const numAmount = Number(amount || 0);
-    const finalAmount = numAmount > 1000 ? Math.round(numAmount) : Math.round((numAmount || 79.9) * 100);
-    const kitName = finalAmount === 5990 || finalAmount === 6987
-      ? "1x Cinta Modeladora Slim Belly"
-      : "KIT 2x Cinta Modeladora Slim Belly";
-    const kitId = finalAmount === 5990 || finalAmount === 6987 ? "kit-01-slim-belly" : "kit-02-slim-belly";
+    const finalAmount =
+      numAmount > 1000 ? Math.round(numAmount) : Math.round((numAmount || 79.9) * 100);
+    const kitName =
+      finalAmount === 5990 || finalAmount === 6987
+        ? "1x Cinta Modeladora Slim Belly"
+        : "KIT 2x Cinta Modeladora Slim Belly";
+    const kitId =
+      finalAmount === 5990 || finalAmount === 6987 ? "kit-01-slim-belly" : "kit-02-slim-belly";
 
     const body = {
       orderId: String(hash || `order_${Date.now()}`),
       platform: "ConfiaShop",
-      paymentMethod: paymentMethod === "pix" ? "pix" : (paymentMethod || "pix"),
+      paymentMethod: paymentMethod === "pix" ? "pix" : paymentMethod || "pix",
       status,
       createdAt: now,
       approvedDate: status === "paid" ? now : null,

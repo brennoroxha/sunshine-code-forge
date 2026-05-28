@@ -64,11 +64,35 @@ const SIZE_TABLE = [
 ];
 
 const KITS = [
-  { id: 1, qty: 1, label: "1 Cinta", title: "1 Cinta", price: 5990, priceLabel: "R$ 59,90", badge: null as string | null },
-  { id: 2, qty: 2, label: "Kit 2 Cintas", title: "2 Cintas", price: 7990, priceLabel: "R$ 79,90", badge: "MAIS VENDIDO" },
+  {
+    id: 1,
+    qty: 1,
+    label: "1 Cinta",
+    title: "1 Cinta",
+    price: 5990,
+    priceLabel: "R$ 59,90",
+    badge: null as string | null,
+  },
+  {
+    id: 2,
+    qty: 2,
+    label: "Kit 2 Cintas",
+    title: "2 Cintas",
+    price: 7990,
+    priceLabel: "R$ 79,90",
+    badge: "MAIS VENDIDO",
+  },
 ];
 
-const TRACKING_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "src", "sck"];
+const TRACKING_KEYS = [
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_content",
+  "utm_term",
+  "src",
+  "sck",
+];
 
 const TESTIMONIALS = [
   {
@@ -109,7 +133,6 @@ const TESTIMONIALS = [
   },
 ];
 
-
 const FAQS = [
   {
     q: "Como escolho o tamanho certo?",
@@ -146,11 +169,20 @@ function Index() {
   const maxItems = selectedKit.qty;
   const remainingColors = Math.max(0, maxItems - colors.length);
   const remainingSizes = Math.max(0, maxItems - sizes.length);
-  const checkoutHref = (id: number) => `/checkout?kit=${id}${trackingQuery ? `&${trackingQuery}` : ""}`;
+  const checkoutHref = (id: number) =>
+    `/checkout?kit=${id}${trackingQuery ? `&${trackingQuery}` : ""}`;
   const pieceWord = (n: number, s: string, p: string) => (n === 1 ? s : p);
-  const buildHint = (kind: "cor" | "tamanho", remaining: number, current: number[], labels: string[]) => {
+  const buildHint = (
+    kind: "cor" | "tamanho",
+    remaining: number,
+    current: number[],
+    labels: string[],
+  ) => {
     if (remaining > 0) {
-      const word = kind === "cor" ? pieceWord(remaining, "cor", "cores") : pieceWord(remaining, "tamanho", "tamanhos");
+      const word =
+        kind === "cor"
+          ? pieceWord(remaining, "cor", "cores")
+          : pieceWord(remaining, "tamanho", "tamanhos");
       const prefix = current.length === 0 ? "escolha" : "escolha mais";
       return `${prefix} ${remaining} ${word}`;
     }
@@ -168,7 +200,13 @@ function Index() {
     try {
       localStorage.setItem(
         "sb_kit",
-        JSON.stringify({ id: selectedKit.id, label: selectedKit.label, title: selectedKit.title, price: selectedKit.price, priceLabel: selectedKit.priceLabel }),
+        JSON.stringify({
+          id: selectedKit.id,
+          label: selectedKit.label,
+          title: selectedKit.title,
+          price: selectedKit.price,
+          priceLabel: selectedKit.priceLabel,
+        }),
       );
     } catch {}
     setColors([]);
@@ -194,9 +232,16 @@ function Index() {
     } catch {}
   }, []);
 
-  const [deliveryDates, setDeliveryDates] = useState<{ placed: string; processed: string; delivered: string } | null>(null);
+  const [deliveryDates, setDeliveryDates] = useState<{
+    placed: string;
+    processed: string;
+    delivered: string;
+  } | null>(null);
   const [shippingRange, setShippingRange] = useState<{ from: string; to: string } | null>(null);
-  const [city, setCity] = useState<{ name: string; region: string }>({ name: "Ourinhos", region: "SP" });
+  const [city, setCity] = useState<{ name: string; region: string }>({
+    name: "Ourinhos",
+    region: "SP",
+  });
   const [viewers, setViewers] = useState(21);
   const [isCtaVisible, setIsCtaVisible] = useState(true);
   const ctaRef = useRef<HTMLAnchorElement>(null);
@@ -234,7 +279,20 @@ function Index() {
   useEffect(() => {
     const fmt = (d: Date) => {
       const dias = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
-      const meses = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+      const meses = [
+        "Jan",
+        "Fev",
+        "Mar",
+        "Abr",
+        "Mai",
+        "Jun",
+        "Jul",
+        "Ago",
+        "Set",
+        "Out",
+        "Nov",
+        "Dez",
+      ];
       return `${dias[d.getDay()]}, ${d.getDate()}. ${meses[d.getMonth()]}`;
     };
     const now = new Date();
@@ -249,7 +307,20 @@ function Index() {
       delivered: fmt(plus(5)),
     });
     const fmtShort = (d: Date) => {
-      const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+      const meses = [
+        "Janeiro",
+        "Fevereiro",
+        "Março",
+        "Abril",
+        "Maio",
+        "Junho",
+        "Julho",
+        "Agosto",
+        "Setembro",
+        "Outubro",
+        "Novembro",
+        "Dezembro",
+      ];
       return `${d.getDate()} de ${meses[d.getMonth()]}`;
     };
     setShippingRange({ from: fmtShort(plus(2)), to: fmtShort(plus(5)) });
@@ -384,239 +455,262 @@ function Index() {
               </div>
               <div style={{ width: "100%", height: 1, background: "#e5e5e5", margin: "12px 0" }} />
 
-            <div className="sb-selector">
-              <label className="sb-label">
-                Escolha seu kit: <strong>{selectedKit.label}</strong>
-              </label>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 8 }}>
-                {KITS.map((k) => {
-                  const active = k.id === kitId;
-                  return (
-                    <button
-                      key={k.id}
-                      type="button"
-                      onClick={() => setKitId(k.id)}
-                      style={{
-                        position: "relative",
-                        padding: "12px 6px 10px",
-                        border: `2px solid ${active ? "var(--sb-cta)" : "#e5e5e5"}`,
-                        background: active ? "#fff5f8" : "#fff",
-                        borderRadius: 12,
-                        cursor: "pointer",
-                        textAlign: "center",
-                        transition: "all .15s ease",
-                      }}
-                    >
-                      {k.badge && (
-                        <span
+              <div className="sb-selector">
+                <label className="sb-label">
+                  Escolha seu kit: <strong>{selectedKit.label}</strong>
+                </label>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 8 }}>
+                  {KITS.map((k) => {
+                    const active = k.id === kitId;
+                    return (
+                      <button
+                        key={k.id}
+                        type="button"
+                        onClick={() => setKitId(k.id)}
+                        style={{
+                          position: "relative",
+                          padding: "12px 6px 10px",
+                          border: `2px solid ${active ? "var(--sb-cta)" : "#e5e5e5"}`,
+                          background: active ? "#fff5f8" : "#fff",
+                          borderRadius: 12,
+                          cursor: "pointer",
+                          textAlign: "center",
+                          transition: "all .15s ease",
+                        }}
+                      >
+                        {k.badge && (
+                          <span
+                            style={{
+                              position: "absolute",
+                              top: -10,
+                              left: "50%",
+                              transform: "translateX(-50%)",
+                              background: k.badge === "MAIS VENDIDO" ? "var(--sb-cta)" : "#1a1a1a",
+                              color: "#fff",
+                              fontSize: 9,
+                              fontWeight: 800,
+                              padding: "3px 8px",
+                              borderRadius: 999,
+                              whiteSpace: "nowrap",
+                              letterSpacing: 0.3,
+                            }}
+                          >
+                            {k.badge}
+                          </span>
+                        )}
+                        <div style={{ fontSize: 12, fontWeight: 700, color: "#1a1a1a" }}>
+                          {k.label}
+                        </div>
+                        <div
                           style={{
-                            position: "absolute",
-                            top: -10,
-                            left: "50%",
-                            transform: "translateX(-50%)",
-                            background: k.badge === "MAIS VENDIDO" ? "var(--sb-cta)" : "#1a1a1a",
-                            color: "#fff",
-                            fontSize: 9,
+                            fontSize: 15,
                             fontWeight: 800,
-                            padding: "3px 8px",
-                            borderRadius: 999,
-                            whiteSpace: "nowrap",
-                            letterSpacing: 0.3,
+                            marginTop: 6,
+                            color: active ? "var(--sb-cta)" : "#1a1a1a",
                           }}
                         >
-                          {k.badge}
-                        </span>
-                      )}
-                      <div style={{ fontSize: 12, fontWeight: 700, color: "#1a1a1a" }}>{k.label}</div>
-                      <div style={{ fontSize: 15, fontWeight: 800, marginTop: 6, color: active ? "var(--sb-cta)" : "#1a1a1a" }}>
-                        {k.priceLabel}
+                          {k.priceLabel}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="sb-selector">
+                <label className="sb-label">
+                  Cor —{" "}
+                  {colors.length > 0 ? colors.map((i) => COLORS[i].name).join(", ") : "escolha"}
+                </label>
+                <div className="sb-swatches">
+                  {COLORS.map((c, i) => {
+                    const count = colors.filter((x) => x === i).length;
+                    return (
+                      <button
+                        key={c.name}
+                        onClick={() => {
+                          setMainImg(c.imgIndex);
+                          setColors((prev) => (prev.length >= maxItems ? [i] : [...prev, i]));
+                        }}
+                        className={`sb-swatch ${count > 0 ? "is-active" : ""}`}
+                        aria-label={c.name}
+                        title={c.name}
+                        style={{ position: "relative" }}
+                      >
+                        <img src={IMAGES[c.imgIndex]} alt={c.name} loading="lazy" />
+                        {count > 0 && (
+                          <span
+                            style={{
+                              position: "absolute",
+                              top: -6,
+                              right: -6,
+                              background: "hsl(var(--primary))",
+                              color: "hsl(var(--primary-foreground))",
+                              borderRadius: "999px",
+                              minWidth: 20,
+                              height: 20,
+                              fontSize: 12,
+                              fontWeight: 700,
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              padding: "0 6px",
+                              boxShadow: "0 1px 4px rgba(0,0,0,.25)",
+                            }}
+                          >
+                            ×{count}
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+                {colors.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setColors([])}
+                    style={{
+                      marginTop: 8,
+                      background: "transparent",
+                      border: "none",
+                      color: "hsl(var(--muted-foreground))",
+                      fontSize: 12,
+                      textDecoration: "underline",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Limpar seleção
+                  </button>
+                )}
+              </div>
+
+              <div className="sb-selector">
+                <label className="sb-label">
+                  Tamanho — {sizes.length > 0 ? sizes.map((i) => SIZES[i]).join(", ") : "escolha"}
+                </label>
+                <div className="sb-sizes">
+                  {SIZES.map((s, i) => {
+                    const count = sizes.filter((x) => x === i).length;
+                    return (
+                      <button
+                        key={s}
+                        onClick={() =>
+                          setSizes((prev) => (prev.length >= maxItems ? [i] : [...prev, i]))
+                        }
+                        className={`sb-size ${count > 0 ? "is-active" : ""}`}
+                      >
+                        {s}
+                        {count > 1 ? ` ×${count}` : ""}
+                      </button>
+                    );
+                  })}
+                </div>
+                {sizes.length > 0 && (
+                  <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 4 }}>
+                    {Array.from(new Set(sizes)).map((idx) => (
+                      <div
+                        key={idx}
+                        style={{
+                          fontSize: 12,
+                          color: "#b45309",
+                          background: "#fff7ed",
+                          border: "1px solid #fed7aa",
+                          padding: "6px 10px",
+                          borderRadius: 8,
+                          fontWeight: 600,
+                        }}
+                      >
+                        ⚠️ Apenas {stockBySize[idx]} unidades restantes no tamanho {SIZES[idx]}
                       </div>
-                    </button>
-                  );
-                })}
+                    ))}
+                  </div>
+                )}
               </div>
-            </div>
 
-            <div className="sb-selector">
-
-              <label className="sb-label">
-                Cor — {colors.length > 0 ? colors.map((i) => COLORS[i].name).join(", ") : "escolha"}
-              </label>
-              <div className="sb-swatches">
-                {COLORS.map((c, i) => {
-                  const count = colors.filter((x) => x === i).length;
-                  return (
-                    <button
-                      key={c.name}
-                      onClick={() => {
-                        setMainImg(c.imgIndex);
-                        setColors((prev) => (prev.length >= maxItems ? [i] : [...prev, i]));
-                      }}
-                      className={`sb-swatch ${count > 0 ? "is-active" : ""}`}
-                      aria-label={c.name}
-                      title={c.name}
-                      style={{ position: "relative" }}
-                    >
-                      <img src={IMAGES[c.imgIndex]} alt={c.name} loading="lazy" />
-                      {count > 0 && (
-                        <span
-                          style={{
-                            position: "absolute",
-                            top: -6,
-                            right: -6,
-                            background: "hsl(var(--primary))",
-                            color: "hsl(var(--primary-foreground))",
-                            borderRadius: "999px",
-                            minWidth: 20,
-                            height: 20,
-                            fontSize: 12,
-                            fontWeight: 700,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            padding: "0 6px",
-                            boxShadow: "0 1px 4px rgba(0,0,0,.25)",
-                          }}
-                        >
-                          ×{count}
-                        </span>
-                      )}
-                    </button>
-                  );
-                })}
+              <div className="sb-price" style={{ flexWrap: "wrap", alignItems: "center", gap: 10 }}>
+                <span className="sb-price-new">{selectedKit.priceLabel}</span>
               </div>
-              {colors.length > 0 && (
-                <button
-                  type="button"
-                  onClick={() => setColors([])}
-                  style={{
-                    marginTop: 8,
-                    background: "transparent",
-                    border: "none",
-                    color: "hsl(var(--muted-foreground))",
-                    fontSize: 12,
-                    textDecoration: "underline",
-                    cursor: "pointer",
-                  }}
-                >
-                  Limpar seleção
-                </button>
-              )}
-            </div>
-
-            <div className="sb-selector">
-              <label className="sb-label">
-                Tamanho — {sizes.length > 0 ? sizes.map((i) => SIZES[i]).join(", ") : "escolha"}
-              </label>
-              <div className="sb-sizes">
-                {SIZES.map((s, i) => {
-                  const count = sizes.filter((x) => x === i).length;
-                  return (
-                    <button
-                      key={s}
-                      onClick={() =>
-                        setSizes((prev) =>
-                          prev.length >= maxItems ? [i] : [...prev, i]
-                        )
-                      }
-                      className={`sb-size ${count > 0 ? "is-active" : ""}`}
-                    >
-                      {s}
-                      {count > 1 ? ` ×${count}` : ""}
-                    </button>
-                  );
-                })}
+              <div className="sb-installments">
+                ou 3x de{" "}
+                {(selectedKit.price / 3 / 100).toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                })}{" "}
+                sem juros
               </div>
-              {sizes.length > 0 && (
-                <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 4 }}>
-                  {Array.from(new Set(sizes)).map((idx) => (
-                    <div
-                      key={idx}
-                      style={{
-                        fontSize: 12,
-                        color: "#b45309",
-                        background: "#fff7ed",
-                        border: "1px solid #fed7aa",
-                        padding: "6px 10px",
-                        borderRadius: 8,
-                        fontWeight: 600,
-                      }}
-                    >
-                      ⚠️ Apenas {stockBySize[idx]} unidades restantes no tamanho {SIZES[idx]}
+
+              <a
+                href={checkoutHref(selectedKit.id)}
+                ref={ctaRef as any}
+                className="sb-cta sb-cta-primary"
+                onClick={ripple}
+              >
+                🛒 COMPRAR AGORA
+              </a>
+
+              <div className="sb-social-count">
+                <span className="sb-pulse" /> {viewers} pessoas estão vendo agora
+              </div>
+
+              <div className="sb-timeline" suppressHydrationWarning>
+                <div className="sb-tl-step">
+                  <div className="sb-tl-icon">
+                    <ClipboardList size={20} />
+                  </div>
+                  <div className="sb-tl-date">{deliveryDates?.placed ?? "—"}</div>
+                  <div className="sb-tl-label">Pedido realizado</div>
+                </div>
+                <div className="sb-tl-line" />
+                <div className="sb-tl-step">
+                  <div className="sb-tl-icon">
+                    <Package size={20} />
+                  </div>
+                  <div className="sb-tl-date">{deliveryDates?.processed ?? "—"}</div>
+                  <div className="sb-tl-label">Processado</div>
+                </div>
+                <div className="sb-tl-line" />
+                <div className="sb-tl-step">
+                  <div className="sb-tl-icon">
+                    <PackageCheck size={20} />
+                  </div>
+                  <div className="sb-tl-date">{deliveryDates?.delivered ?? "—"}</div>
+                  <div className="sb-tl-label">Entregue</div>
+                </div>
+              </div>
+
+              <div className="sb-info-box">
+                <div className="sb-info-row">
+                  <ShieldCheck size={20} className="sb-info-ico" />
+                  <div className="sb-info-text">
+                    <strong>Compra garantida:</strong> Você tem até 30 dias de Garantia
+                  </div>
+                </div>
+                <div className="sb-info-row">
+                  <RefreshCw size={20} className="sb-info-ico" />
+                  <div className="sb-info-text">
+                    <strong>Troca Grátis:</strong> Você tem até 7 dias para testar o produto
+                  </div>
+                </div>
+              </div>
+
+              <div className="sb-info-box">
+                <div className="sb-info-row">
+                  <img src="/correios.svg" alt="Correios" className="sb-info-correios" />
+                  <div className="sb-info-text">
+                    <div>
+                      <strong>Frete Grátis:</strong> para {city.name}
+                      {city.region ? `, ${city.region}` : ""} e Região
                     </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <div className="sb-price" style={{ flexWrap: "wrap", alignItems: "center", gap: 10 }}>
-              <span className="sb-price-new">{selectedKit.priceLabel}</span>
-            </div>
-            <div className="sb-installments">
-              ou 3x de {(selectedKit.price / 3 / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} sem juros
-            </div>
-
-
-            <a href={checkoutHref(selectedKit.id)} ref={ctaRef as any} className="sb-cta sb-cta-primary" onClick={ripple}>
-              🛒 COMPRAR AGORA
-            </a>
-
-            <div className="sb-social-count">
-              <span className="sb-pulse" /> {viewers} pessoas estão vendo agora
-            </div>
-
-            <div className="sb-timeline" suppressHydrationWarning>
-              <div className="sb-tl-step">
-                <div className="sb-tl-icon"><ClipboardList size={20} /></div>
-                <div className="sb-tl-date">{deliveryDates?.placed ?? "—"}</div>
-                <div className="sb-tl-label">Pedido realizado</div>
-              </div>
-              <div className="sb-tl-line" />
-              <div className="sb-tl-step">
-                <div className="sb-tl-icon"><Package size={20} /></div>
-                <div className="sb-tl-date">{deliveryDates?.processed ?? "—"}</div>
-                <div className="sb-tl-label">Processado</div>
-              </div>
-              <div className="sb-tl-line" />
-              <div className="sb-tl-step">
-                <div className="sb-tl-icon"><PackageCheck size={20} /></div>
-                <div className="sb-tl-date">{deliveryDates?.delivered ?? "—"}</div>
-                <div className="sb-tl-label">Entregue</div>
-              </div>
-            </div>
-
-            <div className="sb-info-box">
-              <div className="sb-info-row">
-                <ShieldCheck size={20} className="sb-info-ico" />
-                <div className="sb-info-text">
-                  <strong>Compra garantida:</strong> Você tem até 30 dias de Garantia
+                    <div>
+                      Receba entre: {shippingRange?.from ?? "—"} e {shippingRange?.to ?? "—"}
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="sb-info-row">
-                <RefreshCw size={20} className="sb-info-ico" />
-                <div className="sb-info-text">
-                  <strong>Troca Grátis:</strong> Você tem até 7 dias para testar o produto
-                </div>
-              </div>
-            </div>
-
-            <div className="sb-info-box">
-              <div className="sb-info-row">
-                <img src="/correios.svg" alt="Correios" className="sb-info-correios" />
-                <div className="sb-info-text">
-                  <div><strong>Frete Grátis:</strong> para {city.name}{city.region ? `, ${city.region}` : ""} e Região</div>
-                  <div>Receba entre: {shippingRange?.from ?? "—"} e {shippingRange?.to ?? "—"}</div>
-                </div>
-              </div>
-            </div>
-
             </div>
           </div>
         </div>
       </section>
-
-
-
 
       {/* 4. DESCRIÇÃO */}
       <section className="sb-section" style={{ paddingTop: 0 }}>
@@ -656,10 +750,8 @@ function Index() {
           <div className="sb-desc-img">
             <img src={desc3} alt="Tabela de tamanhos Slim Belly" loading="lazy" />
           </div>
-
         </div>
       </section>
-
 
       {/* 8. DEPOIMENTOS */}
       <section className="sb-section">
@@ -680,10 +772,7 @@ function Index() {
           <div className="sb-faq" data-reveal>
             {FAQS.map((f, i) => (
               <div key={i} className={`sb-faq-item ${openFaq === i ? "is-open" : ""}`}>
-                <button
-                  className="sb-faq-q"
-                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                >
+                <button className="sb-faq-q" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
                   <span>{f.q}</span>
                   <span className="sb-faq-icon">+</span>
                 </button>
@@ -744,15 +833,53 @@ function Index() {
           </div>
           <div>
             <h4>Segurança e Qualidade</h4>
-            <div style={{ textAlign: "center", display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
-              <a href="https://www.sslshopper.com/ssl-checker.html#hostname=https://zuban.com.br" target="_blank" rel="noopener noreferrer">
-                <img src="https://i.imgur.com/tqgH7PX.png" alt="SSL Seguro" width={83} loading="lazy" style={{ verticalAlign: "middle" }} />
+            <div
+              style={{
+                textAlign: "center",
+                display: "flex",
+                gap: 8,
+                flexWrap: "wrap",
+                justifyContent: "center",
+              }}
+            >
+              <a
+                href="https://www.sslshopper.com/ssl-checker.html#hostname=https://zuban.com.br"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="https://i.imgur.com/tqgH7PX.png"
+                  alt="SSL Seguro"
+                  width={83}
+                  loading="lazy"
+                  style={{ verticalAlign: "middle" }}
+                />
               </a>
-              <a href="https://transparencyreport.google.com/safe-browsing/search?url=https://zuban.com.br&hl=pt_BR" target="_blank" rel="noopener noreferrer">
-                <img src="https://i.imgur.com/DZLVXlL.png" alt="Google Safe Browsing" width={83} loading="lazy" style={{ verticalAlign: "middle" }} />
+              <a
+                href="https://transparencyreport.google.com/safe-browsing/search?url=https://zuban.com.br&hl=pt_BR"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="https://i.imgur.com/DZLVXlL.png"
+                  alt="Google Safe Browsing"
+                  width={83}
+                  loading="lazy"
+                  style={{ verticalAlign: "middle" }}
+                />
               </a>
-              <a href="https://transparencyreport.google.com/safe-browsing/search?url=https://zuban.com.br&hl=pt_BR" target="_blank" rel="noopener noreferrer">
-                <img src="https://i.imgur.com/Jnct9y7.png" alt="Site Seguro" width={83} loading="lazy" style={{ verticalAlign: "middle" }} />
+              <a
+                href="https://transparencyreport.google.com/safe-browsing/search?url=https://zuban.com.br&hl=pt_BR"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="https://i.imgur.com/Jnct9y7.png"
+                  alt="Site Seguro"
+                  width={83}
+                  loading="lazy"
+                  style={{ verticalAlign: "middle" }}
+                />
               </a>
             </div>
           </div>
@@ -763,7 +890,15 @@ function Index() {
       </footer>
       {/* Sticky mobile CTA */}
       <div className={`sb-sticky-cta ${!isCtaVisible ? "is-visible" : ""}`}>
-        <div style={{ fontSize: 11, color: "#b45309", textAlign: "center", marginBottom: 6, fontWeight: 600 }}>
+        <div
+          style={{
+            fontSize: 11,
+            color: "#b45309",
+            textAlign: "center",
+            marginBottom: 6,
+            fontWeight: 600,
+          }}
+        >
           ⏰ Oferta por tempo limitado
         </div>
         <a href={checkoutHref(selectedKit.id)} className="sb-cta sb-cta-primary" onClick={ripple}>
@@ -859,14 +994,10 @@ function TestimonialsCarousel({
             />
           ))}
         </div>
-        <button
-          onClick={() => setCurrent((c: number) => (c + 1) % pages)}
-          aria-label="Próximo"
-        >
+        <button onClick={() => setCurrent((c: number) => (c + 1) % pages)} aria-label="Próximo">
           →
         </button>
       </div>
     </div>
   );
 }
-
