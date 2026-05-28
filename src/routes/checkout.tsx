@@ -250,6 +250,7 @@ function CheckoutPage() {
     setPixError(null);
     (async () => {
       try {
+        const cartName = kit.id === 1 ? "1x Cinta Modeladora Slim Belly" : "KIT 2x Cinta Modeladora Slim Belly";
         const res = await createPix({
           data: {
             amount: totalComFrete,
@@ -260,8 +261,9 @@ function CheckoutPage() {
               document: onlyDigits(form.cpf),
             },
             cart: [
-              { name: "Pedido ConfiaShop", quantity: 1, unit_price: totalComFrete },
+              { name: cartName, quantity: 1, unit_price: totalComFrete },
             ],
+            tracking: utms,
           },
         });
         if (canceled) return;
@@ -289,8 +291,7 @@ function CheckoutPage() {
   }, [step]);
 
   const back = () => {
-    if (step === 2) setStep(1);
-    else if (step === 3) setStep(2);
+    if (step === 3) setStep(1);
     else if (step === "pix") setStep(3);
   };
 
@@ -300,13 +301,6 @@ function CheckoutPage() {
         && form.nomeCompleto.trim().split(/\s+/).length >= 2
         && isValidCPF(form.cpf)
         && isValidPhone(form.telefone);
-    }
-    if (s === 2) {
-      return isValidCEP(form.cep)
-        && !!form.endereco.trim()
-        && !!form.bairro.trim()
-        && !!form.numero.trim()
-        && !!form.cidade.trim();
     }
     return true;
   };
