@@ -19,6 +19,7 @@ const InputSchema = z.object({
       })
     )
     .optional(),
+  tracking: z.record(z.string(), z.string()).optional(),
 });
 
 const PRODUCT_HASH = "pz2q1dqx2h";
@@ -63,8 +64,8 @@ export const createPixTransaction = createServerFn({ method: "POST" })
           operation_type: 1,
           customer: { ...data.customer, ip: clientIp ?? undefined },
           cart: items,
-          metadata: { client_ip: clientIp },
-          tracking: typeof globalThis !== "undefined" ? undefined : undefined,
+          metadata: { client_ip: clientIp, ...(data.tracking ?? {}) },
+          tracking: data.tracking ?? {},
         }),
       });
 

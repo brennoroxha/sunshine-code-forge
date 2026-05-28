@@ -23,6 +23,20 @@ function PagamentoConfirmadoPage() {
   const waText = encodeURIComponent(`Olá! Acabei de fazer meu pedido #${hash} e gostaria de acompanhar o status.`);
   const waHref = `https://wa.me/5511999999999?text=${waText}`;
 
+  // Disparo Purchase para Utmify (uma vez), usando o kit do localStorage
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const raw = localStorage.getItem("sb_kit");
+      const kit = raw ? JSON.parse(raw) : null;
+      const value = kit?.price ? kit.price / 100 : amount;
+      const w = window as any;
+      const payload = { currency: "BRL", value, event: "Purchase" };
+      if (typeof w.utmify?.track === "function") w.utmify.track("Purchase", payload);
+      if (typeof w.utmifyTrack === "function") w.utmifyTrack("Purchase", payload);
+    } catch {}
+  }, []);
+
   useEffect(() => {
     if (typeof window === "undefined") return;
     const key = `sb_purchase_fired_${hash}`;
