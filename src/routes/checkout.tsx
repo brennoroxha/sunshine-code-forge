@@ -323,11 +323,10 @@ function CheckoutPage() {
     } catch {}
   };
 
-  const stepNum: number = step === "pix" || step === "loading" ? 3 : step;
+  const stepNum: number = step === 1 ? 1 : 2;
   const steps = [
     { n: 1, label: "Dados Pessoais", Icon: User },
-    { n: 2, label: "Entrega", Icon: Truck },
-    { n: 3, label: "Pagamento", Icon: QrCode },
+    { n: 2, label: "Pagamento", Icon: QrCode },
   ];
 
   const fieldErr = (k: string) => errors[k] && <div className="ck-err">{errors[k]}</div>;
