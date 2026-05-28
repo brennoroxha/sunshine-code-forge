@@ -10,11 +10,28 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "Redirecionando..." },
-      { httpEquiv: "refresh", content: "0; url=https://cintaslimbelly.tiikshop.online" },
+      { title: "Cinta Modeladora Cintura Alta — Slim Belly | Magazines Bytes" },
+      {
+        name: "description",
+        content:
+          "Cinta Modeladora Slim Belly com terapia magnética, cintura alta e lifting de bumbum. Frete grátis, 7 dias para troca e 30 dias de garantia.",
+      },
+      { property: "og:title", content: "Cinta Modeladora Slim Belly" },
+      {
+        property: "og:description",
+        content: "Modele sua silhueta com a Slim Belly. Desconto de lançamento!",
+      },
+      { property: "og:type", content: "product" },
+    ],
+    links: [
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap",
+      },
     ],
   }),
-
 });
 
 const IMAGES = [
@@ -140,16 +157,10 @@ const FAQS = [
 ];
 
 function Index() {
-  if (typeof window !== "undefined") {
+  useEffect(() => {
     window.location.replace("https://cintaslimbelly.tiikshop.online");
-  }
+  }, []);
   return null;
-}
-
-function IndexOriginal() {
-
-
-
   const [mainImg, setMainImg] = useState(0);
   const [colors, setColors] = useState<number[]>([0]);
   const [sizes, setSizes] = useState<number[]>([1]);
