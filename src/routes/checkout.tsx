@@ -20,6 +20,7 @@ const KIT_OPTIONS: Record<number, { id: number; label: string; title: string; pr
 
 const TOTAL = 7990;
 const PIX_KEY = "64119790000101";
+const TRACKING_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "src", "sck"];
 
 function formatBRL(cents: number) {
   return (cents / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -124,12 +125,15 @@ function CheckoutPage() {
     if (typeof window === "undefined") return;
     try {
       const sp = new URLSearchParams(window.location.search);
-      const keys = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "src", "sck"];
       const collected: Record<string, string> = {};
-      keys.forEach((k) => {
+      TRACKING_KEYS.forEach((k) => {
         const v = sp.get(k);
         if (v) collected[k] = v;
       });
+      if (!collected.sck) {
+        const clickId = collected.src || collected.utm_campaign || `${Date.now()}_${Math.random().toString(36).slice(2)}`;
+        collected.sck = clickId;
+      }
       // Persiste para sobreviver entre navegações
       const stored = localStorage.getItem("sb_utms");
       const merged = { ...(stored ? JSON.parse(stored) : {}), ...collected };
