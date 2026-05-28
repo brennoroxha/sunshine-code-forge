@@ -153,6 +153,10 @@ async function sendUtmifyOrder({ payload, hash, amount, paymentMethod, status }:
     // Klivopay normalmente envia em centavos; se já vier <= 1000, assume reais
     const numAmount = Number(amount || 0);
     const finalAmount = numAmount > 1000 ? Math.round(numAmount) : Math.round((numAmount || 79.9) * 100);
+    const kitName = finalAmount === 5990 || finalAmount === 6987
+      ? "1x Cinta Modeladora Slim Belly"
+      : "KIT 2x Cinta Modeladora Slim Belly";
+    const kitId = finalAmount === 5990 || finalAmount === 6987 ? "kit-01-slim-belly" : "kit-02-slim-belly";
 
     const body = {
       orderId: String(hash || `order_${Date.now()}`),
