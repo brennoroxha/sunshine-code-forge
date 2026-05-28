@@ -148,7 +148,16 @@ async function sendUtmifyOrder({ payload, hash, amount, paymentMethod, status }:
   }
   try {
     const customer = payload?.customer || payload?.data?.customer || payload?.transaction?.customer || {};
-    const utms = payload?.tracking || payload?.utm || payload?.data?.utm || {};
+    const metadata = payload?.metadata || payload?.data?.metadata || payload?.transaction?.metadata || {};
+    const utms = {
+      ...metadata,
+      ...(payload?.tracking || {}),
+      ...(payload?.utm || {}),
+      ...(payload?.data?.utm || {}),
+      ...(payload?.data?.tracking || {}),
+      ...(payload?.transaction?.utm || {}),
+      ...(payload?.transaction?.tracking || {}),
+    };
     const now = new Date().toISOString().replace("T", " ").substring(0, 19);
     // Klivopay normalmente envia em centavos; se já vier <= 1000, assume reais
     const numAmount = Number(amount || 0);
