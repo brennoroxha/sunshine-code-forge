@@ -91,18 +91,25 @@ export const Route = createFileRoute("/api/public/klivopay-webhook")({
             ? String(status)
             : "waiting_payment";
 
+        let alreadyPaidSent = false;
+        let alreadyWaitingSent = false;
         try {
           let existingPayload: any = {};
           if (hash) {
             const { data: existingSale, error: existingErr } = await supabaseAdmin
               .from("sales")
-              .select("raw_payload")
+              .select("raw_payload, status, paid_at")
               .eq("transaction_hash", String(hash))
               .maybeSingle();
             if (existingErr) {
               console.error("[klivopay-webhook] erro ao buscar venda existente:", existingErr);
             }
             existingPayload = existingSale?.raw_payload || {};
+            alreadyPaidSent =
+              !!existingPayload?.utmify_paid_sent ||
+              existingSale?.status === "paid" ||
+              !!existingSale?.paid_at;
+            alreadyWaitingSent = !!existingPayload?.utmify_waiting_sent;
           }
           const mergedPayload = {
             ...existingPayload,
@@ -121,6 +128,12 @@ export const Route = createFileRoute("/api/public/klivopay-webhook")({
               ...(payload?.transaction?.metadata || {}),
             },
             webhook_payload: payload,
+            utmify_paid_sent: alreadyPaidSent || isPaid,
+            utmify_waiting_sent:
+              alreadyWaitingSent ||
+              status === "waiting_payment" ||
+              status === "pending" ||
+              event === "pix.generated",
           };
           utmifyPayload = mergedPayload;
           const { error: dbErr } = await supabaseAdmin.from("sales").upsert(
@@ -145,18 +158,23 @@ export const Route = createFileRoute("/api/public/klivopay-webhook")({
         }
 
         if (isPaid) {
-          console.log("[klivopay-webhook] Pagamento confirmado:", hash);
-          await sendUtmifyOrder({
-            payload: utmifyPayload,
-            hash,
-            amount,
-            paymentMethod,
-            status: "paid",
-          });
+          if (alreadyPaidSent) {
+            console.log("[klivopay-webhook] paid duplicado ignorado:", hash);
+          } else {
+            console.log("[klivopay-webhook] Pagamento confirmado:", hash);
+            await sendUtmifyOrder({
+              payload: utmifyPayload,
+              hash,
+              amount,
+              paymentMethod,
+              status: "paid",
+            });
+          }
         } else if (
-          status === "waiting_payment" ||
-          status === "pending" ||
-          event === "pix.generated"
+          !alreadyWaitingSent &&
+          (status === "waiting_payment" ||
+            status === "pending" ||
+            event === "pix.generated")
         ) {
           await sendUtmifyOrder({
             payload: utmifyPayload,
