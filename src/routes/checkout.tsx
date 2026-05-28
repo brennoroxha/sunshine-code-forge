@@ -243,15 +243,6 @@ function CheckoutPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const next = () => {
-    if (step !== "pix" && step !== "loading" && !validateStep(step as Step)) return;
-    if (step === 1) setStep(2);
-    else if (step === 2) setStep(3);
-    else if (step === 3) {
-      setStep("loading");
-    }
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
 
   useEffect(() => {
     if (step !== "loading") return;
