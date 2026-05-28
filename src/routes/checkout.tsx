@@ -230,15 +230,17 @@ function CheckoutPage() {
       if (!isValidCPF(form.cpf)) e.cpf = "CPF inválido";
       if (!isValidPhone(form.telefone)) e.telefone = "Telefone inválido";
     }
-    if (s === 2) {
-      if (!isValidCEP(form.cep)) e.cep = "CEP inválido (8 dígitos)";
-      if (!form.endereco.trim()) e.endereco = "Informe o endereço";
-      if (!form.bairro.trim()) e.bairro = "Informe o bairro";
-      if (!form.numero.trim()) e.numero = "Nº";
-      if (!form.cidade.trim()) e.cidade = "Informe a cidade";
-    }
     setErrors(e);
     return Object.keys(e).length === 0;
+  };
+
+  const next = () => {
+    if (step !== "pix" && step !== "loading" && !validateStep(step as Step)) return;
+    if (step === 1) setStep(3);
+    else if (step === 3) {
+      setStep("loading");
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const next = () => {
