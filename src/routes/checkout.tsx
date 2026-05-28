@@ -111,12 +111,34 @@ function CheckoutPage() {
   const [expira, setExpira] = useState(15 * 60);
   const [pixData, setPixData] = useState<{ hash: string; pix_copy_paste: string; pix_qr_code: string } | null>(null);
   const [pixError, setPixError] = useState<string | null>(null);
+  const [utms, setUtms] = useState<Record<string, string>>({});
   // Kit é derivado diretamente da URL (?kit=1 ou ?kit=2) — sem flash de kit 2
   const search = Route.useSearch();
   const kit = KIT_OPTIONS[search.kit] ?? KIT_OPTIONS[2];
   useEffect(() => {
     try { localStorage.setItem("sb_kit", JSON.stringify(kit)); } catch {}
   }, [kit.id]);
+
+  // Captura UTMs da URL ao montar
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const sp = new URLSearchParams(window.location.search);
+      const keys = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "src", "sck"];
+      const collected: Record<string, string> = {};
+      keys.forEach((k) => {
+        const v = sp.get(k);
+        if (v) collected[k] = v;
+      });
+      // Persiste para sobreviver entre navegações
+      const stored = localStorage.getItem("sb_utms");
+      const merged = { ...(stored ? JSON.parse(stored) : {}), ...collected };
+      if (Object.keys(merged).length) {
+        setUtms(merged);
+        localStorage.setItem("sb_utms", JSON.stringify(merged));
+      }
+    } catch {}
+  }, []);
 
   useEffect(() => {
     // Dispara InitiateCheckout (Meta Pixel + Utmify + dataLayer)
