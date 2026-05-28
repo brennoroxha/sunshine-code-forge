@@ -365,7 +365,7 @@ function CheckoutPage() {
           ))}
         </div>
 
-        {step === 2 && (
+        {step === 3 && (
           <div className="ck-card" style={{ marginBottom: 16 }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, marginBottom: 10 }}>
               <h2 className="ck-h2" style={{ display: "inline-flex", alignItems: "center", gap: 8, margin: 0 }}>
