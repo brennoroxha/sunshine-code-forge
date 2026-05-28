@@ -19,6 +19,7 @@ const InputSchema = z.object({
       })
     )
     .optional(),
+  tracking: z.record(z.string(), z.string()).optional(),
 });
 
 const PRODUCT_HASH = "pz2q1dqx2h";
