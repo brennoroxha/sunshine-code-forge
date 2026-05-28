@@ -182,8 +182,8 @@ async function sendUtmifyOrder({ payload, hash, amount, paymentMethod, status }:
       },
       products: [
         {
-          id: "kit-02-slim-belly",
-          name: "KIT 02 Cinta Modeladora Cintura Alta",
+          id: kitId,
+          name: kitName,
           planId: null,
           planName: null,
           quantity: 1,
