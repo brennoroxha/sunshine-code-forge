@@ -534,7 +534,7 @@ function CheckoutPage() {
 
               <div style={{ marginTop: 14, background: "#f3f4f6", borderRadius: 8, padding: "14px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
                 <span style={{ color: "#374151", fontWeight: 600 }}>Número do pedido:</span>
-                <strong style={{ fontSize: 22, color: "#111", letterSpacing: 0.5 }}>620359715</strong>
+                <strong style={{ fontSize: 22, color: "#111", letterSpacing: 0.5 }}>{pixData?.hash ?? "—"}</strong>
               </div>
 
               <div style={{ marginTop: 16, border: "2px dashed #ef4444", borderRadius: 12, padding: 16, textAlign: "center", background: "#fff" }}>
