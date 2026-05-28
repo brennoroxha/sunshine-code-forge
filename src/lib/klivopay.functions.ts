@@ -17,7 +17,7 @@ const InputSchema = z.object({
         name: z.string(),
         quantity: z.number().int().positive(),
         unit_price: z.number().int().positive(),
-      })
+      }),
     )
     .optional(),
   tracking: z.record(z.string(), z.string()).optional(),
@@ -34,9 +34,11 @@ export const createPixTransaction = createServerFn({ method: "POST" })
       return { ok: false as const, error: "KLIVOPAY_API_TOKEN não configurado" };
     }
 
-    const items = (data.cart && data.cart.length > 0 ? data.cart : [
-      { name: "Pedido", quantity: 1, unit_price: data.amount },
-    ]).map((it) => ({
+    const items = (
+      data.cart && data.cart.length > 0
+        ? data.cart
+        : [{ name: "Pedido", quantity: 1, unit_price: data.amount }]
+    ).map((it) => ({
       product_hash: PRODUCT_HASH,
       title: it.name,
       name: it.name,
