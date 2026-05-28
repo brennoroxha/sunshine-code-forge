@@ -525,43 +525,95 @@ function Index() {
                 <div className="sb-swatches">
                   {COLORS.map((c, i) => {
                     const count = colors.filter((x) => x === i).length;
+                    const active = count > 0;
                     return (
-                      <button
+                      <div
                         key={c.name}
-                        onClick={() => {
-                          setMainImg(c.imgIndex);
-                          setColors((prev) => (prev.length >= maxItems ? [i] : [...prev, i]));
-                        }}
-                        className={`sb-swatch ${count > 0 ? "is-active" : ""}`}
-                        aria-label={c.name}
-                        title={c.name}
-                        style={{ position: "relative" }}
+                        style={{ display: "flex", flexDirection: "column", alignItems: "stretch", gap: 6 }}
                       >
-                        <img src={IMAGES[c.imgIndex]} alt={c.name} loading="lazy" />
-                        {count > 0 && (
-                          <span
+                        <button
+                          onClick={() => {
+                            setMainImg(c.imgIndex);
+                            setColors((prev) => (prev.length >= maxItems ? [i] : [...prev, i]));
+                          }}
+                          className={`sb-swatch ${active ? "is-active" : ""}`}
+                          aria-label={c.name}
+                          title={c.name}
+                          style={{ position: "relative" }}
+                        >
+                          <img src={IMAGES[c.imgIndex]} alt={c.name} loading="lazy" />
+                        </button>
+                        {active ? (
+                          <div
                             style={{
-                              position: "absolute",
-                              top: -6,
-                              right: -6,
-                              background: "hsl(var(--primary))",
-                              color: "hsl(var(--primary-foreground))",
-                              borderRadius: "999px",
-                              minWidth: 20,
-                              height: 20,
-                              fontSize: 12,
-                              fontWeight: 700,
                               display: "flex",
                               alignItems: "center",
-                              justifyContent: "center",
-                              padding: "0 6px",
-                              boxShadow: "0 1px 4px rgba(0,0,0,.25)",
+                              justifyContent: "space-between",
+                              gap: 4,
+                              background: "var(--sb-cta, #e11d48)",
+                              color: "#fff",
+                              borderRadius: 999,
+                              padding: "2px 4px",
+                              fontWeight: 700,
+                              fontSize: 13,
+                              boxShadow: "0 1px 4px rgba(0,0,0,.18)",
                             }}
                           >
-                            ×{count}
-                          </span>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setColors((prev) => {
+                                  const idx = prev.lastIndexOf(i);
+                                  if (idx === -1) return prev;
+                                  const copy = [...prev];
+                                  copy.splice(idx, 1);
+                                  return copy;
+                                });
+                              }}
+                              aria-label={`Remover ${c.name}`}
+                              style={{
+                                width: 22, height: 22, borderRadius: 999, border: 0,
+                                background: "rgba(255,255,255,.22)", color: "#fff",
+                                fontWeight: 800, fontSize: 16, lineHeight: 1, cursor: "pointer",
+                                display: "grid", placeItems: "center",
+                              }}
+                            >
+                              −
+                            </button>
+                            <span style={{ minWidth: 24, textAlign: "center" }}>{count}</span>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setMainImg(c.imgIndex);
+                                setColors((prev) => (prev.length >= maxItems ? prev : [...prev, i]));
+                              }}
+                              aria-label={`Adicionar ${c.name}`}
+                              style={{
+                                width: 22, height: 22, borderRadius: 999, border: 0,
+                                background: "rgba(255,255,255,.22)", color: "#fff",
+                                fontWeight: 800, fontSize: 16, lineHeight: 1, cursor: "pointer",
+                                display: "grid", placeItems: "center",
+                              }}
+                            >
+                              +
+                            </button>
+                          </div>
+                        ) : (
+                          <div
+                            style={{
+                              textAlign: "center",
+                              fontSize: 12,
+                              color: "#6b6b6b",
+                              fontWeight: 600,
+                              padding: "3px 0",
+                            }}
+                          >
+                            Selecionar
+                          </div>
                         )}
-                      </button>
+                      </div>
                     );
                   })}
                 </div>
