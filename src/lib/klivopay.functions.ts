@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeader } from "@tanstack/react-start/server";
 import { z } from "zod";
+import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 const InputSchema = z.object({
   amount: z.number().int().positive(),
@@ -81,9 +82,38 @@ export const createPixTransaction = createServerFn({ method: "POST" })
         };
       }
 
+      const hash = (json.hash || json?.data?.hash) as string;
+      if (hash) {
+        const checkoutPayload = {
+          source: "checkout",
+          checkout_tracking: data.tracking ?? {},
+          tracking: data.tracking ?? {},
+          metadata: { client_ip: clientIp, ...(data.tracking ?? {}) },
+          customer: { ...data.customer, ip: clientIp ?? undefined },
+          cart: items,
+          klivopay_response: json,
+        };
+        const { error: saleErr } = await supabaseAdmin.from("sales").upsert(
+          {
+            transaction_hash: hash,
+            status: "waiting_payment",
+            payment_method: "pix",
+            amount_cents: data.amount,
+            customer_name: data.customer.name,
+            customer_email: data.customer.email,
+            customer_phone: data.customer.phone_number,
+            customer_document: data.customer.document,
+            raw_payload: checkoutPayload,
+            updated_at: new Date().toISOString(),
+          },
+          { onConflict: "transaction_hash" },
+        );
+        if (saleErr) console.error("[checkout] erro ao registrar venda inicial:", saleErr);
+      }
+
       return {
         ok: true as const,
-        hash: (json.hash || json?.data?.hash) as string,
+        hash,
         pix_qr_code: pixCode,
         pix_copy_paste: pixCode,
         qr_code_base64: (json?.pix?.qr_code_base64 || null) as string | null,
