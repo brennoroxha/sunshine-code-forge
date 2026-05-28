@@ -64,8 +64,8 @@ export const createPixTransaction = createServerFn({ method: "POST" })
           operation_type: 1,
           customer: { ...data.customer, ip: clientIp ?? undefined },
           cart: items,
-          metadata: { client_ip: clientIp },
-          tracking: typeof globalThis !== "undefined" ? undefined : undefined,
+          metadata: { client_ip: clientIp, ...(data.tracking ?? {}) },
+          tracking: data.tracking ?? {},
         }),
       });
 
