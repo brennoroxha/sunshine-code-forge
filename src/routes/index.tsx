@@ -176,6 +176,24 @@ function Index() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedKit.id]);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const stored = localStorage.getItem("sb_utms");
+      const previous = stored ? JSON.parse(stored) : {};
+      const tracking: Record<string, string> = { ...previous };
+      TRACKING_KEYS.forEach((key) => {
+        const value = params.get(key);
+        if (value) tracking[key] = value;
+      });
+      if (Object.keys(tracking).length) {
+        localStorage.setItem("sb_utms", JSON.stringify(tracking));
+        setTrackingQuery(new URLSearchParams(tracking).toString());
+      }
+    } catch {}
+  }, []);
+
   const [deliveryDates, setDeliveryDates] = useState<{ placed: string; processed: string; delivered: string } | null>(null);
   const [shippingRange, setShippingRange] = useState<{ from: string; to: string } | null>(null);
   const [city, setCity] = useState<{ name: string; region: string }>({ name: "Ourinhos", region: "SP" });
@@ -539,7 +557,7 @@ function Index() {
             </div>
 
 
-            <a href={`/checkout?kit=${selectedKit.id}`} ref={ctaRef as any} className="sb-cta sb-cta-primary" onClick={ripple}>
+            <a href={checkoutHref(selectedKit.id)} ref={ctaRef as any} className="sb-cta sb-cta-primary" onClick={ripple}>
               🛒 COMPRAR AGORA
             </a>
 
@@ -683,7 +701,7 @@ function Index() {
         <div className="sb-container" data-reveal>
           <h2>Garanta já a sua com desconto de lançamento</h2>
           <p>Estoque limitado — Últimas unidades</p>
-          <a href={`/checkout?kit=${selectedKit.id}`} className="sb-cta-light" onClick={ripple as any}>
+          <a href={checkoutHref(selectedKit.id)} className="sb-cta-light" onClick={ripple as any}>
             QUERO MINHA CINTA AGORA →
           </a>
         </div>
@@ -748,7 +766,7 @@ function Index() {
         <div style={{ fontSize: 11, color: "#b45309", textAlign: "center", marginBottom: 6, fontWeight: 600 }}>
           ⏰ Oferta por tempo limitado
         </div>
-        <a href={`/checkout?kit=${selectedKit.id}`} className="sb-cta sb-cta-primary" onClick={ripple}>
+        <a href={checkoutHref(selectedKit.id)} className="sb-cta sb-cta-primary" onClick={ripple}>
           🛒 QUERO MEU KIT — {selectedKit.priceLabel}
         </a>
       </div>
