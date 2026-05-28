@@ -112,6 +112,24 @@ function AdminPage() {
 
   const filtered = filter === "all" ? sales : sales.filter((s) => s.status === filter);
 
+  // Agrupa por dia (data de criação), ordem decrescente
+  const groups = (() => {
+    const map = new Map<string, { label: string; items: Sale[]; paidCents: number; paidCount: number }>();
+    for (const s of filtered) {
+      const d = new Date(s.created_at);
+      const key = d.toISOString().slice(0, 10);
+      const label = d.toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long", year: "numeric" });
+      const g = map.get(key) || { label, items: [], paidCents: 0, paidCount: 0 };
+      g.items.push(s);
+      if (s.status === "paid") {
+        g.paidCents += s.amount_cents;
+        g.paidCount += 1;
+      }
+      map.set(key, g);
+    }
+    return Array.from(map.entries()).sort(([a], [b]) => (a < b ? 1 : -1));
+  })();
+
   return (
     <div style={{ minHeight: "100vh", background: "#f8fafc", fontFamily: "system-ui, sans-serif", padding: "24px 16px" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
@@ -156,44 +174,57 @@ function AdminPage() {
           ))}
         </div>
 
-        <div style={{ background: "#fff", borderRadius: 10, overflow: "auto", boxShadow: "0 1px 3px rgba(0,0,0,.05)" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
-            <thead style={{ background: "#f1f5f9", textAlign: "left" }}>
-              <tr>
-                <Th>Data</Th>
-                <Th>Cliente</Th>
-                <Th>Contato</Th>
-                <Th>CPF</Th>
-                <Th>Valor</Th>
-                <Th>Método</Th>
-                <Th>Status</Th>
-                <Th>Pago em</Th>
-                <Th>Hash</Th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.length === 0 && (
-                <tr><td colSpan={9} style={{ padding: 24, textAlign: "center", color: "#64748b" }}>Nenhuma venda encontrada.</td></tr>
-              )}
-              {filtered.map((s) => (
-                <tr key={s.id} style={{ borderTop: "1px solid #e2e8f0" }}>
-                  <Td>{fmtDate(s.created_at)}</Td>
-                  <Td>{s.customer_name || "—"}</Td>
-                  <Td>
-                    <div>{s.customer_email || "—"}</div>
-                    <div style={{ color: "#64748b" }}>{s.customer_phone || ""}</div>
-                  </Td>
-                  <Td>{s.customer_document || "—"}</Td>
-                  <Td style={{ fontWeight: 600 }}>{brl(s.amount_cents)}</Td>
-                  <Td>{(s.payment_method || "").toUpperCase()}</Td>
-                  <Td><StatusBadge status={s.status} /></Td>
-                  <Td>{fmtDate(s.paid_at)}</Td>
-                  <Td style={{ fontFamily: "monospace", fontSize: 11, color: "#64748b" }}>{s.transaction_hash?.slice(0, 16) || "—"}</Td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        {groups.length === 0 && (
+          <div style={{ background: "#fff", borderRadius: 10, padding: 24, textAlign: "center", color: "#64748b" }}>
+            Nenhuma venda encontrada.
+          </div>
+        )}
+
+        {groups.map(([key, g]) => (
+          <section key={key} style={{ marginBottom: 24 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8, padding: "0 4px" }}>
+              <h2 style={{ margin: 0, fontSize: 15, color: "#0f172a", textTransform: "capitalize" }}>{g.label}</h2>
+              <div style={{ fontSize: 12, color: "#64748b" }}>
+                {g.items.length} pedido{g.items.length === 1 ? "" : "s"} · {g.paidCount} pago{g.paidCount === 1 ? "" : "s"} · <strong style={{ color: "#0f172a" }}>{brl(g.paidCents)}</strong>
+              </div>
+            </div>
+            <div style={{ background: "#fff", borderRadius: 10, overflow: "auto", boxShadow: "0 1px 3px rgba(0,0,0,.05)" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+                <thead style={{ background: "#f1f5f9", textAlign: "left" }}>
+                  <tr>
+                    <Th>Hora</Th>
+                    <Th>Cliente</Th>
+                    <Th>Contato</Th>
+                    <Th>CPF</Th>
+                    <Th>Valor</Th>
+                    <Th>Método</Th>
+                    <Th>Status</Th>
+                    <Th>Pago em</Th>
+                    <Th>Hash</Th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {g.items.map((s) => (
+                    <tr key={s.id} style={{ borderTop: "1px solid #e2e8f0" }}>
+                      <Td>{new Date(s.created_at).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</Td>
+                      <Td>{s.customer_name || "—"}</Td>
+                      <Td>
+                        <div>{s.customer_email || "—"}</div>
+                        <div style={{ color: "#64748b" }}>{s.customer_phone || ""}</div>
+                      </Td>
+                      <Td>{s.customer_document || "—"}</Td>
+                      <Td style={{ fontWeight: 600 }}>{brl(s.amount_cents)}</Td>
+                      <Td>{(s.payment_method || "").toUpperCase()}</Td>
+                      <Td><StatusBadge status={s.status} /></Td>
+                      <Td>{fmtDate(s.paid_at)}</Td>
+                      <Td style={{ fontFamily: "monospace", fontSize: 11, color: "#64748b" }}>{s.transaction_hash?.slice(0, 16) || "—"}</Td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        ))}
       </div>
     </div>
   );
