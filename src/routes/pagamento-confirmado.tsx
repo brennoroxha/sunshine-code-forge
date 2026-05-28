@@ -39,8 +39,6 @@ function PagamentoConfirmadoPage() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const key = `sb_purchase_fired_${hash}`;
-    if (sessionStorage.getItem(key)) return;
 
     const payload = {
       orderId: hash,
@@ -51,26 +49,49 @@ function PagamentoConfirmadoPage() {
       products: [{ id: "kit-02-slim-belly", name: "KIT 02 Cinta Modeladora Cintura Alta", quantity: 1, price: amount }],
     };
 
+    // Chaves independentes por pixel — assim, se um carregar atrasado,
+    // ele ainda é disparado sem ser bloqueado pelos outros.
+    const keys = {
+      fb: `sb_purchase_fb_${hash}`,
+      utmify: `sb_purchase_utmify_${hash}`,
+      gads: `sb_purchase_gads_${hash}`,
+      gtm: `sb_purchase_gtm_${hash}`,
+    };
+
+    // GTM dataLayer push (sem dependência de script externo)
+    if (!sessionStorage.getItem(keys.gtm)) {
+      const w = window as any;
+      w.dataLayer = w.dataLayer || [];
+      w.dataLayer.push({ event: "purchase", ecommerce: { transaction_id: hash, value: amount, currency: "BRL" } });
+      sessionStorage.setItem(keys.gtm, "1");
+    }
+    window.dispatchEvent(new CustomEvent("purchase", { detail: payload }));
+
     let attempts = 0;
-    const fire = () => {
+    const tryFire = () => {
       attempts++;
       const w = window as any;
-      let fired = false;
-      try {
-        // Meta Pixel (base code garantido no __root)
-        if (typeof w.fbq === "function") {
+
+      // Meta Pixel
+      if (!sessionStorage.getItem(keys.fb) && typeof w.fbq === "function") {
+        try {
           w.fbq("track", "Purchase", { value: amount, currency: "BRL", content_ids: ["kit-02-slim-belly"], content_type: "product", num_items: 1 });
-          fired = true;
-        }
-        // Utmify pixel
-        if (typeof w.utmify?.track === "function") { w.utmify.track("Purchase", payload); fired = true; }
-        if (typeof w.utmifyTrack === "function") { w.utmifyTrack("Purchase", payload); fired = true; }
-        if (typeof w.pixel?.track === "function") { w.pixel.track("Purchase", payload); fired = true; }
-        // GTM dataLayer
-        w.dataLayer = w.dataLayer || [];
-        w.dataLayer.push({ event: "purchase", ecommerce: { transaction_id: hash, value: amount, currency: "BRL" } });
-        // Google Ads (gtag) — conversão + purchase
-        if (typeof w.gtag === "function") {
+          sessionStorage.setItem(keys.fb, "1");
+        } catch (e) { console.error("[purchase][fb]", e); }
+      }
+
+      // Utmify
+      if (!sessionStorage.getItem(keys.utmify)) {
+        try {
+          if (typeof w.utmify?.track === "function") { w.utmify.track("Purchase", payload); sessionStorage.setItem(keys.utmify, "1"); }
+          else if (typeof w.utmifyTrack === "function") { w.utmifyTrack("Purchase", payload); sessionStorage.setItem(keys.utmify, "1"); }
+          else if (typeof w.pixel?.track === "function") { w.pixel.track("Purchase", payload); sessionStorage.setItem(keys.utmify, "1"); }
+        } catch (e) { console.error("[purchase][utmify]", e); }
+      }
+
+      // Google Ads (gtag) — conversão + purchase
+      if (!sessionStorage.getItem(keys.gads) && typeof w.gtag === "function") {
+        try {
           w.gtag("event", "conversion", {
             send_to: "AW-17951971754/316ACNHlmvgbEKqzlfBC",
             value: amount,
@@ -78,28 +99,27 @@ function PagamentoConfirmadoPage() {
             transaction_id: hash,
           });
           w.gtag("event", "purchase", {
+            send_to: "AW-17951971754",
             transaction_id: hash,
             value: amount,
             currency: "BRL",
             items: [{ item_id: "kit-02-slim-belly", item_name: "KIT 02 Cinta Modeladora Cintura Alta", quantity: 1, price: amount }],
           });
-          fired = true;
-        }
-        // Custom event
-        window.dispatchEvent(new CustomEvent("purchase", { detail: payload }));
-      } catch (e) {
-        console.error("[purchase] tracking error", e);
+          sessionStorage.setItem(keys.gads, "1");
+          console.info("[purchase][gads] conversion fired", { transaction_id: hash, value: amount });
+        } catch (e) { console.error("[purchase][gads]", e); }
       }
-      if (fired) {
-        sessionStorage.setItem(key, "1");
-        return true;
-      }
-      return false;
+
+      const allDone =
+        sessionStorage.getItem(keys.fb) &&
+        sessionStorage.getItem(keys.utmify) &&
+        sessionStorage.getItem(keys.gads);
+      return Boolean(allDone);
     };
 
-    if (fire()) return;
+    if (tryFire()) return;
     const iv = setInterval(() => {
-      if (fire() || attempts >= 20) clearInterval(iv);
+      if (tryFire() || attempts >= 40) clearInterval(iv);
     }, 500);
     return () => clearInterval(iv);
   }, [hash, amount]);
