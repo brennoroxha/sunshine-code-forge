@@ -73,17 +73,34 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Lovable App" },
-      { name: "description", content: "Static sales landing page for \"Slim Belly\" high-waisted shapewear." },
+      {
+        name: "description",
+        content: 'Static sales landing page for "Slim Belly" high-waisted shapewear.',
+      },
       { name: "author", content: "Lovable" },
       { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Static sales landing page for \"Slim Belly\" high-waisted shapewear." },
+      {
+        property: "og:description",
+        content: 'Static sales landing page for "Slim Belly" high-waisted shapewear.',
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
       { name: "twitter:title", content: "Lovable App" },
-      { name: "twitter:description", content: "Static sales landing page for \"Slim Belly\" high-waisted shapewear." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/de1619e5-d85d-4c2d-a9e2-02c4be5b60b9/id-preview-98965c3e--f4e9bfcc-6640-454f-838f-08e1c1e37262.lovable.app-1779858802538.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/de1619e5-d85d-4c2d-a9e2-02c4be5b60b9/id-preview-98965c3e--f4e9bfcc-6640-454f-838f-08e1c1e37262.lovable.app-1779858802538.png" },
+      {
+        name: "twitter:description",
+        content: 'Static sales landing page for "Slim Belly" high-waisted shapewear.',
+      },
+      {
+        property: "og:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/de1619e5-d85d-4c2d-a9e2-02c4be5b60b9/id-preview-98965c3e--f4e9bfcc-6640-454f-838f-08e1c1e37262.lovable.app-1779858802538.png",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/de1619e5-d85d-4c2d-a9e2-02c4be5b60b9/id-preview-98965c3e--f4e9bfcc-6640-454f-838f-08e1c1e37262.lovable.app-1779858802538.png",
+      },
     ],
     links: [
       {
@@ -102,8 +119,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         src: "https://cdn.utmify.com.br/scripts/utms/latest.js",
         async: true,
         defer: true,
-        "data-utmify-prevent-xcod-sck": "",
-        "data-utmify-prevent-subids": "",
       },
     ],
   }),
