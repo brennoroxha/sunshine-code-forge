@@ -27,6 +27,7 @@ export const Route = createFileRoute("/api/public/klivopay-webhook")({
         }
 
         let payload: any = {};
+        let utmifyPayload = payload;
         try {
           payload = JSON.parse(rawBody);
         } catch {
@@ -121,6 +122,7 @@ export const Route = createFileRoute("/api/public/klivopay-webhook")({
             },
             webhook_payload: payload,
           };
+          utmifyPayload = mergedPayload;
           const { error: dbErr } = await supabaseAdmin.from("sales").upsert(
             {
               transaction_hash: hash ? String(hash) : `evt_${Date.now()}`,
@@ -144,14 +146,14 @@ export const Route = createFileRoute("/api/public/klivopay-webhook")({
 
         if (isPaid) {
           console.log("[klivopay-webhook] Pagamento confirmado:", hash);
-          await sendUtmifyOrder({ payload: mergedWebhookPayload(payload), hash, amount, paymentMethod, status: "paid" });
+          await sendUtmifyOrder({ payload: utmifyPayload, hash, amount, paymentMethod, status: "paid" });
         } else if (
           status === "waiting_payment" ||
           status === "pending" ||
           event === "pix.generated"
         ) {
           await sendUtmifyOrder({
-            payload,
+            payload: utmifyPayload,
             hash,
             amount,
             paymentMethod,
