@@ -68,6 +68,8 @@ const KITS = [
   { id: 2, qty: 2, label: "Kit 2 Cintas", title: "2 Cintas", price: 7990, priceLabel: "R$ 79,90", badge: "MAIS VENDIDO" },
 ];
 
+const TRACKING_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "src", "sck"];
+
 const TESTIMONIALS = [
   {
     initials: "MS",
@@ -139,12 +141,12 @@ function Index() {
   const [testimonial, setTestimonial] = useState(0);
   const [kitId, setKitId] = useState<number>(2);
   const selectedKit = KITS.find((k) => k.id === kitId) ?? KITS[1];
-  const [stockBySize] = useState<number[]>(() =>
-    SIZES.map(() => 3 + Math.floor(Math.random() * 5)),
-  );
+  const [trackingQuery, setTrackingQuery] = useState("");
+  const [stockBySize] = useState<number[]>([5, 4, 6, 3, 7, 4, 5]);
   const maxItems = selectedKit.qty;
   const remainingColors = Math.max(0, maxItems - colors.length);
   const remainingSizes = Math.max(0, maxItems - sizes.length);
+  const checkoutHref = (id: number) => `/checkout?kit=${id}${trackingQuery ? `&${trackingQuery}` : ""}`;
   const pieceWord = (n: number, s: string, p: string) => (n === 1 ? s : p);
   const buildHint = (kind: "cor" | "tamanho", remaining: number, current: number[], labels: string[]) => {
     if (remaining > 0) {
