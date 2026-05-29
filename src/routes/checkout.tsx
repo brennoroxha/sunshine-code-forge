@@ -145,6 +145,8 @@ function CheckoutPage() {
   } | null>(null);
   const [pixError, setPixError] = useState<string | null>(null);
   const [utms, setUtms] = useState<Record<string, string>>({});
+  const [selectedColors, setSelectedColors] = useState<string[]>([]);
+  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   // Kit é derivado diretamente da URL (?kit=1 ou ?kit=2) — sem flash de kit 2
   const search = Route.useSearch();
   const kit = KIT_OPTIONS[search.kit] ?? KIT_OPTIONS[2];
@@ -178,6 +180,17 @@ function CheckoutPage() {
         setUtms(merged);
         localStorage.setItem("sb_utms", JSON.stringify(merged));
       }
+    } catch {}
+  }, []);
+
+  // Recupera cores e tamanhos selecionados do localStorage
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const c = localStorage.getItem("sb_color_names");
+      const s = localStorage.getItem("sb_size_names");
+      if (c) setSelectedColors(JSON.parse(c));
+      if (s) setSelectedSizes(JSON.parse(s));
     } catch {}
   }, []);
 
@@ -929,12 +942,24 @@ function CheckoutPage() {
               alt="Cinta Modeladora Slim Belly"
               className="ck-cart-img"
             />
-            <div className="ck-cart-info">
-              <div className="ck-cart-name">
-                {kit.label} — Cinta Modeladora Slim Belly ({kit.title})
-              </div>
-              <div className="ck-cart-meta">Qtd: 1</div>
+          <div className="ck-cart-info">
+            <div className="ck-cart-name">
+              {kit.label} — Cinta Modeladora Slim Belly ({kit.title})
             </div>
+            <div className="ck-cart-meta">
+              Qtd: 1
+              {selectedColors.length > 0 && (
+                <span style={{ display: "block", marginTop: 2 }}>
+                  Cor: {selectedColors.join(", ")}
+                </span>
+              )}
+              {selectedSizes.length > 0 && (
+                <span style={{ display: "block", marginTop: 2 }}>
+                  Tamanho: {selectedSizes.join(", ")}
+                </span>
+              )}
+            </div>
+          </div>
             <div className="ck-cart-price">{formatBRL(kit.price)}</div>
           </div>
 

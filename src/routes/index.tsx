@@ -232,6 +232,14 @@ function Index() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedKit.id]);
 
+  // Persist selected colors and sizes so checkout can display them
+  useEffect(() => {
+    try {
+      localStorage.setItem("sb_color_names", JSON.stringify(colors.map((i) => COLORS[i].name)));
+      localStorage.setItem("sb_size_names", JSON.stringify(sizes.map((i) => SIZES[i])));
+    } catch {}
+  }, [colors, sizes]);
+
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
