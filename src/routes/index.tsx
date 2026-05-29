@@ -1070,7 +1070,7 @@ function Index() {
         >
           ⏰ Oferta por tempo limitado
         </div>
-        <a href={checkoutHref(selectedKit.id)} className="sb-cta sb-cta-primary" onClick={ripple}>
+        <a href={checkoutHref(selectedKit.id)} className="sb-cta sb-cta-primary" onClick={(e) => { handleCheckoutClick(e); if (!e.defaultPrevented) ripple(e); }}>
           🛒 QUERO MEU KIT — {selectedKit.priceLabel}
         </a>
       </div>
