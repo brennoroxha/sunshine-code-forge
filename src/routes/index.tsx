@@ -336,7 +336,7 @@ function Index() {
     setDeliveryDates({
       placed: fmt(now),
       processed: fmt(plus(1)),
-      delivered: fmt(plus(5)),
+      delivered: fmt(plus(8)),
     });
     const fmtShort = (d: Date) => {
       const meses = [
