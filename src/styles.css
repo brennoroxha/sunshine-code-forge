@@ -64,6 +64,12 @@ button {
   background: none;
 }
 
+@keyframes sb-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .sb-root {
   background: var(--sb-bg);
   min-height: 100vh;
