@@ -171,6 +171,24 @@ function Index() {
   const remainingSizes = Math.max(0, maxItems - sizes.length);
   const checkoutHref = (id: number) =>
     `/checkout?kit=${id}${trackingQuery ? `&${trackingQuery}` : ""}`;
+  const [selectionError, setSelectionError] = useState<string>("");
+  const handleCheckoutClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (colors.length < maxItems || sizes.length < maxItems) {
+      e.preventDefault();
+      const missing: string[] = [];
+      if (colors.length < maxItems) missing.push("cor");
+      if (sizes.length < maxItems) missing.push("tamanho");
+      setSelectionError(
+        `Selecione ${missing.join(" e ")} antes de continuar para o checkout.`,
+      );
+      const target = document.getElementById(
+        colors.length < maxItems ? "sb-color-section" : "sb-size-section",
+      );
+      target?.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    setSelectionError("");
+  };
   const pieceWord = (n: number, s: string, p: string) => (n === 1 ? s : p);
   const buildHint = (
     kind: "cor" | "tamanho",
