@@ -135,6 +135,7 @@ function CheckoutPage() {
   });
   const [frete, setFrete] = useState<"transportadora" | "full">("transportadora");
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [receiptFile, setReceiptFile] = useState<File | null>(null);
   const [copied, setCopied] = useState(false);
   const [expira, setExpira] = useState(15 * 60);
   const [pixData, setPixData] = useState<{
