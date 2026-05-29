@@ -172,7 +172,8 @@ function Index() {
   const checkoutHref = (id: number) =>
     `/checkout?kit=${id}${trackingQuery ? `&${trackingQuery}` : ""}`;
   const [selectionError, setSelectionError] = useState<string>("");
-  const handleCheckoutClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const [isNavigating, setIsNavigating] = useState(false);
+  const handleCheckoutClick = (e: React.MouseEvent<HTMLAnchorElement>, kitId: number) => {
     if (colors.length < maxItems || sizes.length < maxItems) {
       e.preventDefault();
       const missing: string[] = [];
@@ -187,7 +188,12 @@ function Index() {
       target?.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
+    e.preventDefault();
     setSelectionError("");
+    setIsNavigating(true);
+    setTimeout(() => {
+      window.location.href = checkoutHref(kitId);
+    }, 1200);
   };
   const pieceWord = (n: number, s: string, p: string) => (n === 1 ? s : p);
   const buildHint = (
@@ -801,8 +807,7 @@ function Index() {
                 ref={ctaRef as any}
                 className="sb-cta sb-cta-primary sb-page-cta"
                 onClick={(e) => {
-                  handleCheckoutClick(e);
-                  if (!e.defaultPrevented) ripple(e as any);
+                  handleCheckoutClick(e, selectedKit.id);
                 }}
               >
                 🛒 COMPRAR AGORA
@@ -967,7 +972,7 @@ function Index() {
         <div className="sb-container" data-reveal>
           <h2>Garanta já a sua com desconto de lançamento</h2>
           <p>Estoque limitado — Últimas unidades</p>
-          <a href={checkoutHref(selectedKit.id)} className="sb-cta-light" onClick={(e) => { handleCheckoutClick(e); if (!e.defaultPrevented) (ripple as any)(e); }}>
+          <a href={checkoutHref(selectedKit.id)} className="sb-cta-light" onClick={(e) => handleCheckoutClick(e, selectedKit.id)}>
             QUERO MINHA CINTA AGORA →
           </a>
         </div>
@@ -1078,10 +1083,55 @@ function Index() {
         >
           ⏰ Oferta por tempo limitado
         </div>
-        <a href={checkoutHref(selectedKit.id)} className="sb-cta sb-cta-primary" onClick={(e) => { handleCheckoutClick(e); if (!e.defaultPrevented) ripple(e); }}>
+        <a href={checkoutHref(selectedKit.id)} className="sb-cta sb-cta-primary" onClick={(e) => handleCheckoutClick(e, selectedKit.id)}>
           🛒 QUERO MEU KIT — {selectedKit.priceLabel}
         </a>
       </div>
+
+      {/* Loading overlay */}
+      {isNavigating && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.55)",
+            zIndex: 9999,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 20,
+            backdropFilter: "blur(4px)",
+          }}
+        >
+          <div
+            style={{
+              width: 64,
+              height: 64,
+              border: "5px solid rgba(255,255,255,0.2)",
+              borderTopColor: "#fff",
+              borderRadius: "50%",
+              animation: "sb-spin 0.8s linear infinite",
+            }}
+          />
+          <div
+            style={{
+              color: "#fff",
+              fontSize: 16,
+              fontWeight: 600,
+              textAlign: "center",
+              lineHeight: 1.4,
+              textShadow: "0 1px 4px rgba(0,0,0,0.3)",
+            }}
+          >
+            Preparando seu pedido...
+            <br />
+            <span style={{ fontSize: 13, fontWeight: 400, opacity: 0.85 }}>
+              Você será redirecionado para o checkout
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
