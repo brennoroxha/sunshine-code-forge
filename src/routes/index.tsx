@@ -792,10 +792,30 @@ function Index() {
                 href={checkoutHref(selectedKit.id)}
                 ref={ctaRef as any}
                 className="sb-cta sb-cta-primary sb-page-cta"
-                onClick={ripple}
+                onClick={(e) => {
+                  handleCheckoutClick(e);
+                  if (!e.defaultPrevented) ripple(e as any);
+                }}
               >
                 🛒 COMPRAR AGORA
               </a>
+              {selectionError && (
+                <div
+                  role="alert"
+                  style={{
+                    marginTop: 10,
+                    padding: "10px 12px",
+                    borderRadius: 8,
+                    background: "#fee2e2",
+                    color: "#b91c1c",
+                    fontSize: 13,
+                    fontWeight: 600,
+                    textAlign: "center",
+                  }}
+                >
+                  {selectionError}
+                </div>
+              )}
 
               <div className="sb-social-count">
                 <span className="sb-pulse" /> {viewers} pessoas estão vendo agora
