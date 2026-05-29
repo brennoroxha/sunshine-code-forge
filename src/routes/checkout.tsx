@@ -183,6 +183,17 @@ function CheckoutPage() {
     } catch {}
   }, []);
 
+  // Recupera cores e tamanhos selecionados do localStorage
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const c = localStorage.getItem("sb_color_names");
+      const s = localStorage.getItem("sb_size_names");
+      if (c) setSelectedColors(JSON.parse(c));
+      if (s) setSelectedSizes(JSON.parse(s));
+    } catch {}
+  }, []);
+
   useEffect(() => {
     // Dispara InitiateCheckout (Meta Pixel + Utmify + dataLayer)
     if (typeof window === "undefined") return;
