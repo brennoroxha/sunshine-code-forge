@@ -881,17 +881,19 @@ function CheckoutPage() {
               <ol
                 style={{
                   marginTop: 18,
-                  paddingLeft: 20,
+                  padding: 0,
+                  listStylePosition: "inside",
                   color: "#374151",
                   fontSize: 14,
                   lineHeight: 1.9,
+                  textAlign: "center",
                 }}
               >
-                <li>Copie o código PIX;</li>
-                <li>Acesse o APP do seu banco;</li>
-                <li>Escolha pagar com PIX;</li>
-                <li>Cole o código do PIX;</li>
-                <li>Confirme o pagamento.</li>
+                <li>Copie o código PIX</li>
+                <li>Acesse o APP do seu banco</li>
+                <li>Escolha pagar com PIX</li>
+                <li>Cole o código do PIX</li>
+                <li>Confirme o pagamento</li>
               </ol>
 
               <div style={{ textAlign: "center", margin: "10px 0" }}>
