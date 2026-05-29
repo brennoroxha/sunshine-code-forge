@@ -307,13 +307,22 @@ function CheckoutPage() {
       if (!isValidCPF(form.cpf)) e.cpf = "CPF inválido";
       if (!isValidPhone(form.telefone)) e.telefone = "Telefone inválido";
     }
+    if (s === 2) {
+      if (!isValidCEP(form.cep)) e.cep = "CEP inválido";
+      if (!form.endereco.trim()) e.endereco = "Informe o endereço";
+      if (!form.bairro.trim()) e.bairro = "Informe o bairro";
+      if (!form.numero.trim()) e.numero = "Informe o número";
+      if (!form.cidade.trim()) e.cidade = "Informe a cidade";
+      if (!form.estado.trim()) e.estado = "Informe o estado";
+    }
     setErrors(e);
     return Object.keys(e).length === 0;
   };
 
   const next = () => {
     if (step !== "pix" && step !== "loading" && !validateStep(step as Step)) return;
-    if (step === 1) setStep(3);
+    if (step === 1) setStep(2);
+    else if (step === 2) setStep(3);
     else if (step === 3) {
       setStep("loading");
     }
@@ -366,7 +375,8 @@ function CheckoutPage() {
   }, [step]);
 
   const back = () => {
-    if (step === 3) setStep(1);
+    if (step === 2) setStep(1);
+    else if (step === 3) setStep(2);
     else if (step === "pix") setStep(3);
   };
 
@@ -377,6 +387,16 @@ function CheckoutPage() {
         form.nomeCompleto.trim().split(/\s+/).length >= 2 &&
         isValidCPF(form.cpf) &&
         isValidPhone(form.telefone)
+      );
+    }
+    if (s === 2) {
+      return (
+        isValidCEP(form.cep) &&
+        !!form.endereco.trim() &&
+        !!form.bairro.trim() &&
+        !!form.numero.trim() &&
+        !!form.cidade.trim() &&
+        !!form.estado.trim()
       );
     }
     return true;
@@ -400,10 +420,11 @@ function CheckoutPage() {
     } catch {}
   };
 
-  const stepNum: number = step === 1 ? 1 : 2;
+  const stepNum: number = step === 1 ? 1 : step === 2 ? 2 : 3;
   const steps = [
     { n: 1, label: "Dados Pessoais", Icon: User },
-    { n: 2, label: "Pagamento", Icon: QrCode },
+    { n: 2, label: "Entrega", Icon: Truck },
+    { n: 3, label: "Pagamento", Icon: QrCode },
   ];
 
   const fieldErr = (k: string) => errors[k] && <div className="ck-err">{errors[k]}</div>;
@@ -529,6 +550,83 @@ function CheckoutPage() {
               {fieldErr("telefone")}
             </>
           )}
+
+          {step === 2 && (
+            <>
+              <h2
+                className="ck-h2"
+                style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+              >
+                <Truck size={20} color="#0b2447" /> Endereço de entrega
+              </h2>
+              <p className="ck-muted" style={{ fontSize: 13, marginTop: -4 }}>
+                Informe onde devemos entregar seu pedido.
+              </p>
+              <label className="ck-label">CEP</label>
+              <input
+                placeholder="00000-000"
+                value={form.cep}
+                onChange={upd("cep")}
+                className={inputCls("cep")}
+                inputMode="numeric"
+              />
+              {fieldErr("cep")}
+              <label className="ck-label">Endereço</label>
+              <input
+                placeholder="Rua, avenida..."
+                value={form.endereco}
+                onChange={upd("endereco")}
+                className={inputCls("endereco")}
+              />
+              {fieldErr("endereco")}
+              <label className="ck-label">Bairro</label>
+              <input
+                placeholder="Seu bairro"
+                value={form.bairro}
+                onChange={upd("bairro")}
+                className={inputCls("bairro")}
+              />
+              {fieldErr("bairro")}
+              <label className="ck-label">Número</label>
+              <input
+                placeholder="Nº"
+                value={form.numero}
+                onChange={upd("numero")}
+                className={inputCls("numero")}
+                inputMode="numeric"
+              />
+              {fieldErr("numero")}
+              <label className="ck-label">Cidade</label>
+              <input
+                placeholder="Sua cidade"
+                value={form.cidade}
+                onChange={upd("cidade")}
+                className={inputCls("cidade")}
+              />
+              {fieldErr("cidade")}
+              <label className="ck-label">Estado</label>
+              <input
+                placeholder="UF"
+                value={form.estado}
+                onChange={upd("estado")}
+                className={inputCls("estado")}
+                maxLength={2}
+              />
+              {fieldErr("estado")}
+              <div className="ck-nav ck-nav-inline">
+                <button
+                  type="button"
+                  className="ck-pay-btn"
+                  onClick={next}
+                  disabled={!canAdvance}
+                  style={!canAdvance ? { opacity: 0.5, cursor: "not-allowed" } : undefined}
+                >
+                  Avançar para o pagamento <ChevronRight size={16} />
+                </button>
+              </div>
+            </>
+          )}
+
 
           {step === 3 && (
             <>
