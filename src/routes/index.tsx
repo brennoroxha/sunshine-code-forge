@@ -172,7 +172,8 @@ function Index() {
   const checkoutHref = (id: number) =>
     `/checkout?kit=${id}${trackingQuery ? `&${trackingQuery}` : ""}`;
   const [selectionError, setSelectionError] = useState<string>("");
-  const handleCheckoutClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const [isNavigating, setIsNavigating] = useState(false);
+  const handleCheckoutClick = (e: React.MouseEvent<HTMLAnchorElement>, kitId: number) => {
     if (colors.length < maxItems || sizes.length < maxItems) {
       e.preventDefault();
       const missing: string[] = [];
@@ -187,7 +188,12 @@ function Index() {
       target?.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
+    e.preventDefault();
     setSelectionError("");
+    setIsNavigating(true);
+    setTimeout(() => {
+      window.location.href = checkoutHref(kitId);
+    }, 1200);
   };
   const pieceWord = (n: number, s: string, p: string) => (n === 1 ? s : p);
   const buildHint = (
