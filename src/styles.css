@@ -159,9 +159,6 @@ button {
 .sb-header {
   background: var(--sb-white);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  position: sticky;
-  top: 38px;
-  z-index: 99;
 }
 .sb-header-inner {
   display: flex;
