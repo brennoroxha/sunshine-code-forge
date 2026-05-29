@@ -733,7 +733,7 @@ function Index() {
                 )}
               </div>
 
-              <div className="sb-selector">
+              <div className="sb-selector" id="sb-size-section">
                 <label className="sb-label">
                   Tamanho — {sizes.length > 0 ? sizes.map((i) => SIZES[i]).join(", ") : "escolha"}
                 </label>
