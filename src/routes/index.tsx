@@ -171,6 +171,24 @@ function Index() {
   const remainingSizes = Math.max(0, maxItems - sizes.length);
   const checkoutHref = (id: number) =>
     `/checkout?kit=${id}${trackingQuery ? `&${trackingQuery}` : ""}`;
+  const [selectionError, setSelectionError] = useState<string>("");
+  const handleCheckoutClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (colors.length < maxItems || sizes.length < maxItems) {
+      e.preventDefault();
+      const missing: string[] = [];
+      if (colors.length < maxItems) missing.push("cor");
+      if (sizes.length < maxItems) missing.push("tamanho");
+      setSelectionError(
+        `Selecione ${missing.join(" e ")} antes de continuar para o checkout.`,
+      );
+      const target = document.getElementById(
+        colors.length < maxItems ? "sb-color-section" : "sb-size-section",
+      );
+      target?.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    setSelectionError("");
+  };
   const pieceWord = (n: number, s: string, p: string) => (n === 1 ? s : p);
   const buildHint = (
     kind: "cor" | "tamanho",
@@ -596,7 +614,7 @@ function Index() {
                 </div>
               </div>
 
-              <div className="sb-selector">
+              <div className="sb-selector" id="sb-color-section">
                 <label className="sb-label">
                   Cor —{" "}
                   {colors.length > 0 ? colors.map((i) => COLORS[i].name).join(", ") : "escolha"}
@@ -715,7 +733,7 @@ function Index() {
                 )}
               </div>
 
-              <div className="sb-selector">
+              <div className="sb-selector" id="sb-size-section">
                 <label className="sb-label">
                   Tamanho — {sizes.length > 0 ? sizes.map((i) => SIZES[i]).join(", ") : "escolha"}
                 </label>
@@ -774,10 +792,30 @@ function Index() {
                 href={checkoutHref(selectedKit.id)}
                 ref={ctaRef as any}
                 className="sb-cta sb-cta-primary sb-page-cta"
-                onClick={ripple}
+                onClick={(e) => {
+                  handleCheckoutClick(e);
+                  if (!e.defaultPrevented) ripple(e as any);
+                }}
               >
                 🛒 COMPRAR AGORA
               </a>
+              {selectionError && (
+                <div
+                  role="alert"
+                  style={{
+                    marginTop: 10,
+                    padding: "10px 12px",
+                    borderRadius: 8,
+                    background: "#fee2e2",
+                    color: "#b91c1c",
+                    fontSize: 13,
+                    fontWeight: 600,
+                    textAlign: "center",
+                  }}
+                >
+                  {selectionError}
+                </div>
+              )}
 
               <div className="sb-social-count">
                 <span className="sb-pulse" /> {viewers} pessoas estão vendo agora
@@ -921,7 +959,7 @@ function Index() {
         <div className="sb-container" data-reveal>
           <h2>Garanta já a sua com desconto de lançamento</h2>
           <p>Estoque limitado — Últimas unidades</p>
-          <a href={checkoutHref(selectedKit.id)} className="sb-cta-light" onClick={ripple as any}>
+          <a href={checkoutHref(selectedKit.id)} className="sb-cta-light" onClick={(e) => { handleCheckoutClick(e); if (!e.defaultPrevented) (ripple as any)(e); }}>
             QUERO MINHA CINTA AGORA →
           </a>
         </div>
@@ -1032,7 +1070,7 @@ function Index() {
         >
           ⏰ Oferta por tempo limitado
         </div>
-        <a href={checkoutHref(selectedKit.id)} className="sb-cta sb-cta-primary" onClick={ripple}>
+        <a href={checkoutHref(selectedKit.id)} className="sb-cta sb-cta-primary" onClick={(e) => { handleCheckoutClick(e); if (!e.defaultPrevented) ripple(e); }}>
           🛒 QUERO MEU KIT — {selectedKit.priceLabel}
         </a>
       </div>
