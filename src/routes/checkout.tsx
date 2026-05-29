@@ -135,6 +135,7 @@ function CheckoutPage() {
   });
   const [frete, setFrete] = useState<"transportadora" | "full">("transportadora");
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [receiptFile, setReceiptFile] = useState<File | null>(null);
   const [copied, setCopied] = useState(false);
   const [expira, setExpira] = useState(15 * 60);
   const [pixData, setPixData] = useState<{
@@ -840,8 +841,26 @@ function CheckoutPage() {
                   Se o sistema demorar para confirmar, anexe aqui o print/PDF do Pix para agilizar a
                   liberação do seu pedido.
                 </div>
+                <input
+                  id="ck-receipt-input"
+                  type="file"
+                  accept="image/*,application/pdf"
+                  style={{ display: "none" }}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    setReceiptFile(file);
+                    const msg = encodeURIComponent(
+                      `Olá! Acabei de pagar o Pix do meu pedido na ConfiaShop e quero enviar o comprovante (${file.name}).`,
+                    );
+                    window.open(`https://wa.me/5511999999999?text=${msg}`, "_blank");
+                  }}
+                />
                 <button
                   type="button"
+                  onClick={() => {
+                    document.getElementById("ck-receipt-input")?.click();
+                  }}
                   style={{
                     width: "100%",
                     background: "#ef4444",
@@ -860,6 +879,11 @@ function CheckoutPage() {
                 >
                   ⬆ Anexar comprovante
                 </button>
+                {receiptFile && (
+                  <div style={{ marginTop: 10, fontSize: 12, color: "#16a34a", fontWeight: 600 }}>
+                    ✓ {receiptFile.name} selecionado. Envie no WhatsApp que abrimos para você.
+                  </div>
+                )}
               </div>
             </div>
           )}
