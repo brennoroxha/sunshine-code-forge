@@ -942,12 +942,24 @@ function CheckoutPage() {
               alt="Cinta Modeladora Slim Belly"
               className="ck-cart-img"
             />
-            <div className="ck-cart-info">
-              <div className="ck-cart-name">
-                {kit.label} — Cinta Modeladora Slim Belly ({kit.title})
-              </div>
-              <div className="ck-cart-meta">Qtd: 1</div>
+          <div className="ck-cart-info">
+            <div className="ck-cart-name">
+              {kit.label} — Cinta Modeladora Slim Belly ({kit.title})
             </div>
+            <div className="ck-cart-meta">
+              Qtd: 1
+              {selectedColors.length > 0 && (
+                <span style={{ display: "block", marginTop: 2 }}>
+                  Cor: {selectedColors.join(", ")}
+                </span>
+              )}
+              {selectedSizes.length > 0 && (
+                <span style={{ display: "block", marginTop: 2 }}>
+                  Tamanho: {selectedSizes.join(", ")}
+                </span>
+              )}
+            </div>
+          </div>
             <div className="ck-cart-price">{formatBRL(kit.price)}</div>
           </div>
 
