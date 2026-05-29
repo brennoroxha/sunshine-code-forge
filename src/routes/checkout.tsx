@@ -865,7 +865,7 @@ function CheckoutPage() {
           )}
 
           {/* Navegação */}
-          {step !== "pix" && step !== 3 && (
+          {step === 1 && (
             <div className="ck-nav">
               <button
                 type="button"
@@ -874,15 +874,7 @@ function CheckoutPage() {
                 disabled={!canAdvance}
                 style={!canAdvance ? { opacity: 0.5, cursor: "not-allowed" } : undefined}
               >
-                {step === 1 ? (
-                  <>
-                    Avançar para o pagamento <ChevronRight size={16} />
-                  </>
-                ) : (
-                  <>
-                    Continuar <ChevronRight size={16} />
-                  </>
-                )}
+                Avançar para o pagamento <ChevronRight size={16} />
               </button>
             </div>
           )}
