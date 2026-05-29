@@ -551,6 +551,83 @@ function CheckoutPage() {
             </>
           )}
 
+          {step === 2 && (
+            <>
+              <h2
+                className="ck-h2"
+                style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+              >
+                <Truck size={20} color="#0b2447" /> Endereço de entrega
+              </h2>
+              <p className="ck-muted" style={{ fontSize: 13, marginTop: -4 }}>
+                Informe onde devemos entregar seu pedido.
+              </p>
+              <label className="ck-label">CEP</label>
+              <input
+                placeholder="00000-000"
+                value={form.cep}
+                onChange={upd("cep")}
+                className={inputCls("cep")}
+                inputMode="numeric"
+              />
+              {fieldErr("cep")}
+              <label className="ck-label">Endereço</label>
+              <input
+                placeholder="Rua, avenida..."
+                value={form.endereco}
+                onChange={upd("endereco")}
+                className={inputCls("endereco")}
+              />
+              {fieldErr("endereco")}
+              <label className="ck-label">Bairro</label>
+              <input
+                placeholder="Seu bairro"
+                value={form.bairro}
+                onChange={upd("bairro")}
+                className={inputCls("bairro")}
+              />
+              {fieldErr("bairro")}
+              <label className="ck-label">Número</label>
+              <input
+                placeholder="Nº"
+                value={form.numero}
+                onChange={upd("numero")}
+                className={inputCls("numero")}
+                inputMode="numeric"
+              />
+              {fieldErr("numero")}
+              <label className="ck-label">Cidade</label>
+              <input
+                placeholder="Sua cidade"
+                value={form.cidade}
+                onChange={upd("cidade")}
+                className={inputCls("cidade")}
+              />
+              {fieldErr("cidade")}
+              <label className="ck-label">Estado</label>
+              <input
+                placeholder="UF"
+                value={form.estado}
+                onChange={upd("estado")}
+                className={inputCls("estado")}
+                maxLength={2}
+              />
+              {fieldErr("estado")}
+              <div className="ck-nav ck-nav-inline">
+                <button
+                  type="button"
+                  className="ck-pay-btn"
+                  onClick={next}
+                  disabled={!canAdvance}
+                  style={!canAdvance ? { opacity: 0.5, cursor: "not-allowed" } : undefined}
+                >
+                  Avançar para o pagamento <ChevronRight size={16} />
+                </button>
+              </div>
+            </>
+          )}
+
+
           {step === 3 && (
             <>
               <h2
