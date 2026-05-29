@@ -807,8 +807,7 @@ function Index() {
                 ref={ctaRef as any}
                 className="sb-cta sb-cta-primary sb-page-cta"
                 onClick={(e) => {
-                  handleCheckoutClick(e);
-                  if (!e.defaultPrevented) ripple(e as any);
+                  handleCheckoutClick(e, selectedKit.id);
                 }}
               >
                 🛒 COMPRAR AGORA
@@ -973,7 +972,7 @@ function Index() {
         <div className="sb-container" data-reveal>
           <h2>Garanta já a sua com desconto de lançamento</h2>
           <p>Estoque limitado — Últimas unidades</p>
-          <a href={checkoutHref(selectedKit.id)} className="sb-cta-light" onClick={(e) => { handleCheckoutClick(e); if (!e.defaultPrevented) (ripple as any)(e); }}>
+          <a href={checkoutHref(selectedKit.id)} className="sb-cta-light" onClick={(e) => handleCheckoutClick(e, selectedKit.id)}>
             QUERO MINHA CINTA AGORA →
           </a>
         </div>
@@ -1084,7 +1083,7 @@ function Index() {
         >
           ⏰ Oferta por tempo limitado
         </div>
-        <a href={checkoutHref(selectedKit.id)} className="sb-cta sb-cta-primary" onClick={(e) => { handleCheckoutClick(e); if (!e.defaultPrevented) ripple(e); }}>
+        <a href={checkoutHref(selectedKit.id)} className="sb-cta sb-cta-primary" onClick={(e) => handleCheckoutClick(e, selectedKit.id)}>
           🛒 QUERO MEU KIT — {selectedKit.priceLabel}
         </a>
       </div>
