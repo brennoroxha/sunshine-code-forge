@@ -651,6 +651,18 @@ function CheckoutPage() {
                   {pixError}
                 </div>
               )}
+
+              <div className="ck-nav ck-nav-inline">
+                <button
+                  type="button"
+                  className="ck-pay-btn"
+                  onClick={next}
+                  disabled={!canAdvance}
+                  style={!canAdvance ? { opacity: 0.5, cursor: "not-allowed" } : undefined}
+                >
+                  Finalizar Compra
+                </button>
+              </div>
             </>
           )}
 
