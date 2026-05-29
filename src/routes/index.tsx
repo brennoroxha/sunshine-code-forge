@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { ClipboardList, Package, PackageCheck, ShieldCheck, RefreshCw } from "lucide-react";
+import { ClipboardList, Package, PackageCheck, ShieldCheck, RefreshCw, Magnet } from "lucide-react";
 import desc1 from "@/assets/desc-1.png";
 import desc2 from "@/assets/desc-2.png";
 import desc3 from "@/assets/desc-3.png";
@@ -493,6 +493,37 @@ function Index() {
               }}
             >
               <h1 className="sb-title">Cinta Modeladora Slim Belly — Cintura Alta</h1>
+              <div
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                  background: "linear-gradient(135deg, #b8860b, #d4af37)",
+                  color: "#fff",
+                  fontSize: 13,
+                  fontWeight: 700,
+                  padding: "8px 14px",
+                  borderRadius: 999,
+                  marginTop: 10,
+                  marginBottom: 6,
+                  boxShadow: "0 2px 8px rgba(180,134,11,0.35)",
+                  lineHeight: 1.3,
+                }}
+              >
+                <Magnet size={16} strokeWidth={2.5} />
+                <span>Com Terapia Magnética — Reduz Cólicas e Melhora a Circulação</span>
+              </div>
+              <p
+                style={{
+                  fontSize: 13,
+                  color: "#8b7355",
+                  fontStyle: "italic",
+                  marginBottom: 4,
+                  marginTop: 0,
+                }}
+              >
+                A única cinta com tecnologia magnética integrada no tecido.
+              </p>
               <p style={{ fontSize: 14, color: "#6b6b6b", marginTop: 6, marginBottom: 4 }}>
                 Escolha seu kit abaixo
               </p>
