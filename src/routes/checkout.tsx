@@ -639,7 +639,7 @@ function CheckoutPage() {
                   />
                   <div style={{ flex: 1 }}>
                     <strong style={{ display: "block", color: "#111" }}>Transportadora</strong>
-                    <span style={{ fontSize: 13, color: "#6b7280" }}>4 a 5 dias úteis</span>
+                    <span style={{ fontSize: 13, color: "#6b7280" }}>7 a 8 dias úteis</span>
                   </div>
                   <span style={{ color: "#16a34a", fontWeight: 700 }}>Grátis</span>
                 </label>
@@ -652,7 +652,7 @@ function CheckoutPage() {
                   />
                   <div style={{ flex: 1 }}>
                     <strong style={{ display: "block", color: "#111" }}>Entrega Full</strong>
-                    <span style={{ fontSize: 13, color: "#6b7280" }}>1 a 3 dias úteis</span>
+                    <span style={{ fontSize: 13, color: "#6b7280" }}>4 a 6 dias úteis</span>
                   </div>
                   <span style={{ color: "#111", fontWeight: 700 }}>R$ 9,97</span>
                 </label>

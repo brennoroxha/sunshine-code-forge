@@ -220,7 +220,7 @@ function PagamentoConfirmadoPage() {
                 </div>
                 <div>
                   <div style={{ fontWeight: 600, fontSize: 14, color: "var(--sb-text)" }}>Frete Gr\u00e1tis</div>
-                  <div style={{ fontSize: 12, color: "var(--sb-muted)" }}>Entrega em 4 a 5 dias \u00fateis</div>
+                  <div style={{ fontSize: 12, color: "var(--sb-muted)" }}>Entrega em 7 a 8 dias \u00fateis</div>
                 </div>
               </div>
             </div>

@@ -144,7 +144,7 @@ const FAQS = [
   },
   {
     q: "Qual o prazo de entrega?",
-    a: "O prazo médio é de 3 a 7 dias úteis após a confirmação do pagamento, com frete grátis para todo o Brasil via correios e transportadoras parceiras.",
+    a: "O prazo médio é de 6 a 10 dias úteis após a confirmação do pagamento, com frete grátis para todo o Brasil via correios e transportadoras parceiras.",
   },
   {
     q: "Posso trocar se não couber?",
@@ -336,7 +336,7 @@ function Index() {
     setDeliveryDates({
       placed: fmt(now),
       processed: fmt(plus(1)),
-      delivered: fmt(plus(5)),
+      delivered: fmt(plus(8)),
     });
     const fmtShort = (d: Date) => {
       const meses = [
