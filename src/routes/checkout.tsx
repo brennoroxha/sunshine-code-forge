@@ -307,13 +307,22 @@ function CheckoutPage() {
       if (!isValidCPF(form.cpf)) e.cpf = "CPF inválido";
       if (!isValidPhone(form.telefone)) e.telefone = "Telefone inválido";
     }
+    if (s === 2) {
+      if (!isValidCEP(form.cep)) e.cep = "CEP inválido";
+      if (!form.endereco.trim()) e.endereco = "Informe o endereço";
+      if (!form.bairro.trim()) e.bairro = "Informe o bairro";
+      if (!form.numero.trim()) e.numero = "Informe o número";
+      if (!form.cidade.trim()) e.cidade = "Informe a cidade";
+      if (!form.estado.trim()) e.estado = "Informe o estado";
+    }
     setErrors(e);
     return Object.keys(e).length === 0;
   };
 
   const next = () => {
     if (step !== "pix" && step !== "loading" && !validateStep(step as Step)) return;
-    if (step === 1) setStep(3);
+    if (step === 1) setStep(2);
+    else if (step === 2) setStep(3);
     else if (step === 3) {
       setStep("loading");
     }
