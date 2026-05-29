@@ -144,7 +144,7 @@ const FAQS = [
   },
   {
     q: "Qual o prazo de entrega?",
-    a: "O prazo médio é de 3 a 7 dias úteis após a confirmação do pagamento, com frete grátis para todo o Brasil via correios e transportadoras parceiras.",
+    a: "O prazo médio é de 6 a 10 dias úteis após a confirmação do pagamento, com frete grátis para todo o Brasil via correios e transportadoras parceiras.",
   },
   {
     q: "Posso trocar se não couber?",
