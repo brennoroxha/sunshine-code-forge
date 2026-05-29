@@ -288,7 +288,7 @@ function PagamentoConfirmadoPage() {
             <ArrowLeft size={14} /> Voltar para a p\u00e1gina inicial
           </Link>
         </div>
-        Confia Shop LTDA \u00b7 CNPJ 64.119.790/0001-01
+        Confia Shop LTDA
       </footer>
     </div>
   );
