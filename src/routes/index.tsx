@@ -1087,6 +1087,51 @@ function Index() {
           🛒 QUERO MEU KIT — {selectedKit.priceLabel}
         </a>
       </div>
+
+      {/* Loading overlay */}
+      {isNavigating && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.55)",
+            zIndex: 9999,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 20,
+            backdropFilter: "blur(4px)",
+          }}
+        >
+          <div
+            style={{
+              width: 64,
+              height: 64,
+              border: "5px solid rgba(255,255,255,0.2)",
+              borderTopColor: "#fff",
+              borderRadius: "50%",
+              animation: "sb-spin 0.8s linear infinite",
+            }}
+          />
+          <div
+            style={{
+              color: "#fff",
+              fontSize: 16,
+              fontWeight: 600,
+              textAlign: "center",
+              lineHeight: 1.4,
+              textShadow: "0 1px 4px rgba(0,0,0,0.3)",
+            }}
+          >
+            Preparando seu pedido...
+            <br />
+            <span style={{ fontSize: 13, fontWeight: 400, opacity: 0.85 }}>
+              Você será redirecionado para o checkout
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
