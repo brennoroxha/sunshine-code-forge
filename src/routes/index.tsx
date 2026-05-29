@@ -773,7 +773,7 @@ function Index() {
               <a
                 href={checkoutHref(selectedKit.id)}
                 ref={ctaRef as any}
-                className="sb-cta sb-cta-primary"
+                className="sb-cta sb-cta-primary sb-page-cta"
                 onClick={ripple}
               >
                 🛒 COMPRAR AGORA
