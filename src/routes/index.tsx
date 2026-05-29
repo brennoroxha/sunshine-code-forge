@@ -69,8 +69,8 @@ const KITS = [
     qty: 1,
     label: "1 Cinta",
     title: "1 Cinta",
-    price: 5990,
-    priceLabel: "R$ 59,90",
+    price: 7990,
+    priceLabel: "R$ 79,90",
     badge: null as string | null,
   },
   {
@@ -78,8 +78,8 @@ const KITS = [
     qty: 2,
     label: "Kit 2 Cintas",
     title: "2 Cintas",
-    price: 7990,
-    priceLabel: "R$ 79,90",
+    price: 12990,
+    priceLabel: "R$ 129,90",
     badge: "MAIS VENDIDO",
   },
 ];
