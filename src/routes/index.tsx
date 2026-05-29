@@ -985,8 +985,6 @@ function Index() {
             <img src={logo} alt="ConfiaShop" className="sb-logo-img sb-logo-light" />
             <p className="sb-footer-text">
               Magazines Bytes
-              <br />
-              CNPJ: 08.792.763/0001-24
             </p>
           </div>
           <div>
