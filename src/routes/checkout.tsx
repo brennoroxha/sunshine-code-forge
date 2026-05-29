@@ -613,6 +613,51 @@ function CheckoutPage() {
                 maxLength={2}
               />
               {fieldErr("estado")}
+
+              <div style={{ marginTop: 18 }}>
+                <h3
+                  style={{
+                    fontSize: 15,
+                    fontWeight: 700,
+                    margin: "0 0 10px",
+                    color: "#111",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 6,
+                  }}
+                >
+                  <Truck size={16} color="#0b2447" /> Forma de entrega
+                </h3>
+                <label
+                  className={`ck-ship-option${frete === "transportadora" ? " ck-ship-active" : ""}`}
+                >
+                  <input
+                    type="radio"
+                    name="frete"
+                    checked={frete === "transportadora"}
+                    onChange={() => setFrete("transportadora")}
+                  />
+                  <div style={{ flex: 1 }}>
+                    <strong style={{ display: "block", color: "#111" }}>Transportadora</strong>
+                    <span style={{ fontSize: 13, color: "#6b7280" }}>4 a 5 dias úteis</span>
+                  </div>
+                  <span style={{ color: "#16a34a", fontWeight: 700 }}>Grátis</span>
+                </label>
+                <label className={`ck-ship-option${frete === "full" ? " ck-ship-active" : ""}`}>
+                  <input
+                    type="radio"
+                    name="frete"
+                    checked={frete === "full"}
+                    onChange={() => setFrete("full")}
+                  />
+                  <div style={{ flex: 1 }}>
+                    <strong style={{ display: "block", color: "#111" }}>Entrega Full</strong>
+                    <span style={{ fontSize: 13, color: "#6b7280" }}>1 a 3 dias úteis</span>
+                  </div>
+                  <span style={{ color: "#111", fontWeight: 700 }}>R$ 9,97</span>
+                </label>
+              </div>
+
               <div className="ck-nav ck-nav-inline">
                 <button
                   type="button"
@@ -690,49 +735,8 @@ function CheckoutPage() {
                 </div>
               </div>
 
-              <div style={{ marginTop: 18 }}>
-                <h3
-                  style={{
-                    fontSize: 15,
-                    fontWeight: 700,
-                    margin: "0 0 10px",
-                    color: "#111",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 6,
-                  }}
-                >
-                  <Truck size={16} color="#0b2447" /> Forma de entrega
-                </h3>
-                <label
-                  className={`ck-ship-option${frete === "transportadora" ? " ck-ship-active" : ""}`}
-                >
-                  <input
-                    type="radio"
-                    name="frete"
-                    checked={frete === "transportadora"}
-                    onChange={() => setFrete("transportadora")}
-                  />
-                  <div style={{ flex: 1 }}>
-                    <strong style={{ display: "block", color: "#111" }}>Transportadora</strong>
-                    <span style={{ fontSize: 13, color: "#6b7280" }}>4 a 5 dias úteis</span>
-                  </div>
-                  <span style={{ color: "#16a34a", fontWeight: 700 }}>Grátis</span>
-                </label>
-                <label className={`ck-ship-option${frete === "full" ? " ck-ship-active" : ""}`}>
-                  <input
-                    type="radio"
-                    name="frete"
-                    checked={frete === "full"}
-                    onChange={() => setFrete("full")}
-                  />
-                  <div style={{ flex: 1 }}>
-                    <strong style={{ display: "block", color: "#111" }}>Entrega Full</strong>
-                    <span style={{ fontSize: 13, color: "#6b7280" }}>1 a 3 dias úteis</span>
-                  </div>
-                  <span style={{ color: "#111", fontWeight: 700 }}>R$ 9,97</span>
-                </label>
-              </div>
+
+
 
               {pixError && (
                 <div
