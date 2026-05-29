@@ -614,7 +614,7 @@ function Index() {
                 </div>
               </div>
 
-              <div className="sb-selector">
+              <div className="sb-selector" id="sb-color-section">
                 <label className="sb-label">
                   Cor —{" "}
                   {colors.length > 0 ? colors.map((i) => COLORS[i].name).join(", ") : "escolha"}
