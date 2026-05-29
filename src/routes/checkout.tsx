@@ -375,7 +375,8 @@ function CheckoutPage() {
   }, [step]);
 
   const back = () => {
-    if (step === 3) setStep(1);
+    if (step === 2) setStep(1);
+    else if (step === 3) setStep(2);
     else if (step === "pix") setStep(3);
   };
 
@@ -386,6 +387,16 @@ function CheckoutPage() {
         form.nomeCompleto.trim().split(/\s+/).length >= 2 &&
         isValidCPF(form.cpf) &&
         isValidPhone(form.telefone)
+      );
+    }
+    if (s === 2) {
+      return (
+        isValidCEP(form.cep) &&
+        !!form.endereco.trim() &&
+        !!form.bairro.trim() &&
+        !!form.numero.trim() &&
+        !!form.cidade.trim() &&
+        !!form.estado.trim()
       );
     }
     return true;
@@ -409,10 +420,11 @@ function CheckoutPage() {
     } catch {}
   };
 
-  const stepNum: number = step === 1 ? 1 : 2;
+  const stepNum: number = step === 1 ? 1 : step === 2 ? 2 : 3;
   const steps = [
     { n: 1, label: "Dados Pessoais", Icon: User },
-    { n: 2, label: "Pagamento", Icon: QrCode },
+    { n: 2, label: "Entrega", Icon: Truck },
+    { n: 3, label: "Pagamento", Icon: QrCode },
   ];
 
   const fieldErr = (k: string) => errors[k] && <div className="ck-err">{errors[k]}</div>;
