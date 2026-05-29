@@ -75,7 +75,7 @@ export const Route = createFileRoute("/api/public/klivopay-webhook")({
           ? items.map((it: any) => String(it?.title || it?.name || "").toLowerCase()).join(" | ")
           : "";
         const titleMatches = /cinta|slim|belly|confia/.test(itemTitles);
-        const amountAllowed = [5990, 7990, 6987, 8987].includes(amountCents);
+        const amountAllowed = [7990, 12990, 8987, 13987].includes(amountCents);
         if (!titleMatches && !amountAllowed) {
           console.warn("[klivopay-webhook] pedido ignorado (não é da ConfiaShop):", {
             hash,
