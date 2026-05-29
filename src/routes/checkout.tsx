@@ -145,6 +145,8 @@ function CheckoutPage() {
   } | null>(null);
   const [pixError, setPixError] = useState<string | null>(null);
   const [utms, setUtms] = useState<Record<string, string>>({});
+  const [selectedColors, setSelectedColors] = useState<string[]>([]);
+  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   // Kit é derivado diretamente da URL (?kit=1 ou ?kit=2) — sem flash de kit 2
   const search = Route.useSearch();
   const kit = KIT_OPTIONS[search.kit] ?? KIT_OPTIONS[2];
