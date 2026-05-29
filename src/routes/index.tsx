@@ -959,7 +959,7 @@ function Index() {
         <div className="sb-container" data-reveal>
           <h2>Garanta já a sua com desconto de lançamento</h2>
           <p>Estoque limitado — Últimas unidades</p>
-          <a href={checkoutHref(selectedKit.id)} className="sb-cta-light" onClick={ripple as any}>
+          <a href={checkoutHref(selectedKit.id)} className="sb-cta-light" onClick={(e) => { handleCheckoutClick(e); if (!e.defaultPrevented) (ripple as any)(e); }}>
             QUERO MINHA CINTA AGORA →
           </a>
         </div>
