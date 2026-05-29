@@ -1132,7 +1132,7 @@ function CheckoutPage() {
         </div>
       </main>
 
-      <footer className="ck-footer">Confia Shop LTDA · CNPJ 64.119.790/0001-01</footer>
+      <footer className="ck-footer">Confia Shop LTDA</footer>
     </div>
   );
 }
