@@ -155,6 +155,16 @@ function RootShell({ children }: { children: React.ReactNode }) {
             alt=""
           />
         </noscript>
+        {/* TikTok Pixel noscript fallback */}
+        <noscript>
+          <img
+            height="1"
+            width="1"
+            style={{ display: "none" }}
+            src="https://analytics.tiktok.com/i18n/pixel/events.js?noscript=1"
+            alt=""
+          />
+        </noscript>
         {children}
         <Scripts />
       </body>
