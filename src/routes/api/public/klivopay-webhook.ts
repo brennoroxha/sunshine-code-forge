@@ -226,11 +226,11 @@ async function sendUtmifyOrder({ payload, hash, amount, paymentMethod, status }:
     const finalAmount =
       numAmount > 1000 ? Math.round(numAmount) : Math.round((numAmount || 79.9) * 100);
     const kitName =
-      finalAmount === 5990 || finalAmount === 6987
+      finalAmount === 7990 || finalAmount === 8987
         ? "1x Cinta Modeladora Slim Belly"
         : "KIT 2x Cinta Modeladora Slim Belly";
     const kitId =
-      finalAmount === 5990 || finalAmount === 6987 ? "kit-01-slim-belly" : "kit-02-slim-belly";
+      finalAmount === 7990 || finalAmount === 8987 ? "kit-01-slim-belly" : "kit-02-slim-belly";
 
     const body = {
       orderId: String(hash || `order_${Date.now()}`),
